@@ -1,6 +1,6 @@
 import { useState}  from "react";
 import styles from "./BoardView.module.css";
-import { type Board, type Hand, type Move } from "./types";
+import { type Board, type Hand, type Move } from "../types";
 
 interface Props {
   board: Board;
