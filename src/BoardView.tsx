@@ -1,4 +1,4 @@
-import React, { useState}  from "react";
+import { useState}  from "react";
 import styles from "./BoardView.module.css";
 import { type Board, type Hand, type Move } from "./types";
 

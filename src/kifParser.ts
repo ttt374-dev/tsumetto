@@ -1,5 +1,5 @@
 // parseKif.ts
-import { type Piece, type Board, type Hand, type Move } from "./types";
+import { type Board, type Hand, type Move } from "./types";
 
 export function parseKif(text: string): { board: Board, hands: Hand, moves: Move[] }  {
   let hands: Hand = { black: "", white: "" };  
