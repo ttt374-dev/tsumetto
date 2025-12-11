@@ -1,12 +1,13 @@
 import React from "react";
 import styles from "./BoardView.module.css";
-import { type Board } from "./types";
+import { type Board, type Hand } from "./types";
 
 interface Props {
   board: Board;
+  hands: Hand;
 }
 
-function BoardView({ board }: Props) {
+function BoardView({ board , hands }: Props) {
   return (
     <div className={styles.container}>
       {board.map((row, r) => (
@@ -32,6 +33,14 @@ function BoardView({ board }: Props) {
             })}
         </div>
       ))}
+
+       {/* 持駒表示 */}
+       <div style={{ marginTop: 12 }}>
+  <div>先手の持ち駒：{hands.black || "なし"}</div>
+  
+</div>
+
+
     </div>
   );
 }

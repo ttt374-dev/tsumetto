@@ -2,12 +2,12 @@ import React, { useState } from "react";
 
 import BoardView from './BoardView'
 import { parseKif } from './kifParser'
-import { type Piece } from './types'
+import { type Board, type Hand } from './types'
 
-type Board = (Piece | null)[][]; // [rank][file]：1〜9が index 0〜8 の 2次元配列
 
 export default function MainScreen() {
     const [board, setBoard] = useState<Board | null>(null);
+    const [hands, setHands ] = useState<Hand>({ black: "", white: ""})
 
     const handleFileLoad = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -17,8 +17,9 @@ export default function MainScreen() {
         const text = new TextDecoder("shift_jis").decode(buf);
 
         // text に KIF 日本語が正しく入る
-        const board = parseKif(text);
+        const { board, hands } = parseKif(text);
         setBoard(board);
+        setHands(hands)
     };
 
     return (
@@ -29,7 +30,7 @@ export default function MainScreen() {
 
             {board && (
                 <div style={{ marginTop: 20 }}>
-                    <BoardView board={board} />
+                    <BoardView board={board} hands={hands}/>
                 </div>
             )}
         </div>

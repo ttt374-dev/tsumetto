@@ -1,7 +1,9 @@
 // parseKif.ts
-import { type Piece, type Board } from "./types";
+import { type Piece, type Board, type Hand } from "./types";
 
-export function parseKif(text: string): Board {
+export function parseKif(text: string): { board: Board, hands: Hand }  {
+  let hands: Hand = { black: "", white: "" };
+
   // 9x9 null 埋め
   const board: Board = Array.from({ length: 9 }, () =>
     Array(9).fill(null)
@@ -9,17 +11,36 @@ export function parseKif(text: string): Board {
 
   const lines = text.split(/\r?\n/);
 
+  for (const line of lines) {
+    console.log(line)
+    // 先手の持駒
+    if (line.startsWith("先手の持駒：")) {
+      
+      const value = line.replace("先手の持駒：", "").trim();
+      hands.black = value;        // ← ここに入れる
+      continue;
+    }
+
+    // 後手の持駒
+    if (line.startsWith("後手の持駒：")) {
+      const value = line.replace("後手の持駒：", "").trim();
+      hands.white = value;        // ← 必要ならこちらも
+      continue;
+    }
+  }
+
   // 盤面開始位置
   const startIndex = lines.findIndex((l) =>
     l.includes("+---------------------------+")
   );
-  if (startIndex === -1) return board;
+  if (startIndex === -1) return { board, hands } ;
 
   // 以降の9行が盤面
   for (let r = 0; r < 9; r++) {
     const line = lines[startIndex + 1 + r];
     if (!line) continue;
 
+    
     // "| ◯◯◯… |一" の中央部を取り出す
     const inside = line.split("|")[1] ?? "";
     const rowStr = inside; // 例: " ・ ・ ・ 龍 ・ ・v銀v桂v香"
@@ -52,5 +73,5 @@ export function parseKif(text: string): Board {
     }
   }
 
-  return board;
+  return { board, hands } ;
 }
