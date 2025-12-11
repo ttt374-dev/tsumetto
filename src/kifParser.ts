@@ -44,6 +44,7 @@ export function parseKif(text: string): Board {
       const file = 8 - i;
       const rank = r; // r=0 → 一段目
 
+      console.log("parsed:", file, rank, name, isGote ? "gote" : "sente")
       board[rank][file] = {
         name,
         isBlack: !isGote,
