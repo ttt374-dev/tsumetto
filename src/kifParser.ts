@@ -1,8 +1,9 @@
 // parseKif.ts
-import { type Piece, type Board, type Hand } from "./types";
+import { type Piece, type Board, type Hand, type Move } from "./types";
 
-export function parseKif(text: string): { board: Board, hands: Hand }  {
-  let hands: Hand = { black: "", white: "" };
+export function parseKif(text: string): { board: Board, hands: Hand, moves: Move[] }  {
+  let hands: Hand = { black: "", white: "" };  
+  const moves: Move[] = [];
 
   // 9x9 null 埋め
   const board: Board = Array.from({ length: 9 }, () =>
@@ -33,7 +34,8 @@ export function parseKif(text: string): { board: Board, hands: Hand }  {
   const startIndex = lines.findIndex((l) =>
     l.includes("+---------------------------+")
   );
-  if (startIndex === -1) return { board, hands } ;
+  
+  if (startIndex === -1) return { board, hands, moves } ;
 
   // 以降の9行が盤面
   for (let r = 0; r < 9; r++) {
@@ -73,5 +75,34 @@ export function parseKif(text: string): { board: Board, hands: Hand }  {
     }
   }
 
-  return { board, hands } ;
+   // -----------------------------
+  // 指し手（moves）解析
+  // -----------------------------
+  
+
+  let inMoves = false;
+
+  for (const line of lines) {
+    if (line.startsWith("手数")) {
+      inMoves = true;
+      continue;
+    }
+    if (!inMoves) continue;
+    console.log("in moves: ", line)
+    const move = { moveNumber: 0, rawText: line}
+    /*
+    // 行例: "   1 ５二金打     ( 0:00/00:00:00)"
+    const m = line.match(/^\s*(\d+)\s+([\d一二三四五六七八九]+.*?)/);
+    if (!m) continue;
+
+    const move = {
+      moveNumber: Number(m[1]),
+      rawText: m[2].trim(),
+    }
+      */
+    moves.push(move);
+    console.log("moves: ", move.moveNumber, move.rawText)
+  }
+
+  return { board, hands, moves } ;
 }

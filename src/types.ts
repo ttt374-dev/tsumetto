@@ -9,3 +9,8 @@ export type Hand = {
   black: string; // "金二 銀" のような文字列
   white: string;
 };
+
+export type Move = {
+  moveNumber: number;
+  rawText: string;
+}
