@@ -1,11 +1,11 @@
 import './App.css'
-import MainScreen from './MainScreen'
+import KifPlayerScreen from './KifPlayerScreen'
 
 function App() { 
 
   return (
     <>
-      <MainScreen />
+      <KifPlayerScreen />
     </>
   )
 }

@@ -1,19 +1,17 @@
 import { useState}  from "react";
 import styles from "./BoardView.module.css";
-import { type Board, type Hand, type Move } from "../types";
+import { type KifData } from "../types";
 
 interface Props {
-  board: Board;
-  hands: Hand;
-  moves: Move[];
+  kifData: KifData
 }
 
-function BoardView({ board , hands, moves }: Props) {
+function BoardView({ kifData }: Props) {
   const [showMoves, setShowMoves] = useState(false);
 
   return (
     <div className={styles.container}>
-      {board.map((row, r) => (
+      {kifData.board.map((row, r) => (
         <div key={r} className={styles.row}>
           {row
             .slice()
@@ -39,7 +37,7 @@ function BoardView({ board , hands, moves }: Props) {
 
       {/* 持駒表示 */}
       <div style={{ marginTop: 12 }}>
-        <div>先手の持ち駒：{hands.black || "なし"}</div>
+        <div>先手の持ち駒：{kifData.hands.black || "なし"}</div>
       </div>
 
       { /* 解答 */}
@@ -48,7 +46,7 @@ function BoardView({ board , hands, moves }: Props) {
         {showMoves ? "解答を隠す" : "解答を表示"}
       </button>
       {showMoves &&        
-        moves.map((m, i) => (
+        kifData.moves.map((m, i) => (
           <div key={i} style={{ padding: "2px 0" }}>
             {m.rawText}
           </div>
