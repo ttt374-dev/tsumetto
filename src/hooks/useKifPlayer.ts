@@ -1,23 +1,23 @@
 import { useState } from 'react'
 import { parseKif } from "../kifParser";
-import { type KifPlaybackState } from "../types";
+import { type KifPlayerState } from "../types";
 
 export function useKifPlayer() {
-  const [kifPlaybackState, setKifPlaybackState] =
-    useState<KifPlaybackState>({
-      source: "temp",
-      playMode: "single",
-    });
+    const [kifPlayerState, setKifPlayerState] =
+        useState<KifPlayerState>(createPlayState());
 
-  const loadFromText = (text: string, title?: string) => {
-    const kif = parseKif(text);
-    setKifPlaybackState({
-      source: "temp",
-      playMode: "single",
-      kif,
-      title,
-    });
-  };
-
-  return { kifPlaybackState, loadFromText };
+    const loadFromText = (text: string, title?: string) => {               
+        setKifPlayerState(createPlayState({kifData: parseKif(text), title: title}));
+    };
+    return { kifPlayerState, loadFromText };
 }
+
+// hooks/usePlayerState.ts
+export const createPlayState = (
+  partial?: Partial<KifPlayerState>
+): KifPlayerState => ({
+  kifData: null,  
+  showAnswer: false,  
+  title: "",
+  ...partial,
+});

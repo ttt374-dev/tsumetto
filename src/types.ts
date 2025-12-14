@@ -26,9 +26,12 @@ export type KifData = {
   moves: Move[];  
 }
 
-export type KifPlaybackState = {
-  source: "temp" | "library";
-  playMode: "single" | "seq" | "random";
-  kif?: KifData;
-  title?: string;
+export type KifPlayerState = {
+  kifData: KifData | null;
+  //currentMoveIndex: number;
+  showAnswer: boolean;
+  title: string,
+  //mode: "temp" | "library";
+  //playMode: "single" | "seq" | "random";
+  source?: string;
 };
