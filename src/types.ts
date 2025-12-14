@@ -22,13 +22,14 @@ export type KifData = {
 }
 
 export type KifPlayerState = {
-  kifData: KifData | null;
-  //currentMoveIndex: number;
+  kifData?: KifData;
   showAnswer: boolean;
   title: string,
   //mode: "temp" | "library";
   //playMode: "single" | "seq" | "random";
   source?: string;
+
+  currentLibraryIndex?: number; // 追加
 };
 
 export type KifLibraryEntry = {
