@@ -9,8 +9,8 @@
 
     export default function KifPlayerScreen() {
         const { kifPlayerState, loadFromLibrary, library, importFile, playNext, playPrev } = useKifPlayer();
-        const handleSelectLibrary = (id: string) => {
-            loadFromLibrary(id)            
+        const handleSelectLibrary = (index: number) => {
+            loadFromLibrary(index)            
         }
         const kifData = useDisplayKifData(kifPlayerState)
         console.log("current index", kifPlayerState.currentLibraryIndex)
@@ -44,9 +44,9 @@
                 {/* 内部リストを選択 */}                
                 <select 
                     value={kifPlayerState.currentLibraryIndex ?? ""}
-                    onChange={(e) => handleSelectLibrary(e.target.value)}>
+                    onChange={(e) => handleSelectLibrary(Number(e.target.value))}>
                     {library.map((entry, i) => (
-                        <option key={i} value={i}>{entry.title}</option>
+                        <option key={entry.id} value={i}>{entry.title}</option>
                     ))}
                 </select>
             </div>
