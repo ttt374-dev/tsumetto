@@ -4,13 +4,13 @@ import { createKifData, useKifPlayer } from "../hooks/useKifPlayer";
 import { type KifPlayerState } from '../types';
 
 export function useDisplayKifData(state: KifPlayerState) {
-  return state.kifData ?? createKifData();
+    return state.kifData ?? createKifData();
 }
 
 export default function KifPlayerScreen() {
-    const { kifPlayerState, loadFromFile } = useKifPlayer();
+    const { kifPlayerState, loadFromFile, loadFromLibrary, library, importFile } = useKifPlayer();
     const handleLoadFile = async (file: File) => {
-        loadFromFile(file)        
+        loadFromFile(file)
     }
 
     const kifData = kifPlayerState.kifData ?? createKifData();
@@ -34,6 +34,15 @@ export default function KifPlayerScreen() {
                 <FileButton onFileSelected={handleLoadFile} />
             </div>
 
+ {/* ファイル選択ボタン */}
+      <FileButton onFileSelected={importFile} />
+
+            {/* 内部リストを選択 */}
+            <select onChange={(e) => loadFromLibrary(e.target.value)}>
+                {library.map((entry) => (
+                    <option key={entry.id} value={entry.id}>{entry.title}</option>
+                ))}
+            </select>
         </div>
     );
 }

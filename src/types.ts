@@ -31,3 +31,11 @@ export type KifPlayerState = {
   source?: string;
 };
 
+export type KifLibraryEntry = {
+  id: string;         // 一意の識別子
+  title: string;      // ファイル名や棋譜タイトル
+  source?: string;    // ファイルパスなど（必要なら）
+  kifData: KifData;   // parse済みの棋譜データ
+};
+
+export type KifLibrary = KifLibraryEntry[];
