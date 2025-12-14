@@ -14,3 +14,9 @@ export type Move = {
   moveNumber: number;
   rawText: string;
 }
+
+export type KifData = {
+  board: Board;
+  hands: Hand;
+  moves: Move[];  
+}
