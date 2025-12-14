@@ -26,7 +26,7 @@ export type KifData = {
   moves: Move[];  
 }
 
-type KifPlaybackState = {
+export type KifPlaybackState = {
   source: "temp" | "library";
   playMode: "single" | "seq" | "random";
   kif?: KifData;

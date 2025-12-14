@@ -1,5 +1,5 @@
 import './App.css'
-import KifPlayerScreen from './KifPlayerScreen'
+import KifPlayerScreen from './screens/KifPlayerScreen'
 
 function App() { 
 

@@ -1,10 +1,9 @@
 import { useState } from "react";
 
-import BoardView from './components/BoardView'
-import { parseKif } from './kifParser'
-import { type KifData } from './types'
-import FileButton from "./components/FileButton";
-
+import BoardView from '../components/BoardView'
+import { parseKif } from '../kifParser'
+import { type KifData } from '../types'
+import FileButton from "../components/FileButton";
 
 export default function KifPlayerScreen() {
     const [kifData, setKifData] = useState<KifData>()
