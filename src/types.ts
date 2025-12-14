@@ -5,11 +5,6 @@ export type Piece = {
 
 export type Board = (Piece | null)[][];
 
-export const createEmptyBoard = (): Board =>
-  Array.from({ length: 9 }, () =>
-    Array.from({ length: 9 }, () => null)
-  );
-
 export type Hand = {
   black: string; // "金二 銀" のような文字列
   white: string;
@@ -35,3 +30,4 @@ export type KifPlayerState = {
   //playMode: "single" | "seq" | "random";
   source?: string;
 };
+

@@ -1,7 +1,8 @@
 // parseKif.ts
-import { createEmptyBoard, type Board, type Hand, type Move } from "./types";
+import {  type KifData, type Board, type Hand, type Move } from "./types";
+import { createEmptyBoard } from "./hooks/useKifPlayer";
 
-export function parseKif(text: string): { board: Board, hands: Hand, moves: Move[] }  {
+export function parseKif(text: string): KifData  {
   let hands: Hand = { black: "", white: "" };  
   const moves: Move[] = [];
 

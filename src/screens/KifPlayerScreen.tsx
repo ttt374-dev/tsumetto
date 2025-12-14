@@ -1,30 +1,37 @@
 import BoardView from '../components/BoardView'
 import FileButton from "../components/FileButton";
-import { useKifPlayer } from "../hooks/useKifPlayer";
+import { createKifData, useKifPlayer } from "../hooks/useKifPlayer";
+import { type KifPlayerState } from '../types';
 
-export default function KifPlayerScreen() {    
-    const { kifPlayerState, loadFromText } = useKifPlayer();
-    
-    const loadFile = async (file: File) => {
-        const buf = await file.arrayBuffer();
-        const text = new TextDecoder("shift_jis").decode(buf);
-        loadFromText(text, file.name);        
+export function useDisplayKifData(state: KifPlayerState) {
+  return state.kifData ?? createKifData();
+}
 
+export default function KifPlayerScreen() {
+    const { kifPlayerState, loadFromFile } = useKifPlayer();
+    const handleLoadFile = async (file: File) => {
+        loadFromFile(file)        
     }
-    const kifData = kifPlayerState.kifData
+
+    const kifData = kifPlayerState.kifData ?? createKifData();
+
+
     return (
         <div style={{ padding: 20 }}>
             <h2>TSUME READER</h2>
             <div>
-                {kifData && kifData.board && (
-                    <div style={{ marginTop: 20 }}>
-                        <BoardView kifData={kifData} />
-                    </div>
-                )}
+
+                <div style={{ marginTop: 20 }}>
+                    <BoardView
+                        board={kifData.board}
+                        moves={kifData.moves}
+                        hands={kifData.hands}
+                    />
+                </div>
             </div>
 
             <div>
-                <FileButton onFileSelected={loadFile} />
+                <FileButton onFileSelected={handleLoadFile} />
             </div>
 
         </div>
