@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import BoardView from '../components/BoardView'
 import FileButton from "../components/FileButton";
 import { createKifData, useKifPlayer } from "../hooks/useKifPlayer";
@@ -8,13 +9,13 @@ export function useDisplayKifData(state: KifPlayerState) {
     return state.kifData ?? createKifData();
 }
 
-
 export default function KifPlayerScreen({
   kifPlayerState,
   playNext,
   playPrev,
 }: any) {
     const { loadFromLibrary, library, importFile,  } = useKifPlayer();
+    const navigate = useNavigate();
 
     const kifData = useDisplayKifData(kifPlayerState)
     const curIndex = kifPlayerState.currentLibraryIndex
@@ -44,6 +45,9 @@ export default function KifPlayerScreen({
 
             {/* ファイル選択ボタン */}
             <FileButton label="Import File" onFileSelected={importFile} />
+            <button onClick={() => navigate("/library")}>
+                ライブラリ管理
+            </button>
 
             {/* 内部リストを選択 */}
             <SelectLibraryEntry currentIndex={kifPlayerState.currentLibraryIndex} library={library} onSelect={loadFromLibrary} />
