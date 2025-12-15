@@ -14,9 +14,7 @@ export default function MyAppBar() {
         <Typography variant="h6" sx={{ flexGrow: 1 }}>
           つめっと
         </Typography>
-        <Button color="inherit" onClick={() => navigate("/player")}>
-          Player
-        </Button>
+
         <Button color="inherit" onClick={() => navigate("/library")}>
           Library
         </Button>

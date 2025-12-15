@@ -25,7 +25,9 @@ a:hover {
 body {
   margin: 0;
   display: flex;
-  place-items: center;
+  /*place-items: center; */
+  justify-content: center; /* 左右中央 */
+  align-items: flex-start; /* 上詰め */
  
   min-height: 100vh;
 }

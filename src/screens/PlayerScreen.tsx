@@ -3,6 +3,7 @@ import BoardView from '../components/BoardView'
 import SelectLibraryEntry from '../components/SelectLibraryEntry';
 import { createKifData } from "../hooks/useKifPlayer";
 import { type KifPlayerState, type KifLibraryEntry } from '../types';
+import FileButton from "../components/FileButton";
 
 export function useDisplayKifData(state: KifPlayerState) {
     return state.kifData ?? createKifData();
@@ -14,23 +15,30 @@ export interface PlayerScreenProps {
     playPrev: () => void;
     playLast: () => void;
     loadFromLibrary: (index: number) => void;
+    importFile: (file: File) => Promise<KifLibraryEntry>;
+    onSelect: (index: number) => void;
     //importFile: (file: File) => Promise<void>;
     // もし将来的にライブラリやimport機能を渡すならここに追加
-    library: KifLibraryEntry[];    
-
+    library: KifLibraryEntry[];
 }
-export default function PlayerScreen({kifPlayerState, playFirst, playNext, playPrev, playLast, loadFromLibrary, library}: PlayerScreenProps) {
+export default function PlayerScreen({kifPlayerState, playFirst, playNext, playPrev, playLast, loadFromLibrary, importFile, onSelect, library}: PlayerScreenProps) {
     const navigate = useNavigate();
 
     const kifData = useDisplayKifData(kifPlayerState)
     const curIndex = kifPlayerState.currentLibraryIndex
-    
+    const handleSelectFile = (file: File) => {
+        importFile(file)
+        onSelect(library.length)
+    }
     return (
         <div>
             <h3>
                 {curIndex !== undefined && `${curIndex + 1}: ${kifPlayerState.title}`}
             </h3>
-
+            {/* 内部リストを選択 */}
+            {library.length > 0 &&
+                <SelectLibraryEntry currentIndex={kifPlayerState.currentLibraryIndex} library={library} onSelect={loadFromLibrary} />
+            }
             <div>
                 <div style={{ marginTop: 20 }}>
                     <BoardView
@@ -42,22 +50,16 @@ export default function PlayerScreen({kifPlayerState, playFirst, playNext, playP
             </div>
             
             <div style={{ marginTop: 20 }}>
-                <button onClick={playFirst} disabled={library.length == 0}>最初の棋譜</button>
-                <button onClick={playPrev} disabled={library.length == 0}>前の棋譜</button>
-                <button onClick={playNext} disabled={library.length == 0}>次の棋譜</button>
-                <button onClick={playLast} disabled={library.length == 0}>最後の棋譜</button>
+                <button onClick={playFirst} disabled={library.length == 0}>&lt;&lt;</button>
+                <button onClick={playPrev} disabled={library.length == 0}>&lt;</button>
+                <button onClick={playNext} disabled={library.length == 0}>&gt;</button>
+                <button onClick={playLast} disabled={library.length == 0}>&gt;&gt;</button>
             </div>
 
 
             {/* ファイル選択ボタン */}
-            { /* <FileButton label="Import File" onFileSelected={importFile} /> */}
-            <button onClick={() => navigate("/library")}>
-                ライブラリ管理
-            </button>
-            {library.length > 0 &&
-                <SelectLibraryEntry currentIndex={kifPlayerState.currentLibraryIndex} library={library} onSelect={loadFromLibrary} />
-            }
-            {/* 内部リストを選択 */}
+            <FileButton label="Import File" onFileSelected={handleSelectFile} />
+
 
         </div>
     );

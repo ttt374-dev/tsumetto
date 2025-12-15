@@ -22,7 +22,7 @@ export default function App() {
         <Routes>
           <Route
             path="/player"
-            element={<PlayerScreen {...kifPlayer} library={kifLibrary.library} />}
+            element={<PlayerScreen {...kifPlayer} library={kifLibrary.library} importFile={kifLibrary.importFile} onSelect={(index)=>setSelectedIndex(index)}/>}
           />
           <Route
             path="/library"
