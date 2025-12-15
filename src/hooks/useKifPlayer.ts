@@ -69,6 +69,15 @@ export function useKifPlayer(library: KifLibraryEntry[], selectedIndex?: number 
     );
   };
 
+  /** PLAY_FIRST */
+  const playFirst = () => {
+    setState(prev => {
+      if (library.length === 0) return prev;
+
+      const entry = library[0]
+      return createPlayerState({...prev, kifData: entry.kifData, title: entry.title, currentLibraryIndex: 0})
+    })
+  }
   /** PLAY_NEXT */
   const playNext = () => {
     setState(prev => {
@@ -81,11 +90,16 @@ export function useKifPlayer(library: KifLibraryEntry[], selectedIndex?: number 
         kifData: entry.kifData,
         title: entry.title,
         currentLibraryIndex: next,
-        showAnswer: false,
       });
     });
   };
-
+  /** PLAY_LAST */
+  const playLast = () => {
+    setState(prev => {
+      const entry = library[library.length-1]
+      return createPlayerState({...prev, kifData: entry.kifData, title: entry.title, currentLibraryIndex: library.length-1})
+    })
+  }
 
   /** PLAY_PREV */
   const playPrev = () => {
@@ -113,8 +127,10 @@ export function useKifPlayer(library: KifLibraryEntry[], selectedIndex?: number 
     loadFromText,
     loadFromFile,
     loadFromLibrary,
+    playFirst,
     playNext,
     playPrev,
+    playLast,
   };
 }
 

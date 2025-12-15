@@ -12,7 +12,7 @@ export default function MyAppBar() {
     <AppBar position="fixed">
       <Toolbar>
         <Typography variant="h6" sx={{ flexGrow: 1 }}>
-          Kif App
+          つめっと
         </Typography>
         <Button color="inherit" onClick={() => navigate("/player")}>
           Player
