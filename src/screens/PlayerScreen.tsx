@@ -24,7 +24,7 @@ export default function PlayerScreen({kifPlayerState, playNext, playPrev, loadFr
     const curIndex = kifPlayerState.currentLibraryIndex
     
     return (
-        <div style={{ padding: 20 }}>
+        <div>
             <h2>つめっと</h2>
             <h3>
                 {curIndex !== undefined && `${curIndex + 1}: ${kifPlayerState.title}`}
