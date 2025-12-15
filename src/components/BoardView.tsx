@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import styles from "./BoardView.module.css";
 import { type Board, type Hand, type Move } from "../types";
 
@@ -13,10 +13,6 @@ const rankLabels = ["一","二","三","四","五","六","七","八","九"];
 
 function BoardView({ board, hands, moves }: Props) {
   const [showMoves, setShowMoves] = useState(false);
-
-  useEffect(() => {
-    setShowMoves(false);
-  }, [moves]);
 
   return (
     <div className={styles.container}>
