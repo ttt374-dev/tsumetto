@@ -25,7 +25,9 @@ export function useKifLibrary() {
             ? result.data
             : await result.data.text();
 
-        setLibrary(JSON.parse(dataStr));
+        const savedLib = JSON.parse(dataStr)
+        setLibrary(savedLib);
+       
       } catch {
         setLibrary([]);
       }

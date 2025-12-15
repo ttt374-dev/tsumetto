@@ -24,7 +24,7 @@ export default function LibraryScreen({ library, loadFromLibrary, importFile }: 
                 navigate("/player");
               }}
             >
-              {entry.title}
+              {entry.title} {new Date(entry.createdAt).toLocaleString("ja-JP")}
             </button>
           </li>
         ))}

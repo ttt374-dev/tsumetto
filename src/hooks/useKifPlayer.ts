@@ -12,6 +12,18 @@ export function useKifPlayer(library: KifLibraryEntry[]) {
   const [state, setState] = useState<KifPlayerState>(createPlayState());
   //const [library, setLibrary] = useState<KifLibraryEntry[]>([]);
 
+  // 起動時または library 更新時に先頭棋譜を読み込む
+  useEffect(() => {
+    if (library.length > 0 && state.kifData?.moves.length === 0) {
+      const first = library[0];
+      setState(createPlayState({
+        kifData: first.kifData,
+        title: first.title,
+        currentLibraryIndex: 0,
+        showAnswer: false,
+      }));
+    }
+  }, [library]);
   /* =============================
    * reducer想定の「アクション関数」
    * ============================= */
