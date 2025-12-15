@@ -3,23 +3,26 @@ import { parseKif } from "../kifParser";
 import { type KifData, type KifPlayerState, type KifLibraryEntry, type Board } from "../types";
 
 
-export function useKifPlayer(library: KifLibraryEntry[]) {
-  const [state, setState] = useState<KifPlayerState>(createPlayState());
+export function useKifPlayer(library: KifLibraryEntry[], selectedIndex?: number | null) {
+  const [state, setState] = useState<KifPlayerState>(createPlayerState());
   //const [library, setLibrary] = useState<KifLibraryEntry[]>([]);
   // 起動時または library 更新時に先頭棋譜を読み込む
+
   useEffect(() => {
-    if (library.length > 0) {
-      const first = library[0];
-      setState(createPlayState({
-        kifData: first.kifData,
-        title: first.title,
-        currentLibraryIndex: 0,
-        showAnswer: false,
-      }));
-    } else {
-      setState(createPlayState());
+    if (library.length === 0) {
+      setState(createPlayerState());
+      return;
     }
-  }, [library]);
+
+    // selectedIndex が外部から渡される場合はそれを優先
+    if (selectedIndex != null && library[selectedIndex]) {
+      loadFromLibrary(selectedIndex);
+    } else {
+      // なければ先頭棋譜をロード
+      loadFromLibrary(0);
+    }
+  }, [library, selectedIndex]);
+
 
   /* =============================
    * reducer想定の「アクション関数」
@@ -28,7 +31,7 @@ export function useKifPlayer(library: KifLibraryEntry[]) {
   /** LOAD_KIF */
   const loadKif = (kifData: KifData, title = "") => {
     setState((prev) =>
-      createPlayState({
+      createPlayerState({
         ...prev,
         kifData,
         title,
@@ -56,7 +59,7 @@ export function useKifPlayer(library: KifLibraryEntry[]) {
     if (!entry) return;
 
     setState((prev) =>
-      createPlayState({
+      createPlayerState({
         ...prev,
         kifData: entry.kifData,
         title: entry.title,
@@ -73,7 +76,7 @@ export function useKifPlayer(library: KifLibraryEntry[]) {
       const next =
         ((prev.currentLibraryIndex ?? -1) + 1) % library.length;
       const entry = library[next];
-      return createPlayState({
+      return createPlayerState({
         ...prev,
         kifData: entry.kifData,
         title: entry.title,
@@ -93,7 +96,7 @@ export function useKifPlayer(library: KifLibraryEntry[]) {
       const prevIndex = current === 0 ? library.length - 1 : current - 1;
       const entry = library[prevIndex];
 
-      return createPlayState({
+      return createPlayerState({
         ...prev,
         kifData: entry.kifData,
         title: entry.title,
@@ -117,7 +120,7 @@ export function useKifPlayer(library: KifLibraryEntry[]) {
 
 ///////////////////////////////////
 // hooks/usePlayerState.ts
-export const createPlayState = (
+export const createPlayerState = (
   partial?: Partial<KifPlayerState>
 ): KifPlayerState => ({
   kifData: createKifData(),

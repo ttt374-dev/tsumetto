@@ -87,7 +87,7 @@ export function parseKif(text: string): KifData  {
     }
     if (!inMoves) continue;
     console.log("in moves: ", line)
-    const move = { moveNumber: 0, rawText: line}
+    //const move = { moveNumber: 0, rawText: line}
     /*
     // 行例: "   1 ５二金打     ( 0:00/00:00:00)"
     const m = line.match(/^\s*(\d+)\s+([\d一二三四五六七八九]+.*?)/);
@@ -98,9 +98,29 @@ export function parseKif(text: string): KifData  {
       rawText: m[2].trim(),
     }
       */
+    
+    const move = parseMoveLine(line)
+    if (!move) continue
     moves.push(move);
-    console.log("moves: ", move.moveNumber, move.rawText)
+    
+    console.log("moves: ", move.moveNumber, move.moveText)
   }
 
   return { board, hands, moves } ;
+}
+
+// 1行の KIF を解析して Move オブジェクトへ
+function parseMoveLine(line: string): Move | null {
+  console.log("parse move", line)
+  //  例: "  5 １六歩(43)    ( 0:00/00:00:00)"
+  const moveRegex = /^\s*(\d+)\s+([^\(]+?)(?:\((\d\d)\))?\s*\(/;
+  const m = line.match(moveRegex);
+  if (!m) return null;
+
+  const moveNumber = parseInt(m[1], 10);
+  const isBlack = moveNumber % 2 == 1
+  const moveText = m[2].trim();  // "１六歩"
+  const from = m[3] || null;     // "43" 等、無ければ null
+  console.log("parse move", moveNumber, isBlack, moveText, from)
+  return { moveNumber, isBlack, moveText, from };
 }

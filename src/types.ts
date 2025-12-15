@@ -12,7 +12,9 @@ export type Hand = {
 
 export type Move = {
   moveNumber: number;
-  rawText: string;
+  moveText: string;
+  isBlack: boolean;
+  from: string | null;
 }
 
 export type KifData = {

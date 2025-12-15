@@ -13,29 +13,23 @@ export interface PlayerScreenProps {
     playPrev: () => void;
     loadFromLibrary: (index: number) => void;
     //importFile: (file: File) => Promise<void>;
-
     // もし将来的にライブラリやimport機能を渡すならここに追加
-    library: KifLibraryEntry[];
+    library: KifLibraryEntry[];    
 
 }
-export default function PlayerScreen({
-    kifPlayerState,
-    playNext,
-    playPrev,
-    loadFromLibrary,
-
-    library
-}: PlayerScreenProps) {
-    //const { loadFromLibrary, library, importFile, } = useKifPlayer();
+export default function PlayerScreen({kifPlayerState, playNext, playPrev, loadFromLibrary, library}: PlayerScreenProps) {
     const navigate = useNavigate();
 
     const kifData = useDisplayKifData(kifPlayerState)
     const curIndex = kifPlayerState.currentLibraryIndex
-    //console.log("current index", kifPlayerState.currentLibraryIndex)
-
+    
     return (
         <div style={{ padding: 20 }}>
             <h2>つめっと</h2>
+            <h3>
+                {curIndex !== undefined && `${curIndex + 1}: ${kifPlayerState.title}`}
+            </h3>
+
             <div>
                 <div style={{ marginTop: 20 }}>
                     <BoardView
@@ -45,10 +39,7 @@ export default function PlayerScreen({
                     />
                 </div>
             </div>
-
-            <div>
-                {curIndex !== undefined && `${curIndex + 1}: ${kifPlayerState.title}`}
-            </div>
+            
             <div style={{ marginTop: 20 }}>
                 <button onClick={playPrev} disabled={library.length == 0}>前の棋譜</button>
                 <button onClick={playNext} disabled={library.length == 0}>次の棋譜</button>

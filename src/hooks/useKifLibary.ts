@@ -12,49 +12,49 @@ export function useKifLibrary() {
 
   /* 永続化ロード */
   useEffect(() => {
-  (async () => {
+    (async () => {
+      try {
+        const result = await Filesystem.readFile({
+          path: LIB_FILE,
+          directory: Directory.Data,
+          encoding: Encoding.UTF8,
+        });
+
+        // result.data が string ならそのまま、Blob なら text() で string に変換
+        let dataStr: string;
+        if (typeof result.data === "string") {
+          dataStr = result.data;
+        } else {
+          dataStr = await result.data.text();
+        }
+
+        const savedLib: unknown = JSON.parse(dataStr);
+        if (Array.isArray(savedLib)) {
+          setLibrary(savedLib as KifLibraryEntry[]);
+        } else {
+          setLibrary([]);
+        }
+      } catch {
+        setLibrary([]);
+      }
+    })();
+  }, []);
+
+
+
+  const persist = async (next: KifLibraryEntry[]) => {
     try {
-      const result = await Filesystem.readFile({
+      await Filesystem.writeFile({
         path: LIB_FILE,
+        data: JSON.stringify(next),
         directory: Directory.Data,
         encoding: Encoding.UTF8,
       });
-
-      // result.data が string ならそのまま、Blob なら text() で string に変換
-      let dataStr: string;
-      if (typeof result.data === "string") {
-        dataStr = result.data;
-      } else {
-        dataStr = await result.data.text();
-      }
-
-      const savedLib: unknown = JSON.parse(dataStr);
-      if (Array.isArray(savedLib)) {
-        setLibrary(savedLib as KifLibraryEntry[]);
-      } else {
-        setLibrary([]);
-      }
-    } catch {
-      setLibrary([]);
+      setLibrary(next); // ファイル保存後に state 更新
+    } catch (err) {
+      console.error("Library persist failed", err);
     }
-  })();
-}, []);
-
-
-
-const persist = async (next: KifLibraryEntry[]) => {
-  try {
-    await Filesystem.writeFile({
-      path: LIB_FILE,
-      data: JSON.stringify(next),
-      directory: Directory.Data,
-      encoding: Encoding.UTF8,
-    });
-    setLibrary(next); // ファイル保存後に state 更新
-  } catch (err) {
-    console.error("Library persist failed", err);
-  }
-};
+  };
 
 
   const importFile = async (file: File) => {
@@ -81,7 +81,7 @@ const persist = async (next: KifLibraryEntry[]) => {
         path: LIB_FILE,
         directory: Directory.Data,
       });
-    } catch {}
+    } catch { }
   };
 
   const findById = (id: string) =>

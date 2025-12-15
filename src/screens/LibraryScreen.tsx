@@ -1,15 +1,17 @@
+import { useState } from 'react'
 import { useNavigate } from "react-router-dom";
 import type { KifLibraryEntry } from "../types";
 import FileButton from "../components/FileButton";
 
 export interface LibraryScreenProps {
-  library: KifLibraryEntry[];
-  loadFromLibrary: (index: number) => void;
+  library: KifLibraryEntry[];  
   importFile: (file: File) => Promise<KifLibraryEntry>;
   clearLibrary: () => void;  
+  onSelect: (index: number) => void;
 }
 
-export default function LibraryScreen({ library, loadFromLibrary, importFile, clearLibrary }: LibraryScreenProps) {
+export default function LibraryScreen({ library, importFile, clearLibrary, onSelect }: LibraryScreenProps) {
+  const [importAndPlay, setImportAndPlay] = useState(false)
   const navigate = useNavigate();
 
   const handleClear = async () => {
@@ -21,20 +23,26 @@ export default function LibraryScreen({ library, loadFromLibrary, importFile, cl
     await clearLibrary();
   };
 
+  const handleSelectFile = (file: File) => {
+    importFile(file)
+    onSelect(library.length)
+    if (importAndPlay) navigate("/player")
+  }
   return (
     <div>
       <h2>Library</h2>
-      <ul>
-        {library.map((entry) => (
-          <li key={entry.id}>
+      <ul style={{ listStyle: "none"}}>
+        {library.map((entry, i) => (
+          <li style={{ margin: "4px"}} key={entry.id}>
             <button
               onClick={() => {
                 const index = library.indexOf(entry);
-                loadFromLibrary(index);
+                //loadFromLibrary(index);
+                onSelect(index)
                 navigate("/player");
               }}
             >
-              {entry.title} <span>: </span>{new Date(entry.createdAt).toLocaleString("ja-JP")}
+              {i+1}: {entry.title} ({new Date(entry.createdAt).toLocaleString("ja-JP")})
             </button>
           </li>
         ))}
@@ -42,7 +50,16 @@ export default function LibraryScreen({ library, loadFromLibrary, importFile, cl
 
       <hr />
 
-      <FileButton label="Import File" onFileSelected={importFile} /> 
+      <FileButton label="Import File" onFileSelected={handleSelectFile} /> 
+      {/* チェックボックス */}
+      <label style={{ display: "block", marginBottom: "12px" }}>
+        <input
+          type="checkbox"
+          checked={importAndPlay}
+          onChange={(e) => setImportAndPlay(e.target.checked)}
+        />{" "}
+        Import 後すぐ再生する
+      </label>
 
       <button onClick={handleClear}>
         Delete All

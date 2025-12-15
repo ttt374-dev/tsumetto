@@ -71,7 +71,7 @@ function BoardView({ board, hands, moves }: Props) {
       {showMoves &&
         moves.map((m, i) => (
           <div key={i} style={{ padding: "2px 0" }}>
-            {m.rawText}
+            {i+1}: {m.moveText} ({m.from})
           </div>
         ))
       }
