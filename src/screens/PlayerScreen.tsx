@@ -2,19 +2,27 @@ import { useNavigate } from "react-router-dom";
 import BoardView from '../components/BoardView'
 import FileButton from "../components/FileButton";
 import { createKifData, useKifPlayer } from "../hooks/useKifPlayer";
-import { type KifPlayerState } from '../types';
+import { type KifPlayerState, type KifLibraryEntry } from '../types';
 import SelectLibraryEntry from '../components/SelectLibraryEntry';
 
 export function useDisplayKifData(state: KifPlayerState) {
     return state.kifData ?? createKifData();
 }
-
+export interface KifPlayerScreenProps {
+    kifPlayerState: KifPlayerState;
+    playNext: () => void;
+    playPrev: () => void;
+    // もし将来的にライブラリやimport機能を渡すならここに追加
+    library?: KifLibraryEntry[];
+    loadFromLibrary?: (index: number) => void;
+    importFile?: (file: File) => Promise<void>;
+}
 export default function KifPlayerScreen({
-  kifPlayerState,
-  playNext,
-  playPrev,
-}: any) {
-    const { loadFromLibrary, library, importFile,  } = useKifPlayer();
+    kifPlayerState,
+    playNext,
+    playPrev,
+}: KifPlayerScreenProps) {
+    const { loadFromLibrary, library, importFile, } = useKifPlayer();
     const navigate = useNavigate();
 
     const kifData = useDisplayKifData(kifPlayerState)
@@ -38,8 +46,8 @@ export default function KifPlayerScreen({
                 {curIndex !== undefined && `${curIndex + 1}: ${kifPlayerState.title}`}
             </div>
             <div style={{ marginTop: 20 }}>
-                <button onClick={playPrev} disabled={library.length==0}>Prev Kif</button>
-                <button onClick={playNext} disabled={library.length==0}>Next Kif</button>
+                <button onClick={playPrev} disabled={library.length == 0}>Prev Kif</button>
+                <button onClick={playNext} disabled={library.length == 0}>Next Kif</button>
             </div>
 
 
