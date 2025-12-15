@@ -5,6 +5,7 @@ import { createKifData } from "../hooks/useKifPlayer";
 import { type KifPlayerState, type KifLibraryEntry } from '../types';
 import FileButton from "../components/FileButton";
 import { useSwipeable } from "react-swipeable";
+import { useNavigate } from "react-router-dom";
 
 export function useDisplayKifData(state: KifPlayerState) {
     return state.kifData ?? createKifData();
@@ -23,29 +24,32 @@ export interface PlayerScreenProps {
     library: KifLibraryEntry[];
 }
 export default function PlayerScreen({ kifPlayerState, playFirst, playNext, playPrev, playLast, loadFromLibrary, importFile, onSelect, library }: PlayerScreenProps) {
-    //const navigate = useNavigate();    
+    const navigate = useNavigate();    
     const kifData = useDisplayKifData(kifPlayerState)
     const curIndex = kifPlayerState.currentLibraryIndex
     const handleSelectFile = (file: File) => {
         importFile(file)
         onSelect(library.length)
     }
-
+    const handleGoLibrary = () => {
+        navigate("/library")
+    }
         // スワイプハンドラ
     const handlers = useSwipeable({
-        onSwipedLeft: () => {
-            // 左スワイプ → 次の手
+        onSwipedLeft: () => {// 左スワイプ → 次の棋譜へ
             playNext()
         },
-        onSwipedRight: () => {
-            // 右スワイプ → 前の手
+        onSwipedRight: () => {// 右スワイプ → 前の棋譜へ
             playPrev()
         },
         trackMouse: true, // PCでもマウスでスワイプ可能
         preventScrollOnSwipe: true,
     });
     return (
-        <div>
+    <Box sx={{
+          position: "sticky",
+          top: 0,
+          pt: "env(safe-area-inset-top)"}}>
             <h3>
                 {curIndex !== undefined && `${curIndex + 1}: ${kifPlayerState.title}`}
             </h3>
@@ -76,10 +80,9 @@ export default function PlayerScreen({ kifPlayerState, playFirst, playNext, play
             </div>
 
 
+            <button onClick={handleGoLibrary}>ライブラリ管理</button>
             {/* ファイル選択ボタン */}
-            <FileButton label="Import File" onFileSelected={handleSelectFile} />
-
-
-        </div>
+            <FileButton label="棋譜ファイルを登録" onFileSelected={handleSelectFile} />
+        </Box>
     );
 }

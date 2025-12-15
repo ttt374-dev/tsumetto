@@ -57,21 +57,48 @@ export function useKifLibrary() {
   };
 
 
-  const importFile = async (file: File) => {
-    const buf = await file.arrayBuffer();
-    const text = new TextDecoder("shift_jis").decode(buf);
-    const kifData = parseKif(text);
+const importFile = async (file: File) => {
+  const buf = await file.arrayBuffer();
+  const text = new TextDecoder("shift_jis").decode(buf);
+  const kifData = parseKif(text);
 
-    const entry: KifLibraryEntry = {
-      id: uuidv4(),
-      title: file.name,
-      source: file.name,
-      kifData,
-      createdAt: Date.now(),
-    };
+  let baseName = file.name;
+  let ext = "";
+  const dotIndex = file.name.lastIndexOf(".");
+  if (dotIndex >= 0) {
+    baseName = file.name.slice(0, dotIndex);
+    ext = file.name.slice(dotIndex); // ".kif" などの拡張子
+  }
 
-    await persist([...library, entry]);
-    return entry; // ★ player 側で即ロードできる
+  // 重複チェック
+  let newTitle = baseName + ext;
+  let counter = 1;
+  const existingTitles = new Set(library.map((e) => e.title));
+  while (existingTitles.has(newTitle)) {
+    newTitle = `${baseName}(${counter})${ext}`;
+    counter++;
+  }
+
+  const entry: KifLibraryEntry = {
+    id: uuidv4(),
+    title: newTitle,
+    source: file.name,
+    kifData,
+    createdAt: Date.now(),
+  };
+
+  await persist([...library, entry]);
+  return entry; // ★ player 側で即ロードできる
+};
+
+
+  const deleteEntry = async (entry: KifLibraryEntry) => {
+    try {
+      const nextLibrary = library.filter((e) => e.id !== entry.id);
+      await persist(nextLibrary);
+    } catch (err) {
+      console.error("Failed to delete entry:", err);
+    }
   };
 
   const clearLibrary = async () => {
@@ -92,5 +119,6 @@ export function useKifLibrary() {
     importFile,
     clearLibrary,
     findById,
+    deleteEntry,
   };
 }
