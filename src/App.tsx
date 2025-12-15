@@ -3,7 +3,7 @@ import './App.css'
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useKifPlayer } from "./hooks/useKifPlayer";
 import { useKifLibrary } from './hooks/useKifLibary';
-import KifPlayerScreen from "./screens/PlayerScreen";
+import PlayerScreen from "./screens/PlayerScreen";
 import LibraryScreen from "./screens/LibraryScreen";
 
 export default function App() {
@@ -15,7 +15,7 @@ export default function App() {
       <Routes>
         <Route
           path="/player"
-          element={<KifPlayerScreen {...kifPlayer} library={kifLibrary.library} />}
+          element={<PlayerScreen {...kifPlayer} library={kifLibrary.library} />}
         />
         <Route
           path="/library"

@@ -1,14 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import BoardView from '../components/BoardView'
-import FileButton from "../components/FileButton";
 import SelectLibraryEntry from '../components/SelectLibraryEntry';
-import { createKifData, useKifPlayer } from "../hooks/useKifPlayer";
+import { createKifData } from "../hooks/useKifPlayer";
 import { type KifPlayerState, type KifLibraryEntry } from '../types';
 
 export function useDisplayKifData(state: KifPlayerState) {
     return state.kifData ?? createKifData();
 }
-export interface KifPlayerScreenProps {
+export interface PlayerScreenProps {
     kifPlayerState: KifPlayerState;
     playNext: () => void;
     playPrev: () => void;
@@ -19,14 +18,14 @@ export interface KifPlayerScreenProps {
     library: KifLibraryEntry[];
 
 }
-export default function KifPlayerScreen({
+export default function PlayerScreen({
     kifPlayerState,
     playNext,
     playPrev,
     loadFromLibrary,
 
     library
-}: KifPlayerScreenProps) {
+}: PlayerScreenProps) {
     //const { loadFromLibrary, library, importFile, } = useKifPlayer();
     const navigate = useNavigate();
 

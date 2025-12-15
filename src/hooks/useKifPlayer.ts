@@ -11,7 +11,6 @@ import {
 export function useKifPlayer(library: KifLibraryEntry[]) {
   const [state, setState] = useState<KifPlayerState>(createPlayState());
   //const [library, setLibrary] = useState<KifLibraryEntry[]>([]);
-
   // 起動時または library 更新時に先頭棋譜を読み込む
   useEffect(() => {
     if (library.length > 0 && state.kifData?.moves.length === 0) {
