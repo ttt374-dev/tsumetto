@@ -17,7 +17,7 @@ export interface KifPlayerScreenProps {
 
     // もし将来的にライブラリやimport機能を渡すならここに追加
     library: KifLibraryEntry[];
-    
+
 }
 export default function KifPlayerScreen({
     kifPlayerState,
@@ -61,9 +61,11 @@ export default function KifPlayerScreen({
             <button onClick={() => navigate("/library")}>
                 ライブラリ管理
             </button>
-
+            {library.length > 0 &&
+                <SelectLibraryEntry currentIndex={kifPlayerState.currentLibraryIndex} library={library} onSelect={loadFromLibrary} />
+            }
             {/* 内部リストを選択 */}
-            <SelectLibraryEntry currentIndex={kifPlayerState.currentLibraryIndex} library={library} onSelect={loadFromLibrary} />
+
         </div>
     );
 }

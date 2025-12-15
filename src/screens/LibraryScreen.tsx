@@ -6,10 +6,20 @@ export interface LibraryScreenProps {
   library: KifLibraryEntry[];
   loadFromLibrary: (index: number) => void;
   importFile: (file: File) => Promise<KifLibraryEntry>;
+  clearLibrary: () => void;  
 }
 
-export default function LibraryScreen({ library, loadFromLibrary, importFile }: LibraryScreenProps) {
+export default function LibraryScreen({ library, loadFromLibrary, importFile, clearLibrary }: LibraryScreenProps) {
   const navigate = useNavigate();
+
+  const handleClear = async () => {
+    const ok = window.confirm(
+      "⚠️ ライブラリをすべて削除します。\n（デバッグ用）"
+    );
+    if (!ok) return;
+
+    await clearLibrary();
+  };
 
   return (
     <div>
@@ -24,7 +34,7 @@ export default function LibraryScreen({ library, loadFromLibrary, importFile }: 
                 navigate("/player");
               }}
             >
-              {entry.title} {new Date(entry.createdAt).toLocaleString("ja-JP")}
+              {entry.title} <span>: </span>{new Date(entry.createdAt).toLocaleString("ja-JP")}
             </button>
           </li>
         ))}
@@ -33,6 +43,10 @@ export default function LibraryScreen({ library, loadFromLibrary, importFile }: 
       <hr />
 
       <FileButton label="Import File" onFileSelected={importFile} /> 
+
+      <button onClick={handleClear}>
+        Delete All
+      </button>
       <button onClick={() => navigate("/player")}>
         戻る
       </button>

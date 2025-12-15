@@ -16,11 +16,10 @@ const SelectLibraryEntry: React.FC<SelectLibraryEntryProps> = ({ currentIndex, l
         <select
             value={currentIndex}
             onChange={handleSelectLibrary}>
-            <option value="">Select Kif File</option>
             {
 
                 library.map((entry, i) => (
-                    <option key={entry.id} value={i}>{entry.title}</option>
+                    <option key={entry.id} value={i}>{i+1}:  {entry.title}</option>
                 ))
             }
         </select >

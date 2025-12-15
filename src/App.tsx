@@ -19,7 +19,7 @@ export default function App() {
         />
         <Route
           path="/library"
-          element={<LibraryScreen library={kifLibrary.library} importFile={kifLibrary.importFile} loadFromLibrary={kifPlayer.loadFromLibrary} />}
+          element={<LibraryScreen library={kifLibrary.library} importFile={kifLibrary.importFile} loadFromLibrary={kifPlayer.loadFromLibrary} clearLibrary={kifLibrary.clearLibrary}/>}
         />
         <Route path="*" element={<Navigate to="/player" />} />
       </Routes>

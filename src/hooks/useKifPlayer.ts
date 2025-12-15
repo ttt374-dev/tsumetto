@@ -22,6 +22,8 @@ export function useKifPlayer(library: KifLibraryEntry[]) {
         currentLibraryIndex: 0,
         showAnswer: false,
       }));
+    } else if (library.length == 0){
+      setState(createPlayState())
     }
   }, [library]);
   /* =============================
