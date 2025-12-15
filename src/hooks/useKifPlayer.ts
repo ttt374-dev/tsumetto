@@ -78,6 +78,7 @@ export function useKifPlayer() {
       title: file.name,
       source: file.name,
       kifData,
+      createdAt: Date.now(), // ★
     };
 
     const newLib = [...library, entry];
@@ -109,26 +110,48 @@ export function useKifPlayer() {
     );
   };
 
-  /** PLAY_NEXT */
-  const playNext = () => {
-    if (library.length === 0) return;
+    /** PLAY_NEXT */
+    const playNext = () => {
+        setState(prev => {
+            if (library.length === 0) return prev;
+            const next =
+                ((prev.currentLibraryIndex ?? -1) + 1) % library.length;
+            const entry = library[next];
+            return createPlayState({
+                ...prev,
+                kifData: entry.kifData,
+                title: entry.title,
+                currentLibraryIndex: next,
+                showAnswer: false,
+            });
+        });
+    };
 
-    const next =
-      ((state.currentLibraryIndex ?? -1) + 1) % library.length;
-    loadFromLibrary(next);
-  };
 
-  /** PLAY_PREV */
-  const playPrev = () => {
-    if (library.length === 0) return;
+    /** PLAY_PREV */
+    const playPrev = () => {
+        setState((prev) => {
+            if (library.length === 0) return prev;
 
-    const prev =
-      (state.currentLibraryIndex ?? library.length) - 1 < 0
-        ? library.length - 1
-        : (state.currentLibraryIndex ?? 0) - 1;
+            const current =
+                prev.currentLibraryIndex ?? library.length;
 
-    loadFromLibrary(prev);
-  };
+            const prevIndex =
+                current - 1 < 0 ? library.length - 1 : current - 1;
+
+            const entry = library[prevIndex];
+            if (!entry) return prev;
+
+            return createPlayState({
+                ...prev,
+                kifData: entry.kifData,
+                title: entry.title,
+                currentLibraryIndex: prevIndex,
+                showAnswer: false,
+            });
+        });
+    };
+
 
   return {
     kifPlayerState: state,
@@ -147,6 +170,7 @@ export function useKifPlayer() {
 export const createPlayState = (
     partial?: Partial<KifPlayerState>
 ): KifPlayerState => ({    
+    kifData: createKifData(),
     showAnswer: false,
     title: "",
     ...partial,
@@ -156,15 +180,14 @@ export function createKifData(
     partial?: Partial<KifData>
 ): KifData {
     return {
-        board: createEmptyBoard(),
+        board: createBoard(),
         hands: { black: "", white: "" },
         moves: [],
         ...partial,
     };
 }
 
-
-export const createEmptyBoard = (): Board =>
+export const createBoard = (): Board =>
     Array.from({ length: 9 }, () =>
         Array.from({ length: 9 }, () => null)
     );

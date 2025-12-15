@@ -1,13 +1,13 @@
 // parseKif.ts
 import {  type KifData, type Board, type Hand, type Move } from "./types";
-import { createEmptyBoard } from "./hooks/useKifPlayer";
+import { createBoard } from "./hooks/useKifPlayer";
 
 export function parseKif(text: string): KifData  {
   let hands: Hand = { black: "", white: "" };  
   const moves: Move[] = [];
 
   // 9x9 null 埋め
-  const board: Board = createEmptyBoard()
+  const board: Board = createBoard()
   const lines = text.split(/\r?\n/);
 
   for (const line of lines) {

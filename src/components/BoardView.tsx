@@ -50,8 +50,8 @@ function BoardView({ board , hands, moves }: Props) {
 
       { /* 解答 */}
 
-      <button onClick={() => setShowMoves(!showMoves)}>
-        {showMoves ? "解答を隠す" : "解答を表示"}
+      <button onClick={() => setShowMoves(!showMoves)} disabled={moves.length==0}>
+        {showMoves ? "Hide Answer" : "Show Answer"}
       </button>
       {showMoves &&        
         moves.map((m, i) => (

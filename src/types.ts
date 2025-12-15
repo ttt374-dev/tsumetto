@@ -22,7 +22,7 @@ export type KifData = {
 }
 
 export type KifPlayerState = {
-  kifData?: KifData;
+  kifData: KifData;
   showAnswer: boolean;
   title: string,
   //mode: "temp" | "library";
@@ -37,6 +37,7 @@ export type KifLibraryEntry = {
   title: string;      // ファイル名や棋譜タイトル
   source?: string;    // ファイルパスなど（必要なら）
   kifData: KifData;   // parse済みの棋譜データ
+  createdAt: number;
 };
 
 export type KifLibrary = KifLibraryEntry[];
