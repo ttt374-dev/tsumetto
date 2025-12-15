@@ -22,6 +22,7 @@ function BoardView({ board, hands, moves }: Props) {
     <div className={styles.container}>
       {/* 上の筋表示 */}
       <div className={styles.fileLabels}>
+
         <div className={styles.corner}></div> {/* 左上の空白 */}
         {fileLabels.map((f, i) => (
           <div key={i} className={styles.fileLabel}>{f}</div>
@@ -31,7 +32,9 @@ function BoardView({ board, hands, moves }: Props) {
       {/* 盤面 + 左側の段表示 */}
       {board.map((row, r) => (
         <div key={r} className={styles.rowWithRank}>
-          
+
+          {/* 左側の段表示（スペース） */}
+          <div className={styles.rankLabel}></div>
           {/* 盤面の行 */}
           {row
             .slice()
@@ -50,7 +53,7 @@ function BoardView({ board, hands, moves }: Props) {
               );
             })}
 
-            {/* 左側の段表示 */}
+            {/* 右側の段表示 */}
           <div className={styles.rankLabel}>{rankLabels[r]}</div>
 
         </div>
@@ -63,7 +66,7 @@ function BoardView({ board, hands, moves }: Props) {
 
       {/* 解答表示 */}
       <button onClick={() => setShowMoves(!showMoves)} disabled={moves.length === 0}>
-        {showMoves ? "Hide Answer" : "Show Answer"}
+        {showMoves ? "解答を隠す" : "解答を表示"}
       </button>
       {showMoves &&
         moves.map((m, i) => (

@@ -10,6 +10,7 @@
 
 .rowWithRank {
   display: flex;
+  
 }
 .emptyCell {
   width: 28px;
@@ -36,26 +37,25 @@
 .fileLabels {
   display: flex;
   margin-bottom: 2px;
+  margin-left: 12px;
 }
 
 .fileLabel {
   width: 30px;
-  height: 30px;
+  height: 12px;
   display: flex;
   justify-content: center; /* 横中央 */
   align-items: flex-end;   /* 下寄せ */
-  font-weight: bold;
   font-size: 12px; 
   padding-bottom: 2px;     /* 少し余白 */
 }
 
 .rankLabel {
-  width: 30px;
+  width: 12px;
   height: 30px;
   display: flex;
   justify-content: flex-start; /* 右寄せ */
   align-items: center;       /* 縦中央 */
-  font-weight: bold;
   font-size: 12px;
   padding-right: 2px;        /* 少し余白 */
 }

@@ -1,11 +1,6 @@
 import { useState, useEffect } from "react";
 import { parseKif } from "../kifParser";
-import {
-  type KifData,
-  type KifPlayerState,
-  type KifLibraryEntry,
-  type Board
-} from "../types";
+import { type KifData, type KifPlayerState, type KifLibraryEntry, type Board } from "../types";
 
 
 export function useKifPlayer(library: KifLibraryEntry[]) {
@@ -13,7 +8,7 @@ export function useKifPlayer(library: KifLibraryEntry[]) {
   //const [library, setLibrary] = useState<KifLibraryEntry[]>([]);
   // 起動時または library 更新時に先頭棋譜を読み込む
   useEffect(() => {
-    if (library.length > 0 && state.kifData?.moves.length === 0) {
+    if (library.length > 0) {
       const first = library[0];
       setState(createPlayState({
         kifData: first.kifData,
@@ -21,10 +16,11 @@ export function useKifPlayer(library: KifLibraryEntry[]) {
         currentLibraryIndex: 0,
         showAnswer: false,
       }));
-    } else if (library.length == 0){
-      setState(createPlayState())
+    } else {
+      setState(createPlayState());
     }
   }, [library]);
+
   /* =============================
    * reducer想定の「アクション関数」
    * ============================= */
@@ -70,47 +66,42 @@ export function useKifPlayer(library: KifLibraryEntry[]) {
     );
   };
 
-    /** PLAY_NEXT */
-    const playNext = () => {
-        setState(prev => {
-            if (library.length === 0) return prev;
-            const next =
-                ((prev.currentLibraryIndex ?? -1) + 1) % library.length;
-            const entry = library[next];
-            return createPlayState({
-                ...prev,
-                kifData: entry.kifData,
-                title: entry.title,
-                currentLibraryIndex: next,
-                showAnswer: false,
-            });
-        });
-    };
+  /** PLAY_NEXT */
+  const playNext = () => {
+    setState(prev => {
+      if (library.length === 0) return prev;
+      const next =
+        ((prev.currentLibraryIndex ?? -1) + 1) % library.length;
+      const entry = library[next];
+      return createPlayState({
+        ...prev,
+        kifData: entry.kifData,
+        title: entry.title,
+        currentLibraryIndex: next,
+        showAnswer: false,
+      });
+    });
+  };
 
 
-    /** PLAY_PREV */
-    const playPrev = () => {
-        setState((prev) => {
-            if (library.length === 0) return prev;
+  /** PLAY_PREV */
+  const playPrev = () => {
+    setState(prev => {
+      if (library.length === 0) return prev;
 
-            const current =
-                prev.currentLibraryIndex ?? library.length;
+      const current = prev.currentLibraryIndex ?? 0;
+      const prevIndex = current === 0 ? library.length - 1 : current - 1;
+      const entry = library[prevIndex];
 
-            const prevIndex =
-                current - 1 < 0 ? library.length - 1 : current - 1;
-
-            const entry = library[prevIndex];
-            if (!entry) return prev;
-
-            return createPlayState({
-                ...prev,
-                kifData: entry.kifData,
-                title: entry.title,
-                currentLibraryIndex: prevIndex,
-                showAnswer: false,
-            });
-        });
-    };
+      return createPlayState({
+        ...prev,
+        kifData: entry.kifData,
+        title: entry.title,
+        currentLibraryIndex: prevIndex,
+        showAnswer: false,
+      });
+    });
+  };
 
 
   return {
@@ -127,26 +118,26 @@ export function useKifPlayer(library: KifLibraryEntry[]) {
 ///////////////////////////////////
 // hooks/usePlayerState.ts
 export const createPlayState = (
-    partial?: Partial<KifPlayerState>
-): KifPlayerState => ({    
-    kifData: createKifData(),
-    showAnswer: false,
-    title: "",
-    ...partial,
+  partial?: Partial<KifPlayerState>
+): KifPlayerState => ({
+  kifData: createKifData(),
+  showAnswer: false,
+  title: "",
+  ...partial,
 });
 
 export function createKifData(
-    partial?: Partial<KifData>
+  partial?: Partial<KifData>
 ): KifData {
-    return {
-        board: createBoard(),
-        hands: { black: "", white: "" },
-        moves: [],
-        ...partial,
-    };
+  return {
+    board: createBoard(),
+    hands: { black: "", white: "" },
+    moves: [],
+    ...partial,
+  };
 }
 
 export const createBoard = (): Board =>
-    Array.from({ length: 9 }, () =>
-        Array.from({ length: 9 }, () => null)
-    );
+  Array.from({ length: 9 }, () =>
+    Array.from({ length: 9 }, () => null)
+  );

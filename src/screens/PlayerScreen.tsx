@@ -35,7 +35,7 @@ export default function PlayerScreen({
 
     return (
         <div style={{ padding: 20 }}>
-            <h2>TSUME READER</h2>
+            <h2>つめっと</h2>
             <div>
                 <div style={{ marginTop: 20 }}>
                     <BoardView
@@ -50,8 +50,8 @@ export default function PlayerScreen({
                 {curIndex !== undefined && `${curIndex + 1}: ${kifPlayerState.title}`}
             </div>
             <div style={{ marginTop: 20 }}>
-                <button onClick={playPrev} disabled={library.length == 0}>Prev Kif</button>
-                <button onClick={playNext} disabled={library.length == 0}>Next Kif</button>
+                <button onClick={playPrev} disabled={library.length == 0}>前の棋譜</button>
+                <button onClick={playNext} disabled={library.length == 0}>次の棋譜</button>
             </div>
 
 
