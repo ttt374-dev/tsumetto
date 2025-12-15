@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import BoardView from '../components/BoardView'
 import FileButton from "../components/FileButton";
+import SelectLibraryEntry from '../components/SelectLibraryEntry';
 import { createKifData, useKifPlayer } from "../hooks/useKifPlayer";
 import { type KifPlayerState, type KifLibraryEntry } from '../types';
-import SelectLibraryEntry from '../components/SelectLibraryEntry';
 
 export function useDisplayKifData(state: KifPlayerState) {
     return state.kifData ?? createKifData();
@@ -12,17 +12,22 @@ export interface KifPlayerScreenProps {
     kifPlayerState: KifPlayerState;
     playNext: () => void;
     playPrev: () => void;
+    loadFromLibrary: (index: number) => void;
+    //importFile: (file: File) => Promise<void>;
+
     // もし将来的にライブラリやimport機能を渡すならここに追加
-    library?: KifLibraryEntry[];
-    loadFromLibrary?: (index: number) => void;
-    importFile?: (file: File) => Promise<void>;
+    library: KifLibraryEntry[];
+    
 }
 export default function KifPlayerScreen({
     kifPlayerState,
     playNext,
     playPrev,
+    loadFromLibrary,
+
+    library
 }: KifPlayerScreenProps) {
-    const { loadFromLibrary, library, importFile, } = useKifPlayer();
+    //const { loadFromLibrary, library, importFile, } = useKifPlayer();
     const navigate = useNavigate();
 
     const kifData = useDisplayKifData(kifPlayerState)
@@ -52,7 +57,7 @@ export default function KifPlayerScreen({
 
 
             {/* ファイル選択ボタン */}
-            <FileButton label="Import File" onFileSelected={importFile} />
+            { /* <FileButton label="Import File" onFileSelected={importFile} /> */}
             <button onClick={() => navigate("/library")}>
                 ライブラリ管理
             </button>

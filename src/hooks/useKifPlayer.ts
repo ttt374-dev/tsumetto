@@ -6,38 +6,11 @@ import {
   type KifLibraryEntry,
   type Board
 } from "../types";
-import { v4 as uuidv4 } from "uuid";
 
-import { Filesystem, Directory, Encoding } from "@capacitor/filesystem";
-const LIB_FILE = "kifLibrary.json";
 
-export function useKifPlayer() {
+export function useKifPlayer(library: KifLibraryEntry[]) {
   const [state, setState] = useState<KifPlayerState>(createPlayState());
-  const [library, setLibrary] = useState<KifLibraryEntry[]>([]);
-
-  /* =============================
-   * 永続化ロード
-   * ============================= */
-  useEffect(() => {
-    (async () => {
-      try {
-        const result = await Filesystem.readFile({
-          path: LIB_FILE,
-          directory: Directory.Data,
-          encoding: Encoding.UTF8,
-        });
-
-        const dataStr =
-          typeof result.data === "string"
-            ? result.data
-            : await result.data.text();
-
-        setLibrary(JSON.parse(dataStr));
-      } catch {
-        setLibrary([]);
-      }
-    })();
-  }, []);
+  //const [library, setLibrary] = useState<KifLibraryEntry[]>([]);
 
   /* =============================
    * reducer想定の「アクション関数」
@@ -67,32 +40,6 @@ export function useKifPlayer() {
     loadFromText(text, file.name);
   };
 
-  /** IMPORT_FILE */
-  const importFile = async (file: File) => {
-    const buf = await file.arrayBuffer();
-    const text = new TextDecoder("shift_jis").decode(buf);
-    const kifData = parseKif(text);
-
-    const entry: KifLibraryEntry = {
-      id: uuidv4(),
-      title: file.name,
-      source: file.name,
-      kifData,
-      createdAt: Date.now(), // ★
-    };
-
-    const newLib = [...library, entry];
-    setLibrary(newLib);
-
-    await Filesystem.writeFile({
-      path: LIB_FILE,
-      data: JSON.stringify(newLib),
-      directory: Directory.Data,
-      encoding: Encoding.UTF8,
-    });
-
-    loadKif(kifData, file.name);
-  };
 
   /** SELECT_LIBRARY */
   const loadFromLibrary = (index: number) => {
@@ -158,7 +105,6 @@ export function useKifPlayer() {
     library,
     loadFromText,
     loadFromFile,
-    importFile,
     loadFromLibrary,
     playNext,
     playPrev,
