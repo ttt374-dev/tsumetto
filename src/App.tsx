@@ -2,15 +2,12 @@ import './App.css'
 
 import { StatusBar, Style } from "@capacitor/status-bar";
 import PlayerScreen from "./screens/PlayerScreen";
-import LayoutTestScreen from './screens/LayoutTestScreen';
 
 
 // ステータスバーをオーバーレイにしない
 StatusBar.setOverlaysWebView({ overlay: false });
-
 // ステータスバーの色を変更
 StatusBar.setStyle({ style: Style.Dark });
-
 
 export default function App() {
   /*

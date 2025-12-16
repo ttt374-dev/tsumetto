@@ -18,8 +18,7 @@ export default function PlayerScreen() {
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
     const kifLibrary = useKifLibrary()
     const kifPlayer = useKifPlayer(kifLibrary.library, selectedIndex);
-    const { playNext, playPrev, playFirst, playLast } = kifPlayer
-    const { loadFromLibrary } = kifPlayer
+    const { playNext, playPrev, playFirst, playLast, loadFromLibrary } = kifPlayer    
     const { importFile, deleteEntry } = kifLibrary
 
     const library = kifLibrary.library
@@ -29,14 +28,6 @@ export default function PlayerScreen() {
     const kifData = kifPlayerState.kifData
     const curIndex = kifPlayerState.currentLibraryIndex
 
-    const handleSelectFile = (file: File) => {
-        importFile(file)
-        //kifPlayer.onSelect(library.length)
-        setSelectedIndex(kifLibrary.library.length)
-    }
-    const handleNavLibrary = () => {
-        setLibraryOpen(true)
-    }
     // スワイプハンドラ
     const handlers = useSwipeable({
         onSwipedLeft: () => {// 左スワイプ → 次の棋譜へ
@@ -48,9 +39,9 @@ export default function PlayerScreen() {
         trackMouse: true, // PCでもマウスでスワイプ可能
         preventScrollOnSwipe: true,
     });
-    useAndroidBackHandler(libraryOpen, () => setLibraryOpen(false))
+    //useAndroidBackHandler(libraryOpen, () => setLibraryOpen(false))
     ////////////////////////
-    const items = Array.from({ length: 100 }, (_, i) => `Item ${i + 1}`);  // debug
+    //const items = Array.from({ length: 100 }, (_, i) => `Item ${i + 1}`);  // debug
 
     return (
         <>
@@ -75,8 +66,7 @@ export default function PlayerScreen() {
                         <button onClick={playNext} disabled={library.length == 0}>&gt;</button>
                         <button onClick={playLast} disabled={library.length == 0}>&gt;&gt;</button>
                     </div>
-
-                    <FileButton label="棋譜ファイルを登録" onFileSelected={handleSelectFile} />
+                    
                     <button onClick={() => setLibraryOpen(true)}>ライブラリ管理</button>
 
                 </>}

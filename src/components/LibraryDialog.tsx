@@ -1,12 +1,17 @@
-import { Dialog } from "@mui/material";
-import { useState } from 'react'
-import { useNavigate } from "react-router-dom";
+import { Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
+import { useState, useEffect } from 'react'
 import { Box, List, ListItem, ListItemIcon, ListItemText, Checkbox } from "@mui/material";
 import type { KifLibraryEntry } from "../types";
 import FileButton from "../components/FileButton";
-import { AppLayout } from '../components/AppLayout';
+import { IconButton, Tooltip } from "@mui/material";
+import DeleteIcon from '@mui/icons-material/Delete';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 
 export interface LibraryDialogProps {
+    open: boolean;
+    onClose: () => void
+
     library: KifLibraryEntry[];
     importFile: (file: File) => Promise<KifLibraryEntry>;
     onSelect: (index: number) => void;
@@ -20,15 +25,25 @@ export function LibraryDialog({
     importFile,
     onSelect,
     deleteEntry
-}: LibraryDialogProps & { open: boolean; onClose: () => void }) {
+}: LibraryDialogProps) {
 
     const [checkedIds, setCheckedIds] = useState<Set<string>>(new Set());
 
+    const handleSelectFile = async (file: File) => {
+        try {
+            // importFile が完了するのを待つ
+            const newEntry = await importFile(file);
 
-    const handleSelectFile = (file: File) => {
-        importFile(file)
-        onSelect(library.length)
-    }
+            // 新しいライブラリの最後のインデックスを選択
+            const index = library.findIndex(e => e.id === newEntry.id);
+            if (index !== -1) {
+                onSelect(index);
+            }
+        } catch (err) {
+            console.error("ファイルのインポートに失敗しました", err);
+        }
+    };
+
     const handleCheckboxChange = (id: string) => {
         setCheckedIds((prev) => {
             const newSet = new Set(prev);
@@ -56,39 +71,67 @@ export function LibraryDialog({
         setCheckedIds(new Set());
     };
 
+    useEffect(() => {
+        if (!open) setCheckedIds(new Set());
+    }, [open]);
+
+    const isMobile = window.innerWidth < 768;
     /////////////////////////////////////////////////////
     return (
-        
+
         <Dialog
+            sx={{
+                display: "flex",
+                flexDirection: "column",
+                height: "100vh",
+            }}
             open={open}
             onClose={onClose}
-            fullScreen   // ← Android ならほぼ必須
-        >
-            <AppLayout
-                header={<>
-                    {/* 全選択 / 全解除 */}
-                    <button
-                        onClick={() => setCheckedIds(new Set(library.map((e) => e.id)))}
-                    >
-                        全選択
-                    </button>
-                    <button onClick={() => setCheckedIds(new Set())}>
-                        全解除
-                    </button>
+            maxWidth="lg"
+            fullScreen={isMobile}
+            fullWidth={!isMobile}>
 
-                </>}
-                footer={
-                    <>
-                        
+            <DialogTitle>
+                Library
+            </DialogTitle>
 
-                        <FileButton label="Import File" onFileSelected={handleSelectFile} />
-
-                        <button onClick={handleDeleteSelected}>Delete Selected</button>
-                        <button onClick={onClose}>Close</button>
-                    </>
-                }
+            <DialogContent
+                sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    height: "100dvh", // 好きな高さに調整
+                }}
             >
-                <List style={{
+                <Box sx={{ display: "flex", flexShrink: 0 }}>
+                    {/* 全選択 */}
+                    <Tooltip title="全選択">
+                        <IconButton
+                            onClick={() => setCheckedIds(new Set(library.map((e) => e.id)))}
+                            color="primary"
+                        >
+                            <CheckBoxIcon />
+                        </IconButton>
+                    </Tooltip>
+
+                    {/* 全解除 */}
+                    <Tooltip title="全解除">
+                        <IconButton
+                            onClick={() => setCheckedIds(new Set())}
+                            color="primary"
+                        >
+                            <CheckBoxOutlineBlankIcon />
+                        </IconButton>
+                    </Tooltip>
+
+                    <Tooltip title="選択した棋譜を削除">
+                        <IconButton onClick={handleDeleteSelected} disabled={checkedIds.size === 0} color="error">
+                            <DeleteIcon />
+                        </IconButton>
+                    </Tooltip>
+                </Box>
+
+                <List sx={{
+                    flex: 1,
                     display: "flex",
                     flexDirection: "column",
                     overflowY: "auto"
@@ -114,9 +157,7 @@ export function LibraryDialog({
                                     },
                                 }}
                                 onClick={() => {
-                                    const index = library.indexOf(entry);
-                                    //loadFromLibrary(index);
-                                    onSelect(index)
+                                    onSelect(i)
                                     onClose()
                                 }
                                 }>
@@ -126,7 +167,19 @@ export function LibraryDialog({
                         </ListItem>
                     ))}
                 </List>
-            </AppLayout>
+            </DialogContent>
+            <DialogActions
+                sx={{
+                    flexShrink: 0,
+                    paddingBottom: "env(safe-area-inset-bottom)", // iOS/Androidの安全領域対応
+                    px: 2, // 左右パディング
+                    pt: 1, // 上パディング
+                }}
+            >
+                <FileButton label="棋譜ファイルを登録" onFileSelected={handleSelectFile} />
+                <button onClick={onClose}>戻る</button>
+            </DialogActions>
         </Dialog>
+
     )
 }
