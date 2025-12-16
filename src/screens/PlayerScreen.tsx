@@ -14,7 +14,6 @@ import { useKifLibrary } from '../hooks/useKifLibary';
 import { useAndroidBackHandler } from '../hooks/useAndroidBackHandler';
 import { AppLayout } from '../components/AppLayout';
 
-export interface PlayerScreenProps { }
 export default function PlayerScreen() {
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
     const kifLibrary = useKifLibrary()
@@ -51,6 +50,8 @@ export default function PlayerScreen() {
     });
     useAndroidBackHandler(libraryOpen, () => setLibraryOpen(false))
     ////////////////////////
+    const items = Array.from({ length: 100 }, (_, i) => `Item ${i + 1}`);  // debug
+
     return (
         <>
             <LibraryDialog
@@ -61,11 +62,12 @@ export default function PlayerScreen() {
                 onSelect={(index) => { setSelectedIndex(index) }}
                 onClose={() => { setLibraryOpen(false) }}
             />
-
             <AppLayout
-                header={<h2>
-                    {curIndex !== undefined && `${curIndex + 1}: ${kifPlayerState.title}`}
-                </h2>}
+                header={<>
+                    <h2>
+                        {curIndex !== undefined && `${curIndex + 1}: ${kifPlayerState.title}`}
+                    </h2>
+                </>}
                 footer={<>
                     <div style={{ marginTop: 20 }}>
                         <button onClick={playFirst} disabled={library.length == 0}>&lt;&lt;</button>
@@ -76,19 +78,16 @@ export default function PlayerScreen() {
 
                     <FileButton label="棋譜ファイルを登録" onFileSelected={handleSelectFile} />
                     <button onClick={() => setLibraryOpen(true)}>ライブラリ管理</button>
-                </>
-                }
-            >
-                <Box
-                >
 
-                    {/* 内部リストを選択 */}
+                </>}
+            >
+                <>
+                                  {/* 内部リストを選択 */}
                     {library.length > 0 &&
                         <SelectLibraryEntry
                             currentIndex={kifPlayerState.currentLibraryIndex}
                             library={library} onSelect={loadFromLibrary} />
                     }
-
                     <Box {...handlers} sx={{
                         userSelect: "none", // 選択防止
                         touchAction: "pan-y", // 縦スクロールは阻害しない
@@ -97,20 +96,26 @@ export default function PlayerScreen() {
                             board={kifData.board}
                             hands={kifData.hands}
                         />
-
-
-                        <MovesView
-                            moves={kifData.moves}
-                            visible={kifPlayerState.showMoves}
-                            onToggleVisible={kifPlayer.toggleShowMoves}
-                        />
-
                     </Box>
 
+                    <Box sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        overflowY: "auto"
+                    }}>
 
+                        {
+                           <MovesView
+                                moves={kifData.moves}
+                                visible={kifPlayerState.showMoves}
+                                onToggleVisible={kifPlayer.toggleShowMoves}
+                            />
 
-                </Box>
+                        }
+                    </Box>
+                </>
             </AppLayout>
         </>
-    );
+    )
+    
 }

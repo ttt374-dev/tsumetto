@@ -33,7 +33,7 @@ export function parseKif(text: string): KifData  {
     l.includes("+---------------------------+")
   );
   
-  if (startIndex === -1) return { board, hands, moves } ;
+  //if (startIndex === -1) return { board, hands, moves } ;
 
   // 以降の9行が盤面
   for (let r = 0; r < 9; r++) {

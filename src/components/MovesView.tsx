@@ -8,7 +8,7 @@ interface Props {
 
 export default function MovesView({ moves, visible, onToggleVisible }: Props) {    
     return (
-        <div style={{ flex: 1, overflowY: "auto"}}>
+        <div>
             {/* 解答表示 */}
             < button onClick={onToggleVisible}
             disabled={moves.length === 0} >
