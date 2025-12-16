@@ -25,7 +25,7 @@ export type KifData = {
 
 export type KifPlayerState = {
   kifData: KifData;
-  showAnswer: boolean;
+  showMoves: boolean;
   title: string,
   //mode: "temp" | "library";
   //playMode: "single" | "seq" | "random";

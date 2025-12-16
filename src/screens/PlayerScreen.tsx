@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Box } from "@mui/material";
 import BoardView from '../components/BoardView'
 import SelectLibraryEntry from '../components/SelectLibraryEntry';
@@ -6,6 +7,7 @@ import { type KifPlayerState, type KifLibraryEntry } from '../types';
 import FileButton from "../components/FileButton";
 import { useSwipeable } from "react-swipeable";
 import { useNavigate } from "react-router-dom";
+import MovesView from "../components/MovesView";
 
 export function useDisplayKifData(state: KifPlayerState) {
     return state.kifData ?? createKifData();
@@ -19,6 +21,7 @@ export interface PlayerScreenProps {
     loadFromLibrary: (index: number) => void;
     importFile: (file: File) => Promise<KifLibraryEntry>;
     onSelect: (index: number) => void;
+    //onToggleMovesVisible: () => void;
     //importFile: (file: File) => Promise<void>;
     // もし将来的にライブラリやimport機能を渡すならここに追加
     library: KifLibraryEntry[];
@@ -45,6 +48,14 @@ export default function PlayerScreen({ kifPlayerState, playFirst, playNext, play
         trackMouse: true, // PCでもマウスでスワイプ可能
         preventScrollOnSwipe: true,
     });
+
+    const [ movesVisible, setMovesVisible ] = useState(false)
+    const handleToggleShowMoves = () => {
+        console.log("handle toggle vis")
+        setMovesVisible(!movesVisible)
+    }
+    
+    ////////////////////////
     return (
     <Box sx={{
           position: "sticky",
@@ -65,8 +76,12 @@ export default function PlayerScreen({ kifPlayerState, playFirst, playNext, play
                     }}>
                         <BoardView
                             board={kifData.board}
-                            moves={kifData.moves}
                             hands={kifData.hands}
+                        />
+                        <MovesView
+                            moves={kifData.moves}
+                            visible={movesVisible}
+                            onToggleVisible={handleToggleShowMoves}
                         />
                     </Box>
                 </div>

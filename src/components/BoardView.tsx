@@ -1,18 +1,17 @@
-import { useState } from "react";
 import styles from "./BoardView.module.css";
-import { type Board, type Hand, type Move } from "../types";
+import { type Board, type Hand } from "../types";
 
 interface Props {
   board: Board;
   hands: Hand;
-  moves: Move[];
+  
 }
 
 const fileLabels = ["９","８","７","６","５","４","３","２","１"];
 const rankLabels = ["一","二","三","四","五","六","七","八","九"];
 
-function BoardView({ board, hands, moves }: Props) {
-  const [showMoves, setShowMoves] = useState(false);
+function BoardView({ board, hands}: Props) {
+  
 
   return (
     <div className={styles.container}>
@@ -60,17 +59,7 @@ function BoardView({ board, hands, moves }: Props) {
         <div>先手の持ち駒：{hands.black || "なし"}</div>
       </div>
 
-      {/* 解答表示 */}
-      <button onClick={() => setShowMoves(!showMoves)} disabled={moves.length === 0}>
-        {showMoves ? "解答を隠す" : "解答を表示"}
-      </button>
-      {showMoves &&
-        moves.map((m, i) => (
-          <div key={i} style={{ padding: "2px 0" }}>
-            {i+1}: {m.moveText} ({m.from})
-          </div>
-        ))
-      }
+      
     </div>
   );
 }

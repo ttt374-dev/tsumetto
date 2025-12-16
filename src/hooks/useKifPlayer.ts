@@ -27,6 +27,15 @@ export function useKifPlayer(library: KifLibraryEntry[], selectedIndex?: number 
   /* =============================
    * reducer想定の「アクション関数」
    * ============================= */
+  /** TOGGLE_SHOW_MOVES */
+    //const [ movesVisible, setMovesVisible ] = useState(false)
+    const toggleShowMoves = () => {
+        console.log("handle toggle vis")
+        setState((prev) => 
+          createPlayerState({...prev, showMoves: !state.showMoves})
+      )
+
+    }
 
   /** LOAD_KIF */
   const loadKif = (kifData: KifData, title = "") => {
@@ -35,7 +44,7 @@ export function useKifPlayer(library: KifLibraryEntry[], selectedIndex?: number 
         ...prev,
         kifData,
         title,
-        showAnswer: false,
+        showMoves: false,
       })
     );
   };
@@ -64,7 +73,7 @@ export function useKifPlayer(library: KifLibraryEntry[], selectedIndex?: number 
         kifData: entry.kifData,
         title: entry.title,
         currentLibraryIndex: index,
-        showAnswer: false,
+        showMoves: false,
       })
     );
   };
@@ -115,7 +124,7 @@ export function useKifPlayer(library: KifLibraryEntry[], selectedIndex?: number 
         kifData: entry.kifData,
         title: entry.title,
         currentLibraryIndex: prevIndex,
-        showAnswer: false,
+        showMoves: false,
       });
     });
   };
@@ -140,7 +149,7 @@ export const createPlayerState = (
   partial?: Partial<KifPlayerState>
 ): KifPlayerState => ({
   kifData: createKifData(),
-  showAnswer: false,
+  showMoves: false,
   title: "",
   ...partial,
 });
