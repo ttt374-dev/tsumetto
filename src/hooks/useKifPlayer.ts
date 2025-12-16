@@ -30,11 +30,9 @@ export function useKifPlayer(library: KifLibraryEntry[], selectedIndex?: number 
   /** TOGGLE_SHOW_MOVES */
     //const [ movesVisible, setMovesVisible ] = useState(false)
     const toggleShowMoves = () => {
-        console.log("handle toggle vis")
         setState((prev) => 
           createPlayerState({...prev, showMoves: !state.showMoves})
       )
-
     }
 
   /** LOAD_KIF */
@@ -84,7 +82,7 @@ export function useKifPlayer(library: KifLibraryEntry[], selectedIndex?: number 
       if (library.length === 0) return prev;
 
       const entry = library[0]
-      return createPlayerState({...prev, kifData: entry.kifData, title: entry.title, currentLibraryIndex: 0})
+      return createPlayerState({...prev, kifData: entry.kifData, title: entry.title, showMoves: false, currentLibraryIndex: 0})
     })
   }
   /** PLAY_NEXT */
@@ -99,6 +97,7 @@ export function useKifPlayer(library: KifLibraryEntry[], selectedIndex?: number 
         kifData: entry.kifData,
         title: entry.title,
         currentLibraryIndex: next,
+        showMoves: false,
       });
     });
   };
@@ -106,7 +105,7 @@ export function useKifPlayer(library: KifLibraryEntry[], selectedIndex?: number 
   const playLast = () => {
     setState(prev => {
       const entry = library[library.length-1]
-      return createPlayerState({...prev, kifData: entry.kifData, title: entry.title, currentLibraryIndex: library.length-1})
+      return createPlayerState({...prev, kifData: entry.kifData, title: entry.title, showMoves: false, currentLibraryIndex: library.length-1})
     })
   }
 
@@ -133,6 +132,7 @@ export function useKifPlayer(library: KifLibraryEntry[], selectedIndex?: number 
   return {
     kifPlayerState: state,
     library,
+    toggleShowMoves,
     loadFromText,
     loadFromFile,
     loadFromLibrary,

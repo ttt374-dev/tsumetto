@@ -19,14 +19,17 @@ export interface PlayerScreenProps {
     playPrev: () => void;
     playLast: () => void;
     loadFromLibrary: (index: number) => void;
+    toggleShowMoves: () => void;
+
     importFile: (file: File) => Promise<KifLibraryEntry>;
     onSelect: (index: number) => void;
+    
     //onToggleMovesVisible: () => void;
     //importFile: (file: File) => Promise<void>;
     // もし将来的にライブラリやimport機能を渡すならここに追加
     library: KifLibraryEntry[];
 }
-export default function PlayerScreen({ kifPlayerState, playFirst, playNext, playPrev, playLast, loadFromLibrary, importFile, onSelect, library }: PlayerScreenProps) {
+export default function PlayerScreen({ kifPlayerState, playFirst, playNext, playPrev, playLast, loadFromLibrary, toggleShowMoves, importFile, onSelect, library }: PlayerScreenProps) {
     const navigate = useNavigate();    
     const kifData = useDisplayKifData(kifPlayerState)
     const curIndex = kifPlayerState.currentLibraryIndex
@@ -34,7 +37,7 @@ export default function PlayerScreen({ kifPlayerState, playFirst, playNext, play
         importFile(file)
         onSelect(library.length)
     }
-    const handleGoLibrary = () => {
+    const handleNavLibrary = () => {
         navigate("/library")
     }
         // スワイプハンドラ
@@ -48,12 +51,6 @@ export default function PlayerScreen({ kifPlayerState, playFirst, playNext, play
         trackMouse: true, // PCでもマウスでスワイプ可能
         preventScrollOnSwipe: true,
     });
-
-    const [ movesVisible, setMovesVisible ] = useState(false)
-    const handleToggleShowMoves = () => {
-        console.log("handle toggle vis")
-        setMovesVisible(!movesVisible)
-    }
     
     ////////////////////////
     return (
@@ -80,8 +77,8 @@ export default function PlayerScreen({ kifPlayerState, playFirst, playNext, play
                         />
                         <MovesView
                             moves={kifData.moves}
-                            visible={movesVisible}
-                            onToggleVisible={handleToggleShowMoves}
+                            visible={kifPlayerState.showMoves}
+                            onToggleVisible={toggleShowMoves}
                         />
                     </Box>
                 </div>
@@ -95,7 +92,7 @@ export default function PlayerScreen({ kifPlayerState, playFirst, playNext, play
             </div>
 
 
-            <button onClick={handleGoLibrary}>ライブラリ管理</button>
+            <button onClick={handleNavLibrary}>ライブラリ管理</button>
             {/* ファイル選択ボタン */}
             <FileButton label="棋譜ファイルを登録" onFileSelected={handleSelectFile} />
         </Box>

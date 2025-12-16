@@ -38,7 +38,7 @@ export default function App() {
             deleteEntry={kifLibrary.deleteEntry}
             onSelect={(index) => setSelectedIndex(index)} />}
         />
-        <Route path="*" element={<Navigate to="/player" />} />
+        <Route path="*" element={<Navigate to="/player" replace={false}/>} />
       </Routes>
 
 

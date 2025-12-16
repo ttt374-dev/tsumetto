@@ -22,7 +22,6 @@ export default function MovesView({ moves, visible, onToggleVisible }: Props) {
                         {i + 1}: {m.moveText} ({m.from})
                     </div>
                 ))
-
             }
         </div>
     )
