@@ -6,10 +6,9 @@ interface Props {
     onToggleVisible: () => void;
 }
 
-export default function MovesView({ moves, visible, onToggleVisible }: Props) {
-    
+export default function MovesView({ moves, visible, onToggleVisible }: Props) {    
     return (
-        <div>
+        <div style={{ flex: 1, overflowY: "auto"}}>
             {/* 解答表示 */}
             < button onClick={onToggleVisible}
             disabled={moves.length === 0} >

@@ -1,13 +1,8 @@
 import './App.css'
 
-import { useState } from 'react'
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { StatusBar, Style } from "@capacitor/status-bar";
-
-import { useKifPlayer } from "./hooks/useKifPlayer";
-import { useKifLibrary } from './hooks/useKifLibary';
 import PlayerScreen from "./screens/PlayerScreen";
-import LibraryScreen from "./screens/LibraryScreen";
+
 
 // ステータスバーをオーバーレイにしない
 StatusBar.setOverlaysWebView({ overlay: false });
@@ -17,11 +12,15 @@ StatusBar.setStyle({ style: Style.Dark });
 
 
 export default function App() {
+  /*
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const kifLibrary = useKifLibrary()
   const kifPlayer = useKifPlayer(kifLibrary.library, selectedIndex);
+  */
 
   return (
+    <PlayerScreen />
+    /*
     <BrowserRouter>
 
       <Routes>
@@ -43,5 +42,6 @@ export default function App() {
 
 
     </BrowserRouter>
+    */
   );
 }

@@ -1,0 +1,21 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  overflow: hidden; /* 画面全体はスクロールさせない */
+}
+
+.header {
+  flex-shrink: 0;
+  padding-top: env(safe-area-inset-top);
+}
+
+.footer {
+  flex-shrink: 0;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.main {
+  flex: 1;
+  overflow-Y: auto; /* ← ここ重要 */
+}

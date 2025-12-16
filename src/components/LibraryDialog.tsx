@@ -1,19 +1,28 @@
+import { Dialog } from "@mui/material";
 import { useState } from 'react'
 import { useNavigate } from "react-router-dom";
 import { Box, List, ListItem, ListItemIcon, ListItemText, Checkbox } from "@mui/material";
 import type { KifLibraryEntry } from "../types";
 import FileButton from "../components/FileButton";
 
-export interface LibraryScreenProps {
+
+export interface LibraryDialogProps {
   library: KifLibraryEntry[];
   importFile: (file: File) => Promise<KifLibraryEntry>;  
   onSelect: (index: number) => void;
   deleteEntry: (entry: KifLibraryEntry) => void;
 }
 
-export default function LibraryScreen({ library, importFile, onSelect, deleteEntry }: LibraryScreenProps) {
-  const navigate = useNavigate();
-  const [checkedIds, setCheckedIds] = useState<Set<string>>(new Set());
+export function LibraryDialog({
+  open,
+  onClose,
+  library,
+  importFile,
+  onSelect,
+  deleteEntry
+}: LibraryDialogProps & { open: boolean; onClose: () => void }) {
+
+const [checkedIds, setCheckedIds] = useState<Set<string>>(new Set());
 
   
   const handleSelectFile = (file: File) => {
@@ -48,8 +57,12 @@ export default function LibraryScreen({ library, importFile, onSelect, deleteEnt
   };
 
 
-  ///////////////////////////
   return (
+    <Dialog
+      open={open}
+      onClose={onClose}
+      fullScreen   // ← Android ならほぼ必須
+    >
     <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
       <Box
        sx={{
@@ -70,9 +83,7 @@ export default function LibraryScreen({ library, importFile, onSelect, deleteEnt
           全選択
         </button>
         <button onClick={() => setCheckedIds(new Set())}>全解除</button>
-        <button onClick={() => navigate("/player")}>
-          戻る
-        </button>
+
       </Box>
       <Box
         sx={{
@@ -107,7 +118,7 @@ export default function LibraryScreen({ library, importFile, onSelect, deleteEnt
                   const index = library.indexOf(entry);
                   //loadFromLibrary(index);
                   onSelect(index)
-                  navigate("/player");
+                  onClose()
                 }
                 }>
 
@@ -134,9 +145,11 @@ export default function LibraryScreen({ library, importFile, onSelect, deleteEnt
         <FileButton label="Import File" onFileSelected={handleSelectFile} />
 
         <button onClick={handleDeleteSelected}>Delete Selected</button>
-
+        <button onClick={onClose}>Close</button>
          
       </Box>
     </Box>
-  );
-}
+
+
+    </Dialog>
+)}
