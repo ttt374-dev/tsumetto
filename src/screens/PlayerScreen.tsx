@@ -17,9 +17,9 @@ import { AppLayout } from '../components/AppLayout';
 export default function PlayerScreen() {
     const [indexToPlay, setSelectedIndex] = useState<number | null>(null);
     const kifLibrary = useKifLibrary()
-    const kifPlayer = useKifPlayer(kifLibrary.library, indexToPlay);
+    const kifPlayer = useKifPlayer(kifLibrary.library);
 
-    const { playNext, playPrev, playFirst, playLast, playAtIndex  } = kifPlayer    
+    const { playNext, playPrev, playFirst, playLast, playByEntryId  } = kifPlayer    
     const { importFile, deleteEntry, deleteEntries } = kifLibrary
 
     const library = kifLibrary.library
@@ -52,7 +52,7 @@ export default function PlayerScreen() {
                 importFile={importFile}
                 deleteEntry={deleteEntry}
                 deleteEntries={deleteEntries}
-                onSelect={(index) => { setSelectedIndex(index) }}
+                onSelect={(entry) => { playByEntryId(entry.id) }}
                 onClose={() => { setLibraryOpen(false) }}
             />
             <AppLayout
@@ -75,13 +75,14 @@ export default function PlayerScreen() {
             >
                 <>
                     {/* 内部リストを選択 */}
-                    {library.length > 0 &&
-                        
+                    {/*
+                    {library.length > 0 &&                        
                         <SelectLibraryEntry
                             currentIndex={kifPlayerState.currentLibraryIndex}
                             library={library} onSelect={playAtIndex} />
-                        
+                    
                     }
+                            */}
                     <Box {...handlers} sx={{
                         userSelect: "none", // 選択防止
                         touchAction: "pan-y", // 縦スクロールは阻害しない

@@ -1,110 +1,117 @@
-import { useState, useEffect } from "react";
-import { type KifData, type KifPlayerState, type KifLibraryEntry, type Board } from "../types";
+import { useState, useEffect, useMemo } from "react";
+import { type Board, type KifData, type KifLibraryEntry, type KifPlayerState } from "../types";
 
-
-export function useKifPlayer(library: KifLibraryEntry[], indexToPlay?: number | null) {
+export function useKifPlayer(library: KifLibraryEntry[]) {
   const [state, setState] = useState<KifPlayerState>(createPlayerState());
+  const [currentEntryId, setCurrentEntryId] = useState<string | undefined>();
+
+  /* =====================
+   * 派生値
+   * ===================== */
+
+  // 現在の entry
+  const currentEntry = useMemo(() => {
+    if (!currentEntryId) return undefined;
+    return library.find(e => e.id === currentEntryId);
+  }, [library, currentEntryId]);
+
+  // 表示用 index（state には持たない）
+  const currentIndex = useMemo(() => {
+    if (!currentEntryId) return undefined;
+    const idx = library.findIndex(e => e.id === currentEntryId);
+    return idx >= 0 ? idx : undefined;
+  }, [library, currentEntryId]);
+
+  /* =====================
+   * entryId → state 同期
+   * ===================== */
 
   useEffect(() => {
-          // selectedIndex が外部から渡される場合はそれを優先
-    if (library.length > 0) {
-      if (indexToPlay != null && library[indexToPlay]) {
-        playAtIndex(indexToPlay);
-      } else {
-        // なければ先頭棋譜をロード
-        playFirst();
-      }
-    }
-  }, [library, indexToPlay]);
+    if (!currentEntry) return;
 
-
-  /* =============================
-   * reducer想定の「アクション関数」
-   * ============================= */
-  /** TOGGLE_SHOW_MOVES */
-    //const [ movesVisible, setMovesVisible ] = useState(false)
-    const toggleShowMoves = () => {
-        setState((prev) => 
-          createPlayerState({...prev, showMoves: !prev.showMoves})
-      )
-    }
-
-
-  /** SELECT_LIBRARY */
-  const playAtIndex = (index: number) => {
-    const entry = library[index];
-    if (!entry) return;
-
-    setState((prev) =>
+    setState(prev =>
       createPlayerState({
         ...prev,
-        kifData: entry.kifData,
-        currentLibraryIndex: index,
-        showMoves: false,
+        kifData: currentEntry.kifData,
       })
     );
-  };
+  }, [currentEntry]);
 
-  /** PLAY_FIRST */
-  const playFirst = () => {
-    setState(prev => {
-      if (library.length === 0) return prev;
+  /* =====================
+   * library 変更時の補正
+   * ===================== */
 
-      const entry = library[0]
-      return createPlayerState({...prev, kifData: entry.kifData, showMoves: false, currentLibraryIndex: 0})
-    })
-  }
-  /** PLAY_NEXT */
-  const playNext = () => {
-    setState(prev => {
-      if (library.length === 0) return prev;
-      const next =
-        ((prev.currentLibraryIndex ?? -1) + 1) % library.length;
-      const entry = library[next];
-      return createPlayerState({
-        ...prev,
-        kifData: entry.kifData,
-        currentLibraryIndex: next,
-        showMoves: false,
-      });
-    });
-  };
-  /** PLAY_LAST */
-  const playLast = () => {
-    setState(prev => {
-      const entry = library[library.length-1]
-      return createPlayerState({...prev, kifData: entry.kifData, showMoves: false, currentLibraryIndex: library.length-1})
-    })
+  useEffect(() => {
+    if (!currentEntryId && library.length > 0) {
+      setCurrentEntryId(library[0].id);
+      return;
+    }
+
+    if (
+      currentEntryId &&
+      !library.some(e => e.id === currentEntryId)
+    ) {
+      // 削除された場合 → 先頭へ
+      setCurrentEntryId(library[0]?.id);
+    }
+  }, [library, currentEntryId]);
+
+  /* =====================
+   * 操作系
+   * ===================== */
+
+  function playByEntryId(entryId: string) {
+    console.log("play by entryId", entryId)
+    setCurrentEntryId(entryId);
   }
 
-  /** PLAY_PREV */
-  const playPrev = () => {
-    setState(prev => {
-      if (library.length === 0) return prev;
+  function playFirst() {
+    if (library.length === 0) return;
+    setCurrentEntryId(library[0].id);
+  }
 
-      const current = prev.currentLibraryIndex ?? 0;
-      const prevIndex = current === 0 ? library.length - 1 : current - 1;
-      const entry = library[prevIndex];
+  function playLast() {
+    if (library.length === 0) return;
+    setCurrentEntryId(library[library.length - 1].id);
+  }
 
-      return createPlayerState({
+  function playNext() {
+    if (currentIndex == null) return;
+    const next = library[currentIndex + 1];
+    if (next) setCurrentEntryId(next.id);
+  }
+
+  function playPrev() {
+    if (currentIndex == null) return;
+    const prev = library[currentIndex - 1];
+    if (prev) setCurrentEntryId(prev.id);
+  }
+
+  function toggleShowMoves() {
+    setState(prev =>
+      createPlayerState({
         ...prev,
-        kifData: entry.kifData,
-        currentLibraryIndex: prevIndex,
-        showMoves: false,
-      });
-    });
-  };
+        showMoves: !prev.showMoves,
+      })
+    );
+  }
 
+  /* =====================
+   * 公開 API
+   * ===================== */
 
   return {
-    kifPlayerState: state,
-    library,
-    toggleShowMoves,
-    playAtIndex,
+    kifPlayerState: {
+      ...state,
+      currentEntryId,
+      currentLibraryIndex: currentIndex,
+    },
+    playByEntryId,
     playFirst,
+    playLast,
     playNext,
     playPrev,
-    playLast,
+    toggleShowMoves,
   };
 }
 

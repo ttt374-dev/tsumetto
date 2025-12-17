@@ -14,7 +14,7 @@ export interface LibraryDialogProps {
 
     library: KifLibraryEntry[];
     importFile: (file: File) => Promise<KifLibraryEntry>;
-    onSelect: (index: number) => void;
+    onSelect: (entry: KifLibraryEntry) => void;
     deleteEntry: (entry: KifLibraryEntry) => void;
     deleteEntries: (entries: KifLibraryEntry[]) => void;
 }
@@ -39,7 +39,7 @@ export function LibraryDialog({
             // 新しいライブラリの最後のインデックスを選択
             const index = library.findIndex(e => e.id === newEntry.id);
             if (index !== -1) {
-                onSelect(index);
+                onSelect(newEntry);
             }
         } catch (err) {
             console.error("ファイルのインポートに失敗しました", err);
@@ -167,7 +167,8 @@ export function LibraryDialog({
                                     },
                                 }}
                                 onClick={() => {
-                                    onSelect(i)
+                                    console.log("list on select: entry", entry)
+                                    onSelect(entry)
                                     onClose()
                                 }
                                 }>
