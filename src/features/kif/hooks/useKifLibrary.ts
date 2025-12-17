@@ -3,12 +3,30 @@ import { useState, useEffect } from "react";
 import { Filesystem, Directory, Encoding } from "@capacitor/filesystem";
 import { v4 as uuidv4 } from "uuid";
 import { parseKif } from "../utils/kifParser";
-import { type KifLibraryEntry } from "../types/kif";
+import { type KifLibraryEntry, type KifLibraryState } from "../types/kif";
 
 const LIB_FILE = "kifLibrary.json";
 
 export function useKifLibrary() {
-  const [library, setLibrary] = useState<KifLibraryEntry[]>([]);
+  //const [library, setLibrary] = useState<KifLibraryEntry[]>([]);
+  const [state, setState] = useState<KifLibraryState>({library: [], sortKey: "createdAt", sortOrder: "asc"})
+  const library = state.library
+
+  const sortedLibrary = [...library].sort((a, b) => {
+        let cmp = 0;
+        switch (state.sortKey) {
+            case 'createdAt':
+                cmp = a.createdAt - b.createdAt;
+                break;
+            case 'title':
+                cmp = a.kifData.title.localeCompare(b.kifData.title);
+                break;
+            case 'moveCount':
+                cmp = a.kifData.moves.length - b.kifData.moves.length;
+                break;
+        }
+        return state.sortOrder === 'asc' ? cmp : -cmp;
+    });
 
   /* 永続化ロード */
   useEffect(() => {
@@ -31,16 +49,22 @@ export function useKifLibrary() {
         const savedLib: unknown = JSON.parse(dataStr);
         if (Array.isArray(savedLib)) {
           setLibrary(savedLib as KifLibraryEntry[]);
+          //setState(prev=>({...prev, library: savedLib as KifLibraryEntry[]}))
         } else {
           setLibrary([]);
+          //setState( prev => ( { ...prev, library: []}))
         }
         console.log("saved library", savedLib)
       } catch {
         setLibrary([]);
+        setState( prev => ( { ...prev, library: []}))
       }
     })();
   }, []);
 
+  const setLibrary = (newLib: KifLibraryEntry[]) => {
+    setState( prev => ({ ...prev, library: newLib}))
+  }
 
 
   const persist = async (next: KifLibraryEntry[]) => {
@@ -51,7 +75,8 @@ export function useKifLibrary() {
         directory: Directory.Data,
         encoding: Encoding.UTF8,
       });
-      setLibrary(next); // ファイル保存後に state 更新
+      setState( prev => ( { ...prev, library: next}))
+      //setLibrary(next); // ファイル保存後に state 更新
     } catch (err) {
       console.error("Library persist failed", err);
     }
@@ -138,7 +163,8 @@ export function useKifLibrary() {
   };
 
   const clearLibrary = async () => {
-    setLibrary([]);
+    //setLibrary([]);
+    setState( prev => ( { ...prev, library: []}))
     try {
       await Filesystem.deleteFile({
         path: LIB_FILE,
@@ -151,7 +177,9 @@ export function useKifLibrary() {
     library.find((e) => e.id === id);
 
   return {
-    library,
+    library: sortedLibrary,
+    kifLibraryState: state,
+    setState,
     importFile,
     importFiles,
 

@@ -49,4 +49,13 @@ export type KifPlayerState = {
 };
 
 
+export type SortKey = 'createdAt' | 'title' | 'moveCount';
+export type SortOrder = 'asc' | 'desc';
+
+export type KifLibraryState = {
+  library: KifLibraryEntry[];
+  sortKey: SortKey;
+  sortOrder: SortOrder;
+}
+
 export type KifLibrary = KifLibraryEntry[];

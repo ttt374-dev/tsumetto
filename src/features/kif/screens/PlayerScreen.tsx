@@ -15,7 +15,7 @@ export default function PlayerScreen() {
     const { playNext, playPrev, playFirst, playLast, playByEntryId, playAtIndex } = kifPlayer
     const { importFile, deleteEntry, deleteEntries } = kifLibrary
 
-    const library = kifLibrary.library
+    const library = kifLibrary.kifLibraryState.library
     const kifPlayerState = kifPlayer.kifPlayerState
     const navigate = useNavigate()
     //const navigate = useNavigate();    
@@ -62,7 +62,6 @@ export default function PlayerScreen() {
                     <SelectLibraryEntry
                         currentIndex={kifPlayerState.currentLibraryIndex}
                         library={library} onSelect={playAtIndex} />
-
                 }
 
                 <Box {...swipeHandlers} sx={{
@@ -92,8 +91,7 @@ export default function PlayerScreen() {
                     />
 
                 </Box>
-
-                
+               
 
             </>
         </AppLayout>
