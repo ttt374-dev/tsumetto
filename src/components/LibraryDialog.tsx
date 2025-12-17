@@ -168,7 +168,7 @@ export function LibraryDialog({
                                 }
                                 }>
 
-                                {i + 1}: {entry.title} ({new Date(entry.createdAt).toLocaleString("ja-JP")})
+                                {i + 1}: {entry.kifData.title} ({new Date(entry.createdAt).toLocaleString("ja-JP")})
                             </ListItemText>
                         </ListItem>
                     ))}

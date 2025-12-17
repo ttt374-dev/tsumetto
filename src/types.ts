@@ -20,11 +20,20 @@ export type Move = {
 export type KifData = {
   board: Board;
   hands: Hand;
-  moves: Move[];  
+  moves: Move[];
 
   title: string;
   source?: string;
+
+  
 }
+export type KifLibraryEntry = {
+  id: string;         // 一意の識別子
+  //title: string;      // ファイル名や棋譜タイトル
+  //source?: string;    // ファイルパスなど（必要なら）
+  kifData: KifData;   // parse済みの棋譜データ
+  createdAt: number;  
+};
 
 export type KifPlayerState = {
   kifData: KifData;
@@ -37,12 +46,5 @@ export type KifPlayerState = {
   currentLibraryIndex?: number; // 追加
 };
 
-export type KifLibraryEntry = {
-  id: string;         // 一意の識別子
-  //title: string;      // ファイル名や棋譜タイトル
-  //source?: string;    // ファイルパスなど（必要なら）
-  kifData: KifData;   // parse済みの棋譜データ
-  createdAt: number;
-};
 
 export type KifLibrary = KifLibraryEntry[];

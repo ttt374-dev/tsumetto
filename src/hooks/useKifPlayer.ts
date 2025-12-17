@@ -126,6 +126,7 @@ export function createKifData(
     hands: { black: "", white: "" },
     moves: [],
     title: "",
+    //createdAt: Date.now(),
     ...partial,
   };
 }
