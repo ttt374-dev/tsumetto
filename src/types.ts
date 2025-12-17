@@ -21,23 +21,26 @@ export type KifData = {
   board: Board;
   hands: Hand;
   moves: Move[];  
+
+  title: string;
+  source?: string;
 }
 
 export type KifPlayerState = {
   kifData: KifData;
-  showMoves: boolean;
-  title: string,
+  //title: string,
   //mode: "temp" | "library";
   //playMode: "single" | "seq" | "random";
-  source?: string;
+  //source?: string;
 
+  showMoves: boolean;
   currentLibraryIndex?: number; // 追加
 };
 
 export type KifLibraryEntry = {
   id: string;         // 一意の識別子
-  title: string;      // ファイル名や棋譜タイトル
-  source?: string;    // ファイルパスなど（必要なら）
+  //title: string;      // ファイル名や棋譜タイトル
+  //source?: string;    // ファイルパスなど（必要なら）
   kifData: KifData;   // parse済みの棋譜データ
   createdAt: number;
 };

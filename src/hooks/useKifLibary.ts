@@ -73,16 +73,17 @@ const importFile = async (file: File) => {
   // 重複チェック
   let newTitle = baseName + ext;
   let counter = 1;
-  const existingTitles = new Set(library.map((e) => e.title));
+  const existingTitles = new Set(library.map((e) => e.kifData.title));
   while (existingTitles.has(newTitle)) {
     newTitle = `${baseName}(${counter})${ext}`;
     counter++;
   }
+  kifData.title = newTitle
 
   const entry: KifLibraryEntry = {
     id: uuidv4(),
-    title: newTitle,
-    source: file.name,
+    //title: newTitle,
+    //source: file.name,
     kifData,
     createdAt: Date.now(),
   };

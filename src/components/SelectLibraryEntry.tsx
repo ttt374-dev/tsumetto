@@ -20,7 +20,7 @@ const SelectLibraryEntry: React.FC<SelectLibraryEntryProps> = ({ currentIndex, l
             {
 
                 library.map((entry, i) => (
-                    <option key={entry.id} value={i}>{i+1}:  {entry.title}</option>
+                    <option key={entry.id} value={i}>{i+1}:  {entry.kifData.title}</option>
                 ))
             }
         </select >

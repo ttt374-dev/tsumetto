@@ -39,7 +39,6 @@ export function useKifPlayer(library: KifLibraryEntry[], indexToPlay?: number | 
       createPlayerState({
         ...prev,
         kifData: entry.kifData,
-        title: entry.title,
         currentLibraryIndex: index,
         showMoves: false,
       })
@@ -52,7 +51,7 @@ export function useKifPlayer(library: KifLibraryEntry[], indexToPlay?: number | 
       if (library.length === 0) return prev;
 
       const entry = library[0]
-      return createPlayerState({...prev, kifData: entry.kifData, title: entry.title, showMoves: false, currentLibraryIndex: 0})
+      return createPlayerState({...prev, kifData: entry.kifData, showMoves: false, currentLibraryIndex: 0})
     })
   }
   /** PLAY_NEXT */
@@ -65,7 +64,6 @@ export function useKifPlayer(library: KifLibraryEntry[], indexToPlay?: number | 
       return createPlayerState({
         ...prev,
         kifData: entry.kifData,
-        title: entry.title,
         currentLibraryIndex: next,
         showMoves: false,
       });
@@ -75,7 +73,7 @@ export function useKifPlayer(library: KifLibraryEntry[], indexToPlay?: number | 
   const playLast = () => {
     setState(prev => {
       const entry = library[library.length-1]
-      return createPlayerState({...prev, kifData: entry.kifData, title: entry.title, showMoves: false, currentLibraryIndex: library.length-1})
+      return createPlayerState({...prev, kifData: entry.kifData, showMoves: false, currentLibraryIndex: library.length-1})
     })
   }
 
@@ -91,7 +89,6 @@ export function useKifPlayer(library: KifLibraryEntry[], indexToPlay?: number | 
       return createPlayerState({
         ...prev,
         kifData: entry.kifData,
-        title: entry.title,
         currentLibraryIndex: prevIndex,
         showMoves: false,
       });
@@ -118,7 +115,6 @@ export const createPlayerState = (
 ): KifPlayerState => ({
   kifData: createKifData(),
   showMoves: false,
-  title: "",
   ...partial,
 });
 
@@ -129,6 +125,7 @@ export function createKifData(
     board: createBoard(),
     hands: { black: "", white: "" },
     moves: [],
+    title: "",
     ...partial,
   };
 }

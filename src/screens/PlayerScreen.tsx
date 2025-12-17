@@ -57,7 +57,7 @@ export default function PlayerScreen() {
             <AppLayout
                 header={<>
                     <h2>
-                        {curIndex !== undefined && `${curIndex + 1}: ${kifPlayerState.title}`}
+                        {curIndex !== undefined && `${curIndex + 1}: ${kifPlayerState.kifData.title}`}
                     </h2>
                 </>}
                 footer={<>
