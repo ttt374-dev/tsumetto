@@ -1,7 +1,7 @@
 import './App.css'
 
 import { StatusBar, Style } from "@capacitor/status-bar";
-import PlayerScreen from "./screens/PlayerScreen";
+import PlayerScreen from "../features/kif/screens/PlayerScreen";
 
 
 // ステータスバーをオーバーレイにしない

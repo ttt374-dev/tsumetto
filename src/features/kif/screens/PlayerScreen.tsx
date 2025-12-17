@@ -4,15 +4,14 @@ import BoardView from '../components/BoardView'
 import SelectLibraryEntry from '../components/SelectLibraryEntry';
 import { createKifData } from "../hooks/useKifPlayer";
 import { type KifPlayerState, type KifLibraryEntry } from '../types';
-import FileButton from "../components/FileButton";
+import FileButton from "../../../shared/components/FileButton";
 import { useSwipeable } from "react-swipeable";
 //import { useNavigate } from "react-router-dom";
 import MovesView from "../components/MovesView";
 import { LibraryDialog } from '../components/LibraryDialog';
 import { useKifPlayer } from "../hooks/useKifPlayer";
-import { useKifLibrary } from '../hooks/useKifLibary';
-import { useAndroidBackHandler } from '../hooks/useAndroidBackHandler';
-import { AppLayout } from '../components/AppLayout';
+import { useKifLibrary } from '../../../hooks/useKifLibary';
+import { AppLayout } from '../../../shared/components/AppLayout';
 
 export default function PlayerScreen() {    
     const kifLibrary = useKifLibrary()
