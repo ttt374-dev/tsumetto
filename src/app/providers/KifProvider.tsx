@@ -1,5 +1,5 @@
 import React, { createContext, useContext, type ReactNode } from "react";
-import { useKifLibrary } from '../hooks/useKifLibary';
+import { useKifLibrary } from '../hooks/useKifLibrary';
 import { useKifPlayer } from "../hooks/useKifPlayer";
 
 import type { KifContextValue } from "../types/kifContextValue";

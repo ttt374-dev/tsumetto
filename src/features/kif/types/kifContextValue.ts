@@ -1,4 +1,4 @@
-import type { useKifLibrary } from '../hooks/useKifLibary'
+import type { useKifLibrary } from '../hooks/useKifLibrary'
 import type { useKifPlayer } from "../hooks/useKifPlayer";
 
 // hooks の返り値型を取得してまとめる

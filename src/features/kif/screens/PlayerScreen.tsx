@@ -1,10 +1,10 @@
 import { Box } from "@mui/material";
-import BoardView from '../components/BoardView'
+import BoardView from '../components/BoardView/BoardView'
 import SelectLibraryEntry from '../components/SelectLibraryEntry';
 import { useSwipeable } from "react-swipeable";
 import { useNavigate, } from "react-router-dom";
 import MovesView from "../components/MovesView";
-import { AppLayout } from '../../../shared/components/AppLayout';
+import { AppLayout } from '../../../shared/components/AppLayout/AppLayout';
 import { useKif } from '../hooks/useKif'
 
 export default function PlayerScreen() {

@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 
 import FileButton from "../../../shared/components/FileButton";
-import { AppLayout } from '../../../shared/components/AppLayout';
+import { AppLayout } from '../../../shared/components/AppLayout/AppLayout';
 import { useKif } from '../hooks/useKif'
 import LibraryList from '../components/LibraryList'
 import LibraryControls from '../components/LibraryControls';

@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import { type KifContextValue } from "../types/kifContextValue";
-import { KifContext } from '../providers/KifProvider'
+import { KifContext } from '../../../app/providers/KifProvider'
 
 // Hook で安全に取得
 export function useKif(): KifContextValue {

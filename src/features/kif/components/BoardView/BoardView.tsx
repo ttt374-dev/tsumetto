@@ -1,5 +1,5 @@
 import styles from "./BoardView.module.css";
-import { type Board, type Hand } from "../types/kif";
+import { type Board, type Hand } from "../../types/kif";
 
 interface Props {
   board: Board;
