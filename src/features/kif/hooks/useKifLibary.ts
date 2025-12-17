@@ -2,8 +2,8 @@
 import { useState, useEffect } from "react";
 import { Filesystem, Directory, Encoding } from "@capacitor/filesystem";
 import { v4 as uuidv4 } from "uuid";
-import { parseKif } from "../kifParser";
-import { type KifLibraryEntry } from "../features/kif/types";
+import { parseKif } from "../utils/kifParser";
+import { type KifLibraryEntry } from "../types";
 
 const LIB_FILE = "kifLibrary.json";
 

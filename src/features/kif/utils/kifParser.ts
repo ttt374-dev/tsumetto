@@ -1,6 +1,6 @@
 // parseKif.ts
-import {  type KifData, type Board, type Hand, type Move } from "./types";
-import { createBoard } from "./hooks/useKifPlayer";
+import {  type KifData, type Board, type Hand, type Move } from "../types";
+import { createBoard } from "../hooks/useKifPlayer";
 
 export function parseKif(text: string): KifData  {
   let hands: Hand = { black: "", white: "" };  

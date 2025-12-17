@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import { type Board, type KifData, type KifLibraryEntry, type KifPlayerState } from "../features/kif/types";
+import { type Board, type KifData, type KifLibraryEntry, type KifPlayerState } from "../types";
 
 export function useKifPlayer(library: KifLibraryEntry[]) {
   const [state, setState] = useState<KifPlayerState>(createPlayerState());
