@@ -6,7 +6,7 @@ import { createKifData } from "../hooks/useKifPlayer";
 import { type KifPlayerState, type KifLibraryEntry } from '../types/kif';
 import FileButton from "../../../shared/components/FileButton";
 import { useSwipeable } from "react-swipeable";
-//import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate, } from "react-router-dom";
 import MovesView from "../components/MovesView";
 import { LibraryDialog } from '../components/LibraryDialog';
 import { useKifPlayer } from "../hooks/useKifPlayer";
@@ -24,8 +24,9 @@ export default function PlayerScreen() {
 
     const library = kifLibrary.library
     const kifPlayerState = kifPlayer.kifPlayerState
+    const navigate = useNavigate()
     //const navigate = useNavigate();    
-    const [libraryOpen, setLibraryOpen] = useState(false);
+    //const [libraryOpen, setLibraryOpen] = useState(false);
     const kifData = kifPlayerState.kifData
     const curIndex = kifPlayerState.currentLibraryIndex
 
@@ -43,9 +44,12 @@ export default function PlayerScreen() {
     //useAndroidBackHandler(libraryOpen, () => setLibraryOpen(false))
     ////////////////////////
     //const items = Array.from({ length: 100 }, (_, i) => `Item ${i + 1}`);  // debug
-
+    const handleNavToLibrary = () => {
+        navigate("/library")
+    }
     return (
         <>
+        {/*
             <LibraryDialog
                 open={libraryOpen}
                 library={library}
@@ -55,6 +59,7 @@ export default function PlayerScreen() {
                 onSelect={(entry) => { playByEntryId(entry.id) }}
                 onClose={() => { setLibraryOpen(false) }}
             />
+            */}
             <AppLayout
                 header={<>
                     <h2>
@@ -69,7 +74,7 @@ export default function PlayerScreen() {
                         <button onClick={playLast} disabled={library.length == 0}>&gt;&gt;</button>
                     </div>
                     
-                    <button onClick={() => setLibraryOpen(true)}>ライブラリ管理</button>
+                    <button onClick={handleNavToLibrary}>ライブラリ管理</button>
 
                 </>}
             >

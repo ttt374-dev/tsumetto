@@ -1,8 +1,13 @@
 import './App.css'
 
 import { StatusBar, Style } from "@capacitor/status-bar";
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+
 import PlayerScreen from "../features/kif/screens/PlayerScreen";
+import LibraryScreen from '../features/kif/screens/LibraryScreen';
 import { KifProvider } from '../features/kif/providers/KifProvider';
+
+
 
 // ステータスバーをオーバーレイにしない
 StatusBar.setOverlaysWebView({ overlay: false });
@@ -18,7 +23,14 @@ export default function App() {
 
   return (
     <KifProvider>
-      <PlayerScreen />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/player" element={<PlayerScreen />}/>
+          <Route path="/library" element={<LibraryScreen />}/>
+
+          <Route path="/" element={<Navigate to="/player"/>} />
+        </Routes>
+      </BrowserRouter>
     </KifProvider>
     /*
     <LayoutTestScreen/>
