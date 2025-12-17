@@ -20,7 +20,7 @@ export default function PlayerScreen() {
     const kifPlayer = useKifPlayer(kifLibrary.library, indexToPlay);
 
     const { playNext, playPrev, playFirst, playLast, playAtIndex  } = kifPlayer    
-    const { importFile, deleteEntry } = kifLibrary
+    const { importFile, deleteEntry, deleteEntries } = kifLibrary
 
     const library = kifLibrary.library
     const kifPlayerState = kifPlayer.kifPlayerState
@@ -51,6 +51,7 @@ export default function PlayerScreen() {
                 library={library}
                 importFile={importFile}
                 deleteEntry={deleteEntry}
+                deleteEntries={deleteEntries}
                 onSelect={(index) => { setSelectedIndex(index) }}
                 onClose={() => { setLibraryOpen(false) }}
             />

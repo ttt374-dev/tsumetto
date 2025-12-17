@@ -102,6 +102,23 @@ const importFile = async (file: File) => {
       console.error("Failed to delete entry:", err);
     }
   };
+  const deleteEntries = async (entries: KifLibraryEntry[]) => {
+    try {
+      if (entries.length === 0) return;
+
+      const deleteIds = new Set(entries.map(e => e.id));
+
+      const nextLibrary = library.filter(
+        (e) => !deleteIds.has(e.id)
+      );
+
+      console.log("delete entries", entries, deleteIds, nextLibrary)
+      await persist(nextLibrary);
+      // setLibrary(nextLibrary)
+    } catch (err) {
+      console.error("Failed to delete entries:", err);
+    }
+  };
 
   const clearLibrary = async () => {
     setLibrary([]);
@@ -122,5 +139,6 @@ const importFile = async (file: File) => {
     clearLibrary,
     findById,
     deleteEntry,
+    deleteEntries,
   };
 }

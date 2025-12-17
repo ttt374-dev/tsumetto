@@ -106,7 +106,7 @@ export function parseKif(text: string): KifData  {
     console.log("moves: ", move.moveNumber, move.moveText)
   }
 
-  return { board, hands, moves } ;
+  return { board, hands, moves, title: "" } ;
 }
 
 // 1行の KIF を解析して Move オブジェクトへ

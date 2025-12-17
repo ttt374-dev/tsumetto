@@ -43,6 +43,7 @@ export type KifPlayerState = {
   //source?: string;
 
   showMoves: boolean;
+  currentEntryId?: string;
   currentLibraryIndex?: number; // 追加
 };
 

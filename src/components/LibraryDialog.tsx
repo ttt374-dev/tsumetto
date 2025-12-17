@@ -16,6 +16,7 @@ export interface LibraryDialogProps {
     importFile: (file: File) => Promise<KifLibraryEntry>;
     onSelect: (index: number) => void;
     deleteEntry: (entry: KifLibraryEntry) => void;
+    deleteEntries: (entries: KifLibraryEntry[]) => void;
 }
 
 export function LibraryDialog({
@@ -24,7 +25,8 @@ export function LibraryDialog({
     library,
     importFile,
     onSelect,
-    deleteEntry
+    deleteEntry,
+    deleteEntries,
 }: LibraryDialogProps) {
 
     const [checkedIds, setCheckedIds] = useState<Set<string>>(new Set());
@@ -63,18 +65,20 @@ export function LibraryDialog({
         );
         if (!ok) return;
 
-        // Setを配列に展開
-        const idsToDelete = Array.from(checkedIds);
-        console.log("ids to delete", idsToDelete)
+        // id → entry を一括変換
+        const entriesToDelete = library.filter(e => checkedIds.has(e.id));
 
-        for (const id of idsToDelete) {
-            const entry = library.find((e) => e.id === id);
-            console.log("entry to delete", entry)
-            if (entry) await deleteEntry(entry);
+        if (entriesToDelete.length === 0) {
+            setCheckedIds(new Set());
+            return;
         }
+        //console.log("entries to delete", entriesToDelete)
+
+        await deleteEntries(entriesToDelete);
 
         setCheckedIds(new Set());
     };
+
     
     useEffect(() => {
         if (!open) setCheckedIds(new Set());
