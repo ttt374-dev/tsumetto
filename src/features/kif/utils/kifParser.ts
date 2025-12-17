@@ -10,8 +10,7 @@ export function parseKif(text: string): KifData  {
   const board: Board = createBoard()
   const lines = text.split(/\r?\n/);
 
-  for (const line of lines) {
-    console.log(line)
+  for (const line of lines) {    
     // 先手の持駒
     if (line.startsWith("先手の持駒：")) {
       
@@ -65,7 +64,7 @@ export function parseKif(text: string): KifData  {
       const file = 8 - i;
       const rank = r; // r=0 → 一段目
 
-      console.log("parsed:", file, rank, name, isGote ? "gote" : "sente")
+      //console.log("parsed:", file, rank, name, isGote ? "gote" : "sente")
       board[rank][file] = {
         name,
         isBlack: !isGote,
@@ -86,7 +85,7 @@ export function parseKif(text: string): KifData  {
       continue;
     }
     if (!inMoves) continue;
-    console.log("in moves: ", line)
+    //console.log("in moves: ", line)
     //const move = { moveNumber: 0, rawText: line}
     /*
     // 行例: "   1 ５二金打     ( 0:00/00:00:00)"
@@ -103,7 +102,7 @@ export function parseKif(text: string): KifData  {
     if (!move) continue
     moves.push(move);
     
-    console.log("moves: ", move.moveNumber, move.moveText)
+    //console.log("moves: ", move.moveNumber, move.moveText)
   }
 
   return { board, hands, moves, title: "" } ;
@@ -111,7 +110,7 @@ export function parseKif(text: string): KifData  {
 
 // 1行の KIF を解析して Move オブジェクトへ
 function parseMoveLine(line: string): Move | null {
-  console.log("parse move", line)
+  //console.log("parse move", line)
   //  例: "  5 １六歩(43)    ( 0:00/00:00:00)"
   const moveRegex = /^\s*(\d+)\s+([^\(]+?)(?:\((\d\d)\))?\s*\(/;
   const m = line.match(moveRegex);
@@ -121,6 +120,6 @@ function parseMoveLine(line: string): Move | null {
   const isBlack = moveNumber % 2 == 1
   const moveText = m[2].trim();  // "１六歩"
   const from = m[3] || null;     // "43" 等、無ければ null
-  console.log("parse move", moveNumber, isBlack, moveText, from)
+  //console.log("parse move", moveNumber, isBlack, moveText, from)
   return { moveNumber, isBlack, moveText, from };
 }

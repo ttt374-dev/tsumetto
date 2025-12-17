@@ -17,7 +17,7 @@ function BoardView({ board, hands}: Props) {
     <div className={styles.container}>
       {/* 持駒表示 */}
       <div style={{ marginTop: 12 }}>
-        <div>後手の持ち駒：{hands.white || "なし"}</div>
+        <div>△後手：{hands.white || "なし"}</div>
       </div>
 
 
@@ -62,7 +62,7 @@ function BoardView({ board, hands}: Props) {
 
       {/* 持駒表示 */}
       <div style={{ marginTop: 12 }}>
-        <div>先手の持ち駒：{hands.black || "なし"}</div>
+        <div>▲先手：{hands.black || "なし"}</div>
       </div>
 
       

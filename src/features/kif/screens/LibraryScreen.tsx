@@ -8,10 +8,12 @@ import { useKif } from '../hooks/useKif'
 import LibraryList from '../components/LibraryList'
 import LibraryControls from '../components/LibraryControls';
 import { useLibraryHandlers } from '../hooks/useLibraryHandlers'
+import MultipleFilesButton from '../../../shared/components/MultipleFilesButton';
 
 export default function LibraryScreen() {
     const { kifLibrary, kifPlayer } = useKif()
     const navigate = useNavigate()
+    
 
     const {
         checkedIds,
@@ -27,12 +29,18 @@ export default function LibraryScreen() {
         if (!open) clearAll();
     }, [open]);
 
+    const handleMultipleFilesSelected = async (files: File[]) => {
+        //console.log(kifLibrary)
+        kifLibrary.importFiles(files)
+};
+
     return (
         <AppLayout
             header={"Library"}
             footer={
                 <>
                     <FileButton label="棋譜ファイルを登録" onFileSelected={importFileAndPlay} />
+                    <MultipleFilesButton onFileSelected={handleMultipleFilesSelected}/>
                     <button onClick={() => navigate("/player")}>戻る</button>
                 </>
             }

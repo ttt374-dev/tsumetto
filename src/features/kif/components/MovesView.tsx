@@ -18,7 +18,7 @@ export default function MovesView({ moves, visible, onToggleVisible }: Props) {
                 visible &&
                 moves.map((m, i) => (
                     <div key={i} style={{ padding: "2px 0" }}>
-                        {i + 1}: {m.moveText} ({m.from})
+                        {i + 1}: { m.isBlack ? '▲' : '△'} {m.moveText} ({m.from})
                     </div>
                 ))
             }
