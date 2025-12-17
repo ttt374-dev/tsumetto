@@ -10,7 +10,7 @@ import { useSwipeable } from "react-swipeable";
 import MovesView from "../components/MovesView";
 import { LibraryDialog } from '../components/LibraryDialog';
 import { useKifPlayer } from "../hooks/useKifPlayer";
-import { useKifLibrary } from '../../../hooks/useKifLibary';
+import { useKifLibrary } from '../hooks/useKifLibary';
 import { AppLayout } from '../../../shared/components/AppLayout';
 
 export default function PlayerScreen() {    
