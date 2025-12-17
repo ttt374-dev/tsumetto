@@ -86,6 +86,11 @@ export function useKifPlayer(library: KifLibraryEntry[]) {
     const prev = library[currentIndex - 1];
     if (prev) setCurrentEntryId(prev.id);
   }
+  function playAtIndex(index: number) {
+    const entry = library[index];
+    if (!entry) return;
+    setCurrentEntryId(entry.id);
+  }
 
   function toggleShowMoves() {
     setState(prev =>
@@ -107,6 +112,7 @@ export function useKifPlayer(library: KifLibraryEntry[]) {
       currentLibraryIndex: currentIndex,
     },
     playByEntryId,
+    playAtIndex,
     playFirst,
     playLast,
     playNext,

@@ -19,7 +19,7 @@ export default function PlayerScreen() {
     const kifLibrary = useKifLibrary()
     const kifPlayer = useKifPlayer(kifLibrary.library);
 
-    const { playNext, playPrev, playFirst, playLast, playByEntryId  } = kifPlayer    
+    const { playNext, playPrev, playFirst, playLast, playByEntryId, playAtIndex  } = kifPlayer    
     const { importFile, deleteEntry, deleteEntries } = kifLibrary
 
     const library = kifLibrary.library
@@ -75,14 +75,14 @@ export default function PlayerScreen() {
             >
                 <>
                     {/* 内部リストを選択 */}
-                    {/*
+                    
                     {library.length > 0 &&                        
                         <SelectLibraryEntry
                             currentIndex={kifPlayerState.currentLibraryIndex}
                             library={library} onSelect={playAtIndex} />
                     
                     }
-                            */}
+                    
                     <Box {...handlers} sx={{
                         userSelect: "none", // 選択防止
                         touchAction: "pan-y", // 縦スクロールは阻害しない
