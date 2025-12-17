@@ -14,8 +14,7 @@ import { useKifLibrary } from '../hooks/useKifLibary';
 import { useAndroidBackHandler } from '../hooks/useAndroidBackHandler';
 import { AppLayout } from '../components/AppLayout';
 
-export default function PlayerScreen() {
-    const [indexToPlay, setSelectedIndex] = useState<number | null>(null);
+export default function PlayerScreen() {    
     const kifLibrary = useKifLibrary()
     const kifPlayer = useKifPlayer(kifLibrary.library);
 

@@ -3,24 +3,22 @@ import { type Board, type KifData, type KifLibraryEntry, type KifPlayerState } f
 
 export function useKifPlayer(library: KifLibraryEntry[]) {
   const [state, setState] = useState<KifPlayerState>(createPlayerState());
-  const [currentEntryId, setCurrentEntryId] = useState<string | undefined>();
+  //const [currentEntryId, setCurrentEntryId] = useState<string | undefined>();
 
   /* =====================
    * 派生値
    * ===================== */
-
-  // 現在の entry
   const currentEntry = useMemo(() => {
-    if (!currentEntryId) return undefined;
-    return library.find(e => e.id === currentEntryId);
-  }, [library, currentEntryId]);
+    if (!state.currentEntryId) return undefined;
+    return library.find(e => e.id === state.currentEntryId);
+  }, [library, state.currentEntryId]);
 
-  // 表示用 index（state には持たない）
   const currentIndex = useMemo(() => {
-    if (!currentEntryId) return undefined;
-    const idx = library.findIndex(e => e.id === currentEntryId);
+    if (!state.currentEntryId) return undefined;
+    const idx = library.findIndex(e => e.id === state.currentEntryId);
     return idx >= 0 ? idx : undefined;
-  }, [library, currentEntryId]);
+  }, [library, state.currentEntryId]);
+
 
   /* =====================
    * entryId → state 同期
@@ -40,57 +38,58 @@ export function useKifPlayer(library: KifLibraryEntry[]) {
   /* =====================
    * library 変更時の補正
    * ===================== */
-
   useEffect(() => {
-    if (!currentEntryId && library.length > 0) {
-      setCurrentEntryId(library[0].id);
+    if (!state.currentEntryId && library.length > 0) {
+      playByEntryId(library[0].id);
       return;
     }
 
     if (
-      currentEntryId &&
-      !library.some(e => e.id === currentEntryId)
+      state.currentEntryId &&
+      !library.some(e => e.id === state.currentEntryId)
     ) {
-      // 削除された場合 → 先頭へ
-      setCurrentEntryId(library[0]?.id);
+      playByEntryId(library[0]?.id);
     }
-  }, [library, currentEntryId]);
+  }, [library, state.currentEntryId]);
+
 
   /* =====================
    * 操作系
    * ===================== */
 
   function playByEntryId(entryId: string) {
-    console.log("play by entryId", entryId)
-    setCurrentEntryId(entryId);
-  }
-
-  function playFirst() {
-    if (library.length === 0) return;
-    setCurrentEntryId(library[0].id);
-  }
-
-  function playLast() {
-    if (library.length === 0) return;
-    setCurrentEntryId(library[library.length - 1].id);
-  }
-
-  function playNext() {
-    if (currentIndex == null) return;
-    const next = library[currentIndex + 1];
-    if (next) setCurrentEntryId(next.id);
-  }
-
-  function playPrev() {
-    if (currentIndex == null) return;
-    const prev = library[currentIndex - 1];
-    if (prev) setCurrentEntryId(prev.id);
+    setState(prev => ({
+      ...prev,
+      currentEntryId: entryId,
+    }));
   }
   function playAtIndex(index: number) {
     const entry = library[index];
     if (!entry) return;
-    setCurrentEntryId(entry.id);
+    playByEntryId(entry.id);
   }
+
+  function playFirst() {
+    if (library.length === 0) return;
+    playByEntryId(library[0].id);
+  }
+  function playLast() {
+    if (library.length === 0) return;
+    playByEntryId(library[library.length - 1].id);
+  }
+  function playNext() {
+    if (currentIndex == null) return;
+    const next = library[currentIndex + 1];
+    if (!next) return;
+    playByEntryId(next.id);
+  }
+  function playPrev() {
+    if (currentIndex == null) return;
+    const prev = library[currentIndex - 1];
+    if (!prev) return;
+    playByEntryId(prev.id);
+  }
+
 
   function toggleShowMoves() {
     setState(prev =>
@@ -108,7 +107,6 @@ export function useKifPlayer(library: KifLibraryEntry[]) {
   return {
     kifPlayerState: {
       ...state,
-      currentEntryId,
       currentLibraryIndex: currentIndex,
     },
     playByEntryId,
