@@ -13,7 +13,8 @@ const SelectLibraryEntry: React.FC<SelectLibraryEntryProps> = ({ currentIndex, l
     }
 
     return (
-        <select
+        <select style={{ width: "300px",  display: "block",
+    margin: "12px auto",}}
             value={currentIndex}
             onChange={handleSelectLibrary}>
             {

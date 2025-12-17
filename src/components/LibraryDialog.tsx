@@ -55,7 +55,6 @@ export function LibraryDialog({
             return newSet;
         });
     };
-
     const handleDeleteSelected = async () => {
         if (checkedIds.size === 0) return;
 
@@ -64,16 +63,23 @@ export function LibraryDialog({
         );
         if (!ok) return;
 
-        for (const id of checkedIds) {
+        // Setを配列に展開
+        const idsToDelete = Array.from(checkedIds);
+        console.log("ids to delete", idsToDelete)
+
+        for (const id of idsToDelete) {
             const entry = library.find((e) => e.id === id);
+            console.log("entry to delete", entry)
             if (entry) await deleteEntry(entry);
         }
+
         setCheckedIds(new Set());
     };
-
+    
     useEffect(() => {
         if (!open) setCheckedIds(new Set());
     }, [open]);
+    
 
     const isMobile = window.innerWidth < 768;
     /////////////////////////////////////////////////////

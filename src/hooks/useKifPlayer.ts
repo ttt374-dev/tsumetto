@@ -1,27 +1,21 @@
 import { useState, useEffect } from "react";
-import { parseKif } from "../kifParser";
 import { type KifData, type KifPlayerState, type KifLibraryEntry, type Board } from "../types";
 
 
-export function useKifPlayer(library: KifLibraryEntry[], selectedIndex?: number | null) {
+export function useKifPlayer(library: KifLibraryEntry[], indexToPlay?: number | null) {
   const [state, setState] = useState<KifPlayerState>(createPlayerState());
-  //const [library, setLibrary] = useState<KifLibraryEntry[]>([]);
-  // 起動時または library 更新時に先頭棋譜を読み込む
 
   useEffect(() => {
-    if (library.length === 0) {
-      setState(createPlayerState());
-      return;
+          // selectedIndex が外部から渡される場合はそれを優先
+    if (library.length > 0) {
+      if (indexToPlay != null && library[indexToPlay]) {
+        playAtIndex(indexToPlay);
+      } else {
+        // なければ先頭棋譜をロード
+        playFirst();
+      }
     }
-
-    // selectedIndex が外部から渡される場合はそれを優先
-    if (selectedIndex != null && library[selectedIndex]) {
-      loadFromLibrary(selectedIndex);
-    } else {
-      // なければ先頭棋譜をロード
-      loadFromLibrary(0);
-    }
-  }, [library, selectedIndex]);
+  }, [library, indexToPlay]);
 
 
   /* =============================
@@ -31,37 +25,13 @@ export function useKifPlayer(library: KifLibraryEntry[], selectedIndex?: number 
     //const [ movesVisible, setMovesVisible ] = useState(false)
     const toggleShowMoves = () => {
         setState((prev) => 
-          createPlayerState({...prev, showMoves: !state.showMoves})
+          createPlayerState({...prev, showMoves: !prev.showMoves})
       )
     }
 
-  /** LOAD_KIF */
-  const loadKif = (kifData: KifData, title = "") => {
-    setState((prev) =>
-      createPlayerState({
-        ...prev,
-        kifData,
-        title,
-        showMoves: false,
-      })
-    );
-  };
-
-  /** LOAD_FROM_TEXT */
-  const loadFromText = (text: string, title?: string) => {
-    loadKif(parseKif(text), title);
-  };
-
-  /** LOAD_FROM_FILE */
-  const loadFromFile = async (file: File) => {
-    const buf = await file.arrayBuffer();
-    const text = new TextDecoder("shift_jis").decode(buf);
-    loadFromText(text, file.name);
-  };
-
 
   /** SELECT_LIBRARY */
-  const loadFromLibrary = (index: number) => {
+  const playAtIndex = (index: number) => {
     const entry = library[index];
     if (!entry) return;
 
@@ -133,9 +103,7 @@ export function useKifPlayer(library: KifLibraryEntry[], selectedIndex?: number 
     kifPlayerState: state,
     library,
     toggleShowMoves,
-    loadFromText,
-    loadFromFile,
-    loadFromLibrary,
+    playAtIndex,
     playFirst,
     playNext,
     playPrev,

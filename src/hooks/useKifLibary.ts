@@ -96,6 +96,7 @@ const importFile = async (file: File) => {
     try {
       const nextLibrary = library.filter((e) => e.id !== entry.id);
       await persist(nextLibrary);
+      //setLibrary(nextLibrary)
     } catch (err) {
       console.error("Failed to delete entry:", err);
     }

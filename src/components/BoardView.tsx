@@ -15,6 +15,12 @@ function BoardView({ board, hands}: Props) {
 
   return (
     <div className={styles.container}>
+      {/* 持駒表示 */}
+      <div style={{ marginTop: 12 }}>
+        <div>後手の持ち駒：{hands.white || "なし"}</div>
+      </div>
+
+
       {/* 上の筋表示 */}
       <div className={styles.fileLabels}>
 

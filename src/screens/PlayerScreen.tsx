@@ -15,10 +15,11 @@ import { useAndroidBackHandler } from '../hooks/useAndroidBackHandler';
 import { AppLayout } from '../components/AppLayout';
 
 export default function PlayerScreen() {
-    const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+    const [indexToPlay, setSelectedIndex] = useState<number | null>(null);
     const kifLibrary = useKifLibrary()
-    const kifPlayer = useKifPlayer(kifLibrary.library, selectedIndex);
-    const { playNext, playPrev, playFirst, playLast, loadFromLibrary } = kifPlayer    
+    const kifPlayer = useKifPlayer(kifLibrary.library, indexToPlay);
+
+    const { playNext, playPrev, playFirst, playLast, playAtIndex  } = kifPlayer    
     const { importFile, deleteEntry } = kifLibrary
 
     const library = kifLibrary.library
@@ -72,11 +73,13 @@ export default function PlayerScreen() {
                 </>}
             >
                 <>
-                                  {/* 内部リストを選択 */}
+                    {/* 内部リストを選択 */}
                     {library.length > 0 &&
+                        
                         <SelectLibraryEntry
                             currentIndex={kifPlayerState.currentLibraryIndex}
-                            library={library} onSelect={loadFromLibrary} />
+                            library={library} onSelect={playAtIndex} />
+                        
                     }
                     <Box {...handlers} sx={{
                         userSelect: "none", // 選択防止
