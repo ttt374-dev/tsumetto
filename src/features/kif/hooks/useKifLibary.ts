@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { Filesystem, Directory, Encoding } from "@capacitor/filesystem";
 import { v4 as uuidv4 } from "uuid";
 import { parseKif } from "../utils/kifParser";
-import { type KifLibraryEntry } from "../types";
+import { type KifLibraryEntry } from "../types/kif";
 
 const LIB_FILE = "kifLibrary.json";
 
@@ -34,6 +34,7 @@ export function useKifLibrary() {
         } else {
           setLibrary([]);
         }
+        console.log("saved library", savedLib)
       } catch {
         setLibrary([]);
       }

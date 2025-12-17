@@ -1,7 +1,7 @@
 import { Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
 import { useState, useEffect } from 'react'
 import { Box, List, ListItem, ListItemIcon, ListItemText, Checkbox } from "@mui/material";
-import type { KifLibraryEntry } from "../types";
+import type { KifLibraryEntry } from "../types/kif";
 import FileButton from "../../../shared/components/FileButton";
 import { IconButton, Tooltip } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';

@@ -2,7 +2,7 @@ import './App.css'
 
 import { StatusBar, Style } from "@capacitor/status-bar";
 import PlayerScreen from "../features/kif/screens/PlayerScreen";
-
+import { KifProvider } from '../features/kif/providers/KifProvider';
 
 // ステータスバーをオーバーレイにしない
 StatusBar.setOverlaysWebView({ overlay: false });
@@ -17,7 +17,9 @@ export default function App() {
   */
 
   return (
-    <PlayerScreen />
+    <KifProvider>
+      <PlayerScreen />
+    </KifProvider>
     /*
     <LayoutTestScreen/>
     <BrowserRouter>

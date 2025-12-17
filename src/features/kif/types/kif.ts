@@ -1,3 +1,4 @@
+
 export type Piece = {
   name: string;
   isBlack: boolean;

@@ -1,4 +1,4 @@
-import { type Move } from "../types";
+import { type Move } from "../types/kif";
 
 interface Props {
     moves: Move[];

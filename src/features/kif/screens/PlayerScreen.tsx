@@ -3,7 +3,7 @@ import { Box } from "@mui/material";
 import BoardView from '../components/BoardView'
 import SelectLibraryEntry from '../components/SelectLibraryEntry';
 import { createKifData } from "../hooks/useKifPlayer";
-import { type KifPlayerState, type KifLibraryEntry } from '../types';
+import { type KifPlayerState, type KifLibraryEntry } from '../types/kif';
 import FileButton from "../../../shared/components/FileButton";
 import { useSwipeable } from "react-swipeable";
 //import { useNavigate } from "react-router-dom";
@@ -12,10 +12,12 @@ import { LibraryDialog } from '../components/LibraryDialog';
 import { useKifPlayer } from "../hooks/useKifPlayer";
 import { useKifLibrary } from '../hooks/useKifLibary';
 import { AppLayout } from '../../../shared/components/AppLayout';
+import { useKif } from '../hooks/useKif'
 
 export default function PlayerScreen() {    
-    const kifLibrary = useKifLibrary()
-    const kifPlayer = useKifPlayer(kifLibrary.library);
+    const { kifLibrary, kifPlayer } = useKif()
+    //const kifLibrary = useKifLibrary()
+    //const kifPlayer = useKifPlayer(kifLibrary.library);
 
     const { playNext, playPrev, playFirst, playLast, playByEntryId, playAtIndex  } = kifPlayer    
     const { importFile, deleteEntry, deleteEntries } = kifLibrary
