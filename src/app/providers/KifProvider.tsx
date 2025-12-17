@@ -1,8 +1,8 @@
 import React, { createContext, useContext, type ReactNode } from "react";
-import { useKifLibrary } from '../hooks/useKifLibrary';
-import { useKifPlayer } from "../hooks/useKifPlayer";
+import { useKifLibrary } from '../../features/kif/hooks/useKifLibrary'
+import { useKifPlayer } from "../../features/kif/hooks/useKifPlayer";
 
-import type { KifContextValue } from "../types/kifContextValue";
+import type { KifContextValue } from "../../features/kif/types/kifContextValue";
 
 export const KifContext = createContext<KifContextValue | null>(null);
 

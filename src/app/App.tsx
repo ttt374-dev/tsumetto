@@ -5,7 +5,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 import PlayerScreen from "../features/kif/screens/PlayerScreen";
 import LibraryScreen from '../features/kif/screens/LibraryScreen';
-import { KifProvider } from '../features/kif/providers/KifProvider';
+import { KifProvider } from './providers/KifProvider';
 
 
 

@@ -24,13 +24,16 @@ export default function PlayerScreen() {
     const curIndex = kifPlayerState.currentLibraryIndex
 
     // スワイプハンドラ
-    const handlers = useSwipeable({
+    const swipeHandlers = useSwipeable({
         onSwipedLeft: () => {// 左スワイプ → 次の棋譜へ
             playNext()
         },
         onSwipedRight: () => {// 右スワイプ → 前の棋譜へ
             playPrev()
         },
+        onSwipedUp: () => {  kifPlayer.hideMoves()},
+        onSwipedDown: () => { kifPlayer.showMoves()},
+        
         trackMouse: true, // PCでもマウスでスワイプ可能
         preventScrollOnSwipe: true,
     });
@@ -47,19 +50,13 @@ export default function PlayerScreen() {
                     {curIndex !== undefined && `${curIndex + 1}: ${kifPlayerState.kifData.title}`}
                 </h2>
             </>}
-            footer={<>
-                <div style={{ marginTop: 20 }}>
-                    <button onClick={playFirst} disabled={library.length == 0}>&lt;&lt;</button>
-                    <button onClick={playPrev} disabled={library.length == 0}>&lt;</button>
-                    <button onClick={playNext} disabled={library.length == 0}>&gt;</button>
-                    <button onClick={playLast} disabled={library.length == 0}>&gt;&gt;</button>
-                </div>
-
+            footer={
                 <button onClick={handleNavToLibrary}>ライブラリ管理</button>
+            }
 
-            </>}
         >
             <>
+                
                 {/* 内部リストを選択 */}
                 {library.length > 0 &&
                     <SelectLibraryEntry
@@ -68,7 +65,7 @@ export default function PlayerScreen() {
 
                 }
 
-                <Box {...handlers} sx={{
+                <Box {...swipeHandlers} sx={{
                     userSelect: "none", // 選択防止
                     touchAction: "pan-y", // 縦スクロールは阻害しない
                 }}>
@@ -77,7 +74,12 @@ export default function PlayerScreen() {
                         hands={kifData.hands}
                     />
                 </Box>
-
+<Box>
+                    <button onClick={playFirst} disabled={library.length == 0}>&lt;&lt;</button>
+                    <button onClick={playPrev} disabled={library.length == 0}>&lt;</button>
+                    <button onClick={playNext} disabled={library.length == 0}>&gt;</button>
+                    <button onClick={playLast} disabled={library.length == 0}>&gt;&gt;</button>
+                </Box>
                 <Box sx={{
                     display: "flex",
                     flexDirection: "column",
@@ -90,6 +92,9 @@ export default function PlayerScreen() {
                     />
 
                 </Box>
+
+                
+
             </>
         </AppLayout>
     )

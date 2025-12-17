@@ -91,7 +91,12 @@ export function useKifPlayer(library: KifLibraryEntry[]) {
     playByEntryId(prev.id);
   }
 
-
+  function showMoves(){
+    setState(prev => createPlayerState({...prev, showMoves: true}))
+  }
+  function hideMoves(){
+    setState(prev => createPlayerState({...prev, showMoves: false}))
+  }
   function toggleShowMoves() {
     setState(prev =>
       createPlayerState({
@@ -116,6 +121,8 @@ export function useKifPlayer(library: KifLibraryEntry[]) {
     playLast,
     playNext,
     playPrev,
+    showMoves,
+    hideMoves,
     toggleShowMoves,
   };
 }
