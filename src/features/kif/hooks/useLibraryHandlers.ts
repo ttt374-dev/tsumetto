@@ -2,8 +2,10 @@ import { useState } from "react";
 import type { KifLibraryEntry } from "../types/kifLibrary";
 
 export function useLibraryHandlers(kifLibrary: any, kifPlayer: any, navigate: (path: string) => void) {
+//export function useLibraryHandlers(kifLibrary: ReturnType<useKifLibrary>, kifPlayer: any, navigate: (path: string) => void) {
     const [checkedIds, setCheckedIds] = useState<Set<string>>(new Set());
-    const library = kifLibrary.library;
+    const library = kifLibrary.kifLibraryState.library
+    console.log("library on handlers", library)
 
     const importFileAndPlay = async (file: File) => {
         try {
@@ -41,6 +43,7 @@ export function useLibraryHandlers(kifLibrary: any, kifPlayer: any, navigate: (p
         if (!ok) return;
 
         const entriesToDelete = library.filter((e: KifLibraryEntry) => checkedIds.has(e.id));
+        console.log("delete selected", entriesToDelete)
         if (entriesToDelete.length === 0) {
             clearAll();
             return;

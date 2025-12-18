@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Box } from "@mui/material";
 
 import BoardView from '../components/BoardView/BoardView'
@@ -7,6 +8,10 @@ import { useNavigate, } from "react-router-dom";
 import MovesView from "../components/MovesView";
 import { AppLayout } from '../../../shared/components/AppLayout/AppLayout';
 import { useKif } from '../hooks/useKif'
+import type { KifLearningRecord } from '../types/kifLearning'
+import { useKifLearning } from '../hooks/useKifLearning';
+
+const LEARNING_FILE = "kif-learning.json";
 
 export default function PlayerScreen() {
     const { kifLibrary, kifPlayer } = useKif()
@@ -17,6 +22,10 @@ export default function PlayerScreen() {
     const navigate = useNavigate()
     const kifData = kifPlayerState.kifData
     const curIndex = kifPlayerState.currentLibraryIndex
+    
+    const { getRecord, markSolved, markFailed } = useKifLearning()
+    const curEntryId = kifPlayerState.currentEntryId
+    const learningRecord= getRecord(curEntryId)
 
     // スワイプハンドラ
     const swipeHandlers = useSwipeable({
@@ -35,12 +44,19 @@ export default function PlayerScreen() {
     const handleNavToLibrary = () => {
         navigate("/library")
     }
-    const handleCorrect = () => {
 
-    }
-    const handleWrong = () => {
-        
-    }
+    ///
+    const calcAccuracy = (
+        record: KifLearningRecord | undefined
+    ): number | undefined => {
+        if (!record) return undefined;
+
+        const total = record.solvedCount + record.failedCount;
+        if (total === 0) return undefined;
+
+        return (record.solvedCount / total) * 100;
+    };
+    
     ////////////////////////////////////////////////////////////////////////
     return (
         <AppLayout
@@ -78,10 +94,21 @@ export default function PlayerScreen() {
                     <button onClick={playNext} disabled={library.length == 0}>&gt;</button>
                     <button onClick={playLast} disabled={library.length == 0}>&gt;&gt;</button>
                 </Box>
+
+                <Box
+                    sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        width: "100%",
+                        gap: 2,
+                    }}>
                 <Box sx={{
                     display: "flex",
+                    flexGrow: 1,
                     flexDirection: "column",
-                    overflowY: "auto"
+                    overflowY: "auto",
+                    minWidth: 120,
                 }}>
                     <MovesView
                         moves={kifData.moves}
@@ -90,15 +117,31 @@ export default function PlayerScreen() {
                     />
 
                 </Box>
-                <Box>
-                    <button onClick={handleCorrect}>
+                <Box sx={{display: "flex",  flexDirection: "column", gap: 1}}>
+                    <button 
+                        disabled={!curEntryId}
+                        onClick={() => curEntryId && markSolved(curEntryId)}>
                         正解
                     </button>
-                    <button onClick={handleWrong}>
+                    <button 
+                        disabled={!curEntryId}
+                        onClick={() => curEntryId && markFailed(curEntryId)}>
                         間違い
                     </button>
+
+                        {learningRecord && learningRecord.solvedCount + learningRecord.failedCount > 0 &&
+                            <>
+                                <div>
+                                    正答率：{`${calcAccuracy(learningRecord)}%`}
+                                </div>
+                                <div>
+                                    ( {learningRecord.solvedCount} / 
+                                    {learningRecord.failedCount+learningRecord.solvedCount} )
+                                </div>
+                            </>
+                        }
                 </Box>
-               
+               </Box>
             </>
         </AppLayout>
     )

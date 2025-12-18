@@ -18,6 +18,7 @@ export default function LibraryScreen() {
 
     const { setSortKey, toggleSortOrder } = kifLibrary
 
+    console.log("kifLibrary on screen", kifLibrary)
     const {
         checkedIds,
         //importFileAndPlay,
