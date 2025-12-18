@@ -16,7 +16,6 @@ interface UseKifLearning {
 
 const LEARNING_FILE = "kif-learning.json";
 
-
 export function useKifLearning(): UseKifLearning {
     const [records, setRecords] =
         useState<Record<string, KifLearningRecord>>({});
@@ -30,6 +29,31 @@ export function useKifLearning(): UseKifLearning {
         }
     }
 
+    const load = async (): Promise<Record<string, KifLearningRecord>> => {
+        const result = await Filesystem.readFile({
+                    path: LEARNING_FILE,
+                    directory: Directory.Data,
+                    encoding: Encoding.UTF8,
+                });
+
+                const text =
+                    typeof result.data === "string"
+                        ? result.data
+                        : await result.data.text();
+
+                const parsed: unknown = JSON.parse(text);
+
+                if (
+                    typeof parsed === "object" &&
+                    parsed !== null &&
+                    (parsed as any).version === 1 &&
+                    typeof (parsed as any).records === "object"
+                ) {
+                    return (parsed as KifLearningStore).records
+                } else {
+                    return {}
+                }
+    }
 
     useEffect(() => {
         (async () => {
