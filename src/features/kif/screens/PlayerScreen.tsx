@@ -14,7 +14,7 @@ export default function PlayerScreen() {
     const { kifLibrary, kifPlayer, kifLearning } = useKif()
     const { playNext, playPrev, playFirst, playLast, playByEntryId, playAtIndex } = kifPlayer
 
-    const library = kifLibrary.library
+    const library = kifLibrary.sortedLibrary
     const kifPlayerState = kifPlayer.kifPlayerState
     const navigate = useNavigate()
     const kifData = kifPlayerState.kifData
@@ -95,17 +95,18 @@ export default function PlayerScreen() {
                 <Box
                     sx={{
                         display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        width: "100%",
+                        justifyContent: "center",                                              
+                        
+                        //width: "100%",
                         gap: 2,
                     }}>
                 <Box sx={{
                     display: "flex",
-                    flexGrow: 1,
+                    //flexGrow: 1,
                     flexDirection: "column",
                     overflowY: "auto",
-                    minWidth: 120,
+                    gap: 2,
+                    //minWidth: 120,
                 }}>
                     <MovesView
                         moves={kifData.moves}
@@ -114,7 +115,7 @@ export default function PlayerScreen() {
                     />
 
                 </Box>
-                <Box sx={{display: "flex",  flexDirection: "column", gap: 1}}>
+                <Box sx={{display: "flex",  flexDirection: "column", gap: 2}}>
                     <button 
                         disabled={!curEntryId}
                         onClick={() => curEntryId && markSolved(curEntryId)}>

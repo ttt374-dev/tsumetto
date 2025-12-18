@@ -12,6 +12,11 @@ function LibraryList({
     handleCheckboxChange: (id: string) => void;
     onSelect: (entry: KifLibraryEntry) => void;
 }) {
+    const formatAccuracy = (accuracy: number | null): string => {
+        if (accuracy == null) return "-"
+        const digits = 0
+        return  `${(accuracy * 100).toFixed(digits)}%`
+    }
     return (
         <List sx={{ flex: 1, display: "flex", flexDirection: "column", overflowY: "auto" }}>
             {library.map((entry, i) => (
@@ -30,8 +35,8 @@ function LibraryList({
                             "&:hover": { backgroundColor: "#e0e0e0" }
                         }}
                         onClick={() => onSelect(entry)}
-                    >
-                        {i + 1}: {entry.kifData.title} ({new Date(entry.createdAt).toLocaleString("ja-JP")} [{entry.accuracy}])
+                    >                        
+                        {i + 1}: {entry.kifData.title} ({new Date(entry.createdAt).toLocaleString("ja-JP")} [{formatAccuracy(entry.accuracy)}])
                     </ListItemText>
                 </ListItem>
             ))}

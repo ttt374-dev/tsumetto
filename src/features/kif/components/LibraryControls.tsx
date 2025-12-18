@@ -12,10 +12,12 @@ type LibraryControlsProps = {
     clearAll: () => void;
     handleDeleteSelected: () => void;
 
+    sortKey: SortKey,
     sortOrder: SortOrder,
     setSortKey: (key: SortKey) => void;
     toggleSortOrder: () => void;
 };
+
 
 export function LibraryControls({    
     checkedIds,
@@ -23,10 +25,15 @@ export function LibraryControls({
     clearAll,
     handleDeleteSelected,
 
-    sortOrder,
+    sortKey,    
     setSortKey,
+    sortOrder,
     toggleSortOrder
 }: LibraryControlsProps) {
+    const handleSortKeyChange = (e: any) => { 
+        console.log(e.target.value)
+        setSortKey(e.target.value) }
+
     return (
         <Box sx={{ display: "flex", flexShrink: 0 }}>
             {/* 全選択 */}
@@ -57,6 +64,15 @@ export function LibraryControls({
                 </IconButton>
             </Tooltip>  
 
+            <select value={sortKey} onChange={handleSortKeyChange}>
+                <option key="createdAt" value="createdAt">追加順</option>
+                <option key="title" value="title">名前順</option>
+                <option key="accuracy" value="accuracy">正答率</option>
+            </select>
+                           <button onClick={() => toggleSortOrder()}>
+                    {sortOrder === 'asc' ? '昇順' : '降順'}
+                </button>
+                {/*
             <div style={{ display: "flex", gap: "0.5rem" }}>
                 <button onClick={() => setSortKey('createdAt')}>追加順</button>
                 <button onClick={() => setSortKey('title')}>名前順</button>
@@ -65,7 +81,7 @@ export function LibraryControls({
                 <button onClick={() => toggleSortOrder()}>
                     {sortOrder === 'asc' ? '昇順' : '降順'}
                 </button>
-            </div>          
+            </div>      */    }
         </Box>
     )
 }

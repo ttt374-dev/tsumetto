@@ -67,6 +67,7 @@ export default function LibraryScreen() {
                 selectAll={selectAll}
                 clearAll={clearAll}
                 handleDeleteSelected={deleteSelected}
+                sortKey={kifLibrary.sortKey}
                 setSortKey={kifLibrary.setSortKey}
                 toggleSortOrder={kifLibrary.toggleSortOrder}
                 sortOrder={kifLibrary.sortOrder}
