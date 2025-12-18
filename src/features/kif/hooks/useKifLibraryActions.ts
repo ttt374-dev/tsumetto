@@ -60,6 +60,21 @@ export function useKifLibraryActions(
         }
         return results;
     };
+    const updateTitle = async (entryId: string, newTitle: string) => {
+        // 重複チェック（任意）
+        const existingTitles = new Set(library.map(e => e.kifData.title));
+        if (existingTitles.has(newTitle)) {
+            throw new Error("タイトルが重複しています");
+        }
+
+        const nextLibrary = library.map(e =>
+            e.id === entryId
+                ? { ...e, kifData: { ...e.kifData, title: newTitle } }
+                : e
+        );
+
+        await persist(nextLibrary);
+    };
 
     const deleteEntry = async (entry: KifLibraryEntry) => {
         try {
@@ -88,5 +103,5 @@ export function useKifLibraryActions(
         }
     };
 
-    return { importFile, importFiles, deleteEntry, deleteEntries };
+    return { importFile, importFiles, updateTitle, deleteEntry, deleteEntries };
 }

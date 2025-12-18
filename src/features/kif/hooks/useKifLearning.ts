@@ -6,7 +6,7 @@ import type { KifLearningRecord, KifLearningStore } from "../types/kifLearning";
 interface UseKifLearning {
     records: Record<string, KifLearningRecord>;
 
-    getRecord(entryId?: string): KifLearningRecord | undefined;
+    getRecord(entryId: string | null): KifLearningRecord | null;
 
     markSolved(entryId: string): void;
     markFailed(entryId: string): void;
@@ -21,8 +21,8 @@ export function useKifLearning(): UseKifLearning {
     const [records, setRecords] =
         useState<Record<string, KifLearningRecord>>({});
 
-    const getRecord = (entryId?: string) => {
-        if (!entryId) return undefined
+    const getRecord = (entryId: string | null) => {
+        if (!entryId) return null
         return records[entryId] ?? {
             entryId,
             solvedCount: 0,

@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Box } from "@mui/material";
 import { useSwipeable } from "react-swipeable";
 import { useNavigate, } from "react-router-dom";
@@ -9,6 +10,7 @@ import { AppLayout } from '../../../shared/components/AppLayout/AppLayout';
 import { useKif } from '../hooks/useKif'
 import type { KifLearningRecord } from '../types/kifLearning'
 //import { useKifLearning } from '../hooks/useKifLearning';
+import { KifEntryEditDialog } from "../dialogs/KifEntryEditDialog";
 
 export default function PlayerScreen() {
     const { kifLibrary, kifPlayer, kifLearning } = useKif()
@@ -41,7 +43,19 @@ export default function PlayerScreen() {
     const handleNavToLibrary = () => {
         navigate("/library")
     }
-
+    const [ openEditDialog, setOpenEditDialog ] = useState(false)
+    const handleOpenEditDialog = () => {
+        setOpenEditDialog(true)
+    }
+    const handleCloseEditDialog = () => {
+        setOpenEditDialog(false)
+    }
+    const handleDelete = () => {
+        //playFirst()
+        const index = library.findIndex(e => e.id === curEntryId);
+        const nextEntry = library[index + 1] ?? library[index - 1] ?? null;
+        playByEntryId(nextEntry.id)
+    }
     ///
     const calcAccuracy = (
         record: KifLearningRecord | undefined
@@ -68,6 +82,7 @@ export default function PlayerScreen() {
 
         >
             <>
+            <KifEntryEditDialog open={openEditDialog} onClose={handleCloseEditDialog} onDelete={handleDelete} entryId={curEntryId}/>
                 
                 {/* 内部リストを選択 */}
                 {library.length > 0 &&
@@ -112,20 +127,20 @@ export default function PlayerScreen() {
                         moves={kifData.moves}
                         visible={kifPlayerState.showMoves}
                         onToggleVisible={kifPlayer.toggleShowMoves}
-                    />
+                        />
 
-                </Box>
-                <Box sx={{display: "flex",  flexDirection: "column", gap: 2}}>
-                    <button 
-                        disabled={!curEntryId}
-                        onClick={() => curEntryId && markSolved(curEntryId)}>
-                        正解
-                    </button>
-                    <button 
-                        disabled={!curEntryId}
-                        onClick={() => curEntryId && markFailed(curEntryId)}>
-                        間違い
-                    </button>
+                    </Box>
+                    <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                        <button
+                            disabled={!curEntryId}
+                            onClick={() => curEntryId && markSolved(curEntryId)}>
+                            正答
+                        </button>
+                        <button
+                            disabled={!curEntryId}
+                            onClick={() => curEntryId && markFailed(curEntryId)}>
+                            誤答
+                        </button>
 
                         {learningRecord && learningRecord.solvedCount + learningRecord.failedCount > 0 &&
                             <>
@@ -133,13 +148,16 @@ export default function PlayerScreen() {
                                     正答率：{`${calcAccuracy(learningRecord)}%`}
                                 </div>
                                 <div>
-                                    ( {learningRecord.solvedCount} / 
-                                    {learningRecord.failedCount+learningRecord.solvedCount} )
+                                    ( {learningRecord.solvedCount} /
+                                    {learningRecord.failedCount + learningRecord.solvedCount} )
                                 </div>
                             </>
                         }
+                        <button onClick={handleOpenEditDialog}>
+                            編集・詳細
+                        </button>
+                    </Box>
                 </Box>
-               </Box>
             </>
         </AppLayout>
     )
