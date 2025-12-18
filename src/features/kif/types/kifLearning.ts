@@ -16,3 +16,4 @@ export type KifLearningStore = {
   version: 1;
   records: Record<string, KifLearningRecord>;
 };
+

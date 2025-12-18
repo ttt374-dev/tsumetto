@@ -7,7 +7,7 @@ export type KifLibraryEntry = {
   kifData: KifData;   // parse済みの棋譜データ
   createdAt: number;  
 };
-export type SortKey = 'createdAt' | 'title' | 'moveCount';
+export type SortKey = 'createdAt' | 'title' | 'moveCount' | 'accuracy';
 export type SortOrder = 'asc' | 'desc';
 
 export type KifLibraryState = {
@@ -17,3 +17,11 @@ export type KifLibraryState = {
 }
 
 //export type KifLibrary = KifLibraryEntry[];
+
+// types/kifLibraryView.ts
+export type KifLibraryWithLearning = {
+  entry: KifLibraryEntry
+  solvedCount: number
+  failedCount: number
+  accuracy: number | null   // 未学習は null
+}

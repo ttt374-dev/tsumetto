@@ -1,29 +1,26 @@
-import { useState } from 'react'
 import { Box } from "@mui/material";
+import { useSwipeable } from "react-swipeable";
+import { useNavigate, } from "react-router-dom";
 
 import BoardView from '../components/BoardView/BoardView'
 import SelectLibraryEntry from '../components/SelectLibraryEntry';
-import { useSwipeable } from "react-swipeable";
-import { useNavigate, } from "react-router-dom";
 import MovesView from "../components/MovesView";
 import { AppLayout } from '../../../shared/components/AppLayout/AppLayout';
 import { useKif } from '../hooks/useKif'
 import type { KifLearningRecord } from '../types/kifLearning'
-import { useKifLearning } from '../hooks/useKifLearning';
-
-const LEARNING_FILE = "kif-learning.json";
+//import { useKifLearning } from '../hooks/useKifLearning';
 
 export default function PlayerScreen() {
-    const { kifLibrary, kifPlayer } = useKif()
+    const { kifLibrary, kifPlayer, kifLearning } = useKif()
     const { playNext, playPrev, playFirst, playLast, playByEntryId, playAtIndex } = kifPlayer
 
-    const library = kifLibrary.kifLibraryState.library
+    const library = kifLibrary.library
     const kifPlayerState = kifPlayer.kifPlayerState
     const navigate = useNavigate()
     const kifData = kifPlayerState.kifData
     const curIndex = kifPlayerState.currentLibraryIndex
     
-    const { getRecord, markSolved, markFailed } = useKifLearning()
+    const { getRecord, markSolved, markFailed } = kifLearning
     const curEntryId = kifPlayerState.currentEntryId
     const learningRecord= getRecord(curEntryId)
 
