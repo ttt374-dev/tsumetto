@@ -1,4 +1,5 @@
 import { Box } from "@mui/material";
+
 import BoardView from '../components/BoardView/BoardView'
 import SelectLibraryEntry from '../components/SelectLibraryEntry';
 import { useSwipeable } from "react-swipeable";
@@ -9,17 +10,11 @@ import { useKif } from '../hooks/useKif'
 
 export default function PlayerScreen() {
     const { kifLibrary, kifPlayer } = useKif()
-    //const kifLibrary = useKifLibrary()
-    //const kifPlayer = useKifPlayer(kifLibrary.library);
-
     const { playNext, playPrev, playFirst, playLast, playByEntryId, playAtIndex } = kifPlayer
-    const { importFile, deleteEntry, deleteEntries } = kifLibrary
 
     const library = kifLibrary.kifLibraryState.library
     const kifPlayerState = kifPlayer.kifPlayerState
     const navigate = useNavigate()
-    //const navigate = useNavigate();    
-    //const [libraryOpen, setLibraryOpen] = useState(false);
     const kifData = kifPlayerState.kifData
     const curIndex = kifPlayerState.currentLibraryIndex
 
@@ -37,12 +32,16 @@ export default function PlayerScreen() {
         trackMouse: true, // PCでもマウスでスワイプ可能
         preventScrollOnSwipe: true,
     });
-    //useAndroidBackHandler(libraryOpen, () => setLibraryOpen(false))
-    ////////////////////////
-    //const items = Array.from({ length: 100 }, (_, i) => `Item ${i + 1}`);  // debug
     const handleNavToLibrary = () => {
         navigate("/library")
     }
+    const handleCorrect = () => {
+
+    }
+    const handleWrong = () => {
+        
+    }
+    ////////////////////////////////////////////////////////////////////////
     return (
         <AppLayout
             header={<>
@@ -73,7 +72,7 @@ export default function PlayerScreen() {
                         hands={kifData.hands}
                     />
                 </Box>
-<Box>
+                <Box>
                     <button onClick={playFirst} disabled={library.length == 0}>&lt;&lt;</button>
                     <button onClick={playPrev} disabled={library.length == 0}>&lt;</button>
                     <button onClick={playNext} disabled={library.length == 0}>&gt;</button>
@@ -91,8 +90,15 @@ export default function PlayerScreen() {
                     />
 
                 </Box>
+                <Box>
+                    <button onClick={handleCorrect}>
+                        正解
+                    </button>
+                    <button onClick={handleWrong}>
+                        間違い
+                    </button>
+                </Box>
                
-
             </>
         </AppLayout>
     )
