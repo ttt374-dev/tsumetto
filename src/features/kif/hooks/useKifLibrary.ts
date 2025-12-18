@@ -31,9 +31,9 @@ export function useKifLibrary() {
     });
   }, [library, state.sortKey, state.sortOrder]);
 
-
-  /* 永続化ロード */
   useEffect(() => {
+    let cancelled = false;
+
     (async () => {
       try {
         const result = await Filesystem.readFile({
@@ -42,29 +42,31 @@ export function useKifLibrary() {
           encoding: Encoding.UTF8,
         });
 
-        // result.data が string ならそのまま、Blob なら text() で string に変換
-        let dataStr: string;
-        if (typeof result.data === "string") {
-          dataStr = result.data;
-        } else {
-          dataStr = await result.data.text();
+        const dataStr =
+          typeof result.data === "string"
+            ? result.data
+            : await result.data.text();
+
+          console.log("LIB_FILE raw:", dataStr);
+        const savedLib: unknown = JSON.parse(dataStr);
+
+        if (!cancelled) {
+          setLibrary(Array.isArray(savedLib) ? savedLib as KifLibraryEntry[] : []);
         }
 
-        const savedLib: unknown = JSON.parse(dataStr);
-        if (Array.isArray(savedLib)) {
-          setLibrary(savedLib as KifLibraryEntry[]);
-          //setState(prev=>({...prev, library: savedLib as KifLibraryEntry[]}))
-        } else {
+      } catch (e) {
+        console.warn("library load failed", e);
+        if (!cancelled) {
           setLibrary([]);
-          //setState( prev => ( { ...prev, library: []}))
         }
-        console.log("saved library", savedLib)
-      } catch {
-        setLibrary([]);
-        setState( prev => ( { ...prev, library: []}))
       }
     })();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
+
 
   const setLibrary = (newLib: KifLibraryEntry[]) => {
     setState( prev => ({ ...prev, library: newLib}))
