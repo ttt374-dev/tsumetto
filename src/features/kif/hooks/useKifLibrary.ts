@@ -47,7 +47,7 @@ export function useKifLibrary() {
             ? result.data
             : await result.data.text();
 
-          console.log("LIB_FILE raw:", dataStr);
+          //console.log("LIB_FILE raw:", dataStr);
         const savedLib: unknown = JSON.parse(dataStr);
 
         if (!cancelled) {
@@ -160,7 +160,7 @@ export function useKifLibrary() {
         (e) => !deleteIds.has(e.id)
       );
 
-      console.log("delete entries", entries, deleteIds, nextLibrary)
+      //console.log("delete entries", entries, deleteIds, nextLibrary)
       await persist(nextLibrary);
       // setLibrary(nextLibrary)
     } catch (err) {

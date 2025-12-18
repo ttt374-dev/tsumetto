@@ -27,7 +27,11 @@ export default function LibraryScreen() {
         selectAll,
         clearAll,
         deleteSelected
-    } = useLibraryHandlers(kifLibrary, kifPlayer, navigate);
+    } = useLibraryHandlers(
+            kifLibrary.kifLibraryState.library, kifLibrary.importFile, kifLibrary.deleteEntries,  
+            kifPlayer.playLast, kifPlayer.playByEntryId,
+            navigate
+        );
 
     useEffect(() => {
         if (!open) clearAll();
