@@ -41,8 +41,6 @@ export function KifEntryEditDialog({
   useEffect(() => {
     setTitle(entry?.kifData.title ?? "")
   }, [entryId, entry])
-
-
   
   // handlers
   const handleDelete = () => {
@@ -68,7 +66,9 @@ export function KifEntryEditDialog({
   const handleCancel = () => {
     onClose()
   }
-
+  const handleResetAccuracy = () => {
+    entry && kifLearning.reset(entry.id)
+  }
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>
@@ -86,6 +86,14 @@ export function KifEntryEditDialog({
            
           />
         </Box>
+        { /* 正答誤答*/ }
+        <div>
+          { record && `正答：${record.solvedCount}, 誤答：${record.failedCount}` }
+        
+        <Button onClick= {handleResetAccuracy}>
+          リセット
+        </Button>
+        </div>
 
       </DialogContent>
       <DialogActions>
