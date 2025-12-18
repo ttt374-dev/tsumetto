@@ -1,5 +1,5 @@
 import { List, ListItem, ListItemIcon, ListItemText, Checkbox } from "@mui/material";
-import type { KifLibraryEntry } from '../types/kif';
+import type { KifLibraryEntry } from '../types/kifLibrary';
 
 function LibraryList({
     library,
