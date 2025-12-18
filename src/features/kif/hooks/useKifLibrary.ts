@@ -25,6 +25,7 @@ export function useKifLibrary() {
     store.setLibrary(next)
   }
 
+  const findById = (id: string) => library.find((e) => e.id === id);
  const actions = useKifLibraryActions(
     store.state.library,
     persist
@@ -34,6 +35,7 @@ export function useKifLibrary() {
     sortedLibrary,
     ...actions,    
 
+    findById,
     setSortKey: store.setSortKey,
     toggleSortOrder: store.toggleSortOrder,
   };
