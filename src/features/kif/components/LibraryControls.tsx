@@ -3,7 +3,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 
-import type { KifLibraryEntry } from "../types/kifLibrary";
+import type { KifLibraryEntry, SortKey, SortOrder } from "../types/kifLibrary";
 
 type LibraryControlsProps = {
     library: KifLibraryEntry[];
@@ -11,13 +11,21 @@ type LibraryControlsProps = {
     selectAll: () => void;
     clearAll: () => void;
     handleDeleteSelected: () => void;
+
+    sortOrder: SortOrder,
+    setSortKey: (key: SortKey) => void;
+    toggleSortOrder: () => void;
 };
 
 export function LibraryControls({    
     checkedIds,
     selectAll,
     clearAll,
-    handleDeleteSelected
+    handleDeleteSelected,
+
+    sortOrder,
+    setSortKey,
+    toggleSortOrder
 }: LibraryControlsProps) {
     return (
         <Box sx={{ display: "flex", flexShrink: 0 }}>
@@ -47,7 +55,17 @@ export function LibraryControls({
                 <IconButton onClick={handleDeleteSelected} disabled={checkedIds.size === 0} color="error">
                     <DeleteIcon />
                 </IconButton>
-            </Tooltip>            
+            </Tooltip>  
+
+            <div style={{ display: "flex", gap: "0.5rem" }}>
+                <button onClick={() => setSortKey('createdAt')}>追加順</button>
+                <button onClick={() => setSortKey('title')}>名前順</button>
+                <button onClick={() => setSortKey('moveCount')}>手数順</button>
+                <button onClick={() => setSortKey('accuracy')}>正答率</button>
+                <button onClick={() => toggleSortOrder()}>
+                    {sortOrder === 'asc' ? '昇順' : '降順'}
+                </button>
+            </div>          
         </Box>
     )
 }

@@ -10,6 +10,7 @@ import LibraryControls from '../components/LibraryControls';
 import { useLibraryHandlers } from '../hooks/useLibraryHandlers'
 import MultipleFilesButton from '../../../shared/components/MultipleFilesButton';
 import { useKifSortedLibraryWithLearning } from '../hooks/useKifSortedLibraryWithLearning';
+import { Store } from '@mui/icons-material';
 
 export default function LibraryScreen() {
     const { kifLibrary, kifPlayer, kifLearning } = useKif()
@@ -25,7 +26,7 @@ export default function LibraryScreen() {
             kifLibrary.sortOrder
         );
 
-    const { setSortKey, toggleSortOrder } = kifLibrary
+    //const { setSortKey, toggleSortOrder } = kifLibrary
 
     console.log("kifLibrary on screen", kifLibrary)
     const {
@@ -66,16 +67,11 @@ export default function LibraryScreen() {
                 selectAll={selectAll}
                 clearAll={clearAll}
                 handleDeleteSelected={deleteSelected}
+                setSortKey={kifLibrary.setSortKey}
+                toggleSortOrder={kifLibrary.toggleSortOrder}
+                sortOrder={kifLibrary.sortOrder}
             />
 
-            <div style={{ display: "flex", gap: "0.5rem" }}>
-                <button onClick={() => setSortKey('createdAt')}>追加順</button>
-                <button onClick={() => setSortKey('title')}>名前順</button>
-                <button onClick={() => setSortKey('moveCount')}>手数順</button>
-                <button onClick={() => toggleSortOrder()}>
-                    {kifLibrary.sortOrder === 'asc' ? '昇順' : '降順'}
-                </button>
-            </div>
             <LibraryList library={sortedLibrary} checkedIds={checkedIds} handleCheckboxChange={toggleCheckbox} onSelect={selectEntry}/>
         </AppLayout>
 
