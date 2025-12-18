@@ -18,7 +18,7 @@ export function useKifSortedLibraryWithLearning(
       const total = solved + failed
 
       return {
-        entry,
+        ...entry, // ← flatten
         solvedCount: solved,
         failedCount: failed,
         accuracy: total > 0 ? solved / total : null,
@@ -35,6 +35,7 @@ export function useKifSortedLibraryWithLearning(
 
   return sortedEntries
 }
+
 // hooks/compareKifLibraryWithLearning.ts
 export function compareKifLibraryWithLearning(
   a: KifLibraryWithLearning,
@@ -43,13 +44,13 @@ export function compareKifLibraryWithLearning(
 ) {
   switch (sortKey) {
     case "createdAt":
-      return a.entry.createdAt - b.entry.createdAt
+      return a.createdAt - b.createdAt
 
     case "title":
-      return a.entry.kifData.title.localeCompare(b.entry.kifData.title)
+      return a.kifData.title.localeCompare(b.kifData.title)
 
     case "moveCount":
-      return a.entry.kifData.moves.length - b.entry.kifData.moves.length
+      return a.kifData.moves.length - b.kifData.moves.length
 
     case "accuracy": {
       // 未学習は最後に寄せる

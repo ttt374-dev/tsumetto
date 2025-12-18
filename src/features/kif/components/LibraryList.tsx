@@ -1,5 +1,5 @@
 import { List, ListItem, ListItemIcon, ListItemText, Checkbox } from "@mui/material";
-import type { KifLibraryEntry } from '../types/kifLibrary';
+import type { KifLibraryEntry, KifLibraryWithLearning } from '../types/kifLibrary';
 
 function LibraryList({
     library,
@@ -7,7 +7,7 @@ function LibraryList({
     handleCheckboxChange,
     onSelect
 }: {
-    library: KifLibraryEntry[];
+    library: KifLibraryWithLearning[];
     checkedIds: Set<string>;
     handleCheckboxChange: (id: string) => void;
     onSelect: (entry: KifLibraryEntry) => void;

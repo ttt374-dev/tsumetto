@@ -9,7 +9,7 @@ import { useKifLibraryActions } from "./useKifLibraryActions";
 
 export function useKifLibrary() {
   const store = useKifLibraryStore()
-    const persistApi = useKifLibraryPersist()
+  const persistApi = useKifLibraryPersist()
   const library = store.state.library
   
   const sortedLibrary = useSortedKifLibrary(library, store.state.sortKey, store.state.sortOrder)

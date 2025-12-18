@@ -9,20 +9,27 @@ import LibraryList from '../components/LibraryList'
 import LibraryControls from '../components/LibraryControls';
 import { useLibraryHandlers } from '../hooks/useLibraryHandlers'
 import MultipleFilesButton from '../../../shared/components/MultipleFilesButton';
+import { useKifSortedLibraryWithLearning } from '../hooks/useKifSortedLibraryWithLearning';
 
 export default function LibraryScreen() {
-    const { kifLibrary, kifPlayer } = useKif()
+    const { kifLibrary, kifPlayer, kifLearning } = useKif()
     const navigate = useNavigate()
     //const library = kifLibrary.library
+    //const sortedLibrary = kifLibrary.sortedLibrary
 
-    
+    const sortedLibrary =
+        useKifSortedLibraryWithLearning(
+            kifLibrary.library,
+            kifLearning.records,
+            kifLibrary.sortKey,
+            kifLibrary.sortOrder
+        );
 
     const { setSortKey, toggleSortOrder } = kifLibrary
 
     console.log("kifLibrary on screen", kifLibrary)
     const {
         checkedIds,
-        //importFileAndPlay,
         selectEntry,
         toggleCheckbox,
         selectAll,
@@ -54,7 +61,7 @@ export default function LibraryScreen() {
             }
         >
             <LibraryControls
-                library={kifLibrary.sortedLibrary}
+                library={sortedLibrary}
                 checkedIds={checkedIds}
                 selectAll={selectAll}
                 clearAll={clearAll}
@@ -69,7 +76,7 @@ export default function LibraryScreen() {
                     {kifLibrary.sortOrder === 'asc' ? '昇順' : '降順'}
                 </button>
             </div>
-            <LibraryList library={kifLibrary.sortedLibrary} checkedIds={checkedIds} handleCheckboxChange={toggleCheckbox} onSelect={selectEntry}/>
+            <LibraryList library={sortedLibrary} checkedIds={checkedIds} handleCheckboxChange={toggleCheckbox} onSelect={selectEntry}/>
         </AppLayout>
 
     )

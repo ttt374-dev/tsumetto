@@ -19,8 +19,8 @@ export type KifLibraryState = {
 //export type KifLibrary = KifLibraryEntry[];
 
 // types/kifLibraryView.ts
-export type KifLibraryWithLearning = {
-  entry: KifLibraryEntry
+export type KifLibraryWithLearning = 
+  KifLibraryEntry & {
   solvedCount: number
   failedCount: number
   accuracy: number | null   // 未学習は null

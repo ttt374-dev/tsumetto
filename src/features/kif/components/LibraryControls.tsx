@@ -13,8 +13,7 @@ type LibraryControlsProps = {
     handleDeleteSelected: () => void;
 };
 
-export function LibraryControls({
-    library,
+export function LibraryControls({    
     checkedIds,
     selectAll,
     clearAll,
@@ -48,10 +47,7 @@ export function LibraryControls({
                 <IconButton onClick={handleDeleteSelected} disabled={checkedIds.size === 0} color="error">
                     <DeleteIcon />
                 </IconButton>
-            </Tooltip>
-
-
-            
+            </Tooltip>            
         </Box>
     )
 }
