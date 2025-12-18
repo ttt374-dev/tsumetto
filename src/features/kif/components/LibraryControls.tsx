@@ -3,7 +3,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 
-import type { KifLibraryEntry } from "../types/kif";
+import type { KifLibraryEntry } from "../types/kifLibrary";
 
 type LibraryControlsProps = {
     library: KifLibraryEntry[];

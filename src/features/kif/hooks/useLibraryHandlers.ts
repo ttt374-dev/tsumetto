@@ -1,16 +1,26 @@
 import { useState } from "react";
 import type { KifLibraryEntry } from "../types/kifLibrary";
 
-export function useLibraryHandlers(kifLibrary: any, kifPlayer: any, navigate: (path: string) => void) {
+//export function useLibraryHandlers(kifLibrary: any, kifPlayer: any, navigate: (path: string) => void) {
+export function useLibraryHandlers(
+    library: KifLibraryEntry[], 
+    importFile: (file: File) => Promise<KifLibraryEntry>,
+    deleteEntries: (entries: KifLibraryEntry[]) => void,
+    
+    playLast: () => void,
+    playByEntryId: (id: string) => void,
+
+    navigate: (path: string) => void,
+) {
     const [checkedIds, setCheckedIds] = useState<Set<string>>(new Set());
-    const library = kifLibrary.library;
+    //const library = kifLibrary.library;
 
     const importFileAndPlay = async (file: File) => {
         try {
-            const newEntry = await kifLibrary.importFile(file);
+            const newEntry = await importFile(file);
             const index = library.findIndex((e: KifLibraryEntry) => e.id === newEntry.id);
             if (index !== -1) {
-                kifPlayer.playLast();
+                playLast();
                 navigate("/player");
             }
         } catch (err) {
@@ -19,7 +29,7 @@ export function useLibraryHandlers(kifLibrary: any, kifPlayer: any, navigate: (p
     };
 
     const selectEntry = (entry: KifLibraryEntry) => {
-        kifPlayer.playByEntryId(entry.id);
+        playByEntryId(entry.id);
         navigate("/player");
     };
 
@@ -46,7 +56,7 @@ export function useLibraryHandlers(kifLibrary: any, kifPlayer: any, navigate: (p
             return;
         }
 
-        await kifLibrary.deleteEntries(entriesToDelete);
+        await deleteEntries(entriesToDelete);
         clearAll();
     };
 
