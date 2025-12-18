@@ -9,16 +9,18 @@ import LibraryList from '../components/LibraryList'
 import LibraryControls from '../components/LibraryControls';
 import { useLibraryHandlers } from '../hooks/useLibraryHandlers'
 import MultipleFilesButton from '../../../shared/components/MultipleFilesButton';
-import type { SortKey, SortOrder } from '../types/kif'
+import type { SortKey, SortOrder } from '../types/kifLibrary'
 
 export default function LibraryScreen() {
     const { kifLibrary, kifPlayer } = useKif()
     const navigate = useNavigate()
-    const library = kifLibrary.library
+    //const library = kifLibrary.library
+
+    const { setSortKey, toggleSortOrder } = kifLibrary
 
     const {
         checkedIds,
-        importFileAndPlay,
+        //importFileAndPlay,
         selectEntry,
         toggleCheckbox,
         selectAll,
@@ -34,14 +36,6 @@ export default function LibraryScreen() {
         //console.log(kifLibrary)
         kifLibrary.importFiles(files)
     };
-    const setSortKey = (key: SortKey) => {
-        kifLibrary.setState(prev => ({...prev, sortKey: key}))
-    }
-    const toggleSortOrder = () => {
-        kifLibrary.setState(prev => ({...prev, sortOrder: kifLibrary.kifLibraryState.sortOrder === 'asc' ? 'desc' : 'asc'}))
-    }
-
-
 
     return (
         <AppLayout
@@ -54,7 +48,7 @@ export default function LibraryScreen() {
             }
         >
             <LibraryControls
-                library={library}
+                library={kifLibrary.sortedLibrary}
                 checkedIds={checkedIds}
                 selectAll={selectAll}
                 clearAll={clearAll}
@@ -69,7 +63,7 @@ export default function LibraryScreen() {
                     {kifLibrary.kifLibraryState.sortOrder === 'asc' ? '昇順' : '降順'}
                 </button>
             </div>
-            <LibraryList library={library} checkedIds={checkedIds} handleCheckboxChange={toggleCheckbox} onSelect={selectEntry}/>
+            <LibraryList library={kifLibrary.sortedLibrary} checkedIds={checkedIds} handleCheckboxChange={toggleCheckbox} onSelect={selectEntry}/>
         </AppLayout>
 
     )

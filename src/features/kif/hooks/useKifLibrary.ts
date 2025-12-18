@@ -1,9 +1,10 @@
 // hooks/useKifLibrary.ts
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Filesystem, Directory, Encoding } from "@capacitor/filesystem";
 import { v4 as uuidv4 } from "uuid";
 import { parseKif } from "../utils/kifParser";
-import { type KifLibraryEntry, type KifLibraryState } from "../types/kif";
+import { type KifLibraryEntry, type KifLibraryState } from "../types/kifLibrary";
+import type { SortKey } from '../types/kifLibrary'
 
 const LIB_FILE = "kifLibrary.json";
 
@@ -12,21 +13,24 @@ export function useKifLibrary() {
   const [state, setState] = useState<KifLibraryState>({library: [], sortKey: "createdAt", sortOrder: "asc"})
   const library = state.library
 
-  const sortedLibrary = [...library].sort((a, b) => {
-        let cmp = 0;
-        switch (state.sortKey) {
-            case 'createdAt':
-                cmp = a.createdAt - b.createdAt;
-                break;
-            case 'title':
-                cmp = a.kifData.title.localeCompare(b.kifData.title);
-                break;
-            case 'moveCount':
-                cmp = a.kifData.moves.length - b.kifData.moves.length;
-                break;
-        }
-        return state.sortOrder === 'asc' ? cmp : -cmp;
+  const sortedLibrary = useMemo(() => {
+    return [...library].sort((a, b) => {
+      let cmp = 0;
+      switch (state.sortKey) {
+        case "createdAt":
+          cmp = a.createdAt - b.createdAt;
+          break;
+        case "title":
+          cmp = a.kifData.title.localeCompare(b.kifData.title);
+          break;
+        case "moveCount":
+          cmp = a.kifData.moves.length - b.kifData.moves.length;
+          break;
+      }
+      return state.sortOrder === "asc" ? cmp : -cmp;
     });
+  }, [library, state.sortKey, state.sortOrder]);
+
 
   /* 永続化ロード */
   useEffect(() => {
@@ -176,10 +180,18 @@ export function useKifLibrary() {
   const findById = (id: string) =>
     library.find((e) => e.id === id);
 
+  const setSortKey = (key: SortKey) => {
+        setState(prev => ({...prev, sortKey: key}))
+    }
+    const toggleSortOrder = () => {
+        setState(prev => ({...prev, sortOrder: state.sortOrder === 'asc' ? 'desc' : 'asc'}))
+    }
+
   return {
-    library: sortedLibrary,
     kifLibraryState: state,
-    setState,
+    sortedLibrary,
+
+    //setState,
     importFile,
     importFiles,
 
@@ -187,5 +199,8 @@ export function useKifLibrary() {
     findById,
     deleteEntry,
     deleteEntries,
+
+    setSortKey,
+    toggleSortOrder,
   };
 }

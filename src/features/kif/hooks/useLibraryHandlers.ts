@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { KifLibraryEntry } from "../types/kif";
+import type { KifLibraryEntry } from "../types/kifLibrary";
 
 export function useLibraryHandlers(kifLibrary: any, kifPlayer: any, navigate: (path: string) => void) {
     const [checkedIds, setCheckedIds] = useState<Set<string>>(new Set());
