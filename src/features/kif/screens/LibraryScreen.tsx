@@ -9,10 +9,14 @@ import LibraryControls from '../components/LibraryControls';
 import { useLibraryHandlers } from '../hooks/useLibraryHandlers'
 import MultipleFilesButton from '../../../shared/components/MultipleFilesButton';
 import { useKifSortedLibraryWithLearning } from '../hooks/useKifSortedLibraryWithLearning';
+import { KifEntryEditDialog } from "../dialogs/KifEntryEditDialog";
+import type { KifLibraryEntry } from '../types/kifLibrary';
 
 export default function LibraryScreen() {
     const { kifLibrary, kifPlayer, kifLearning } = useKif()
     const navigate = useNavigate()
+    const [editDialogOpen, setEditDialogOpen] = useState(false);
+    const [editEntryId, setEditEntryId] = useState<string | null>(null);
 
     const sortedLibrary =
         useKifSortedLibraryWithLearning(
@@ -44,6 +48,17 @@ export default function LibraryScreen() {
         kifLibrary.importFiles(files)
     };
 
+    // handler
+        // リストアイテムクリック時
+    const handleSelectEntry = (entry: KifLibraryEntry) => {
+        setEditEntryId(entry.id);
+        setEditDialogOpen(true);
+    };
+
+    const handleCloseDialog = () => {
+        setEditDialogOpen(false);
+        setEditEntryId(null);
+    };
     return (
         <AppLayout
             header={"Library"}
@@ -54,6 +69,8 @@ export default function LibraryScreen() {
                 </>
             }
         >
+
+            
             <LibraryControls
                 library={sortedLibrary}
                 checkedIds={checkedIds}
@@ -66,7 +83,24 @@ export default function LibraryScreen() {
                 sortOrder={kifLibrary.sortOrder}
             />
 
-            <LibraryList library={sortedLibrary} checkedIds={checkedIds} handleCheckboxChange={toggleCheckbox} onSelect={selectEntry}/>
+            <LibraryList 
+                library={sortedLibrary} checkedIds={checkedIds} 
+                handleCheckboxChange={toggleCheckbox} 
+                onSelect={handleSelectEntry}/>
+
+            {/* Dialog を JSX の下に配置 */}
+            <KifEntryEditDialog
+                open={editDialogOpen}
+                entryId={editEntryId}
+                onClose={handleCloseDialog}
+                onDelete={() => {
+                    editEntryId && 
+                        kifLibrary.deleteEntry(kifLibrary.findById(editEntryId)!);
+                        //kifLearning.reset(editEntryId);
+                    
+                    handleCloseDialog();
+                }}
+                />
         </AppLayout>
 
     )

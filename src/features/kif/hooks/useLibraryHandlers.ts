@@ -14,7 +14,6 @@ export function useLibraryHandlers(
     const [checkedIds, setCheckedIds] = useState<Set<string>>(new Set());
     //const library = kifLibrary.library;
 
-
     const importFileAndPlay = async (file: File) => {
         try {
             const newEntry = await importFile(file);
@@ -30,7 +29,7 @@ export function useLibraryHandlers(
 
     const selectEntry = (entry: KifLibraryEntry) => {
         playByEntryId(entry.id);
-        navigate("/player");
+        //navigate("/player");
     };
 
     const toggleCheckbox = (id: string) => {

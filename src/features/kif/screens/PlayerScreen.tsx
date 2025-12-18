@@ -51,7 +51,8 @@ export default function PlayerScreen() {
         setOpenEditDialog(false)
     }
     const handleDelete = () => {
-        //playFirst()
+        const entry = curEntryId && kifLibrary.findById(curEntryId)
+        entry && kifLibrary.deleteEntry(entry)
         const index = library.findIndex(e => e.id === curEntryId);
         const nextEntry = library[index + 1] ?? library[index - 1] ?? null;
         playByEntryId(nextEntry.id)
@@ -82,7 +83,10 @@ export default function PlayerScreen() {
 
         >
             <>
-            <KifEntryEditDialog open={openEditDialog} onClose={handleCloseEditDialog} onDelete={handleDelete} entryId={curEntryId}/>
+            <KifEntryEditDialog 
+                open={openEditDialog} 
+                onClose={handleCloseEditDialog} 
+                onDelete={handleDelete} entryId={curEntryId}/>
                 
                 {/* 内部リストを選択 */}
                 {library.length > 0 &&

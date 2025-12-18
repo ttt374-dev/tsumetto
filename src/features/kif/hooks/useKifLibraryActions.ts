@@ -85,6 +85,7 @@ export function useKifLibraryActions(
             console.error("Failed to delete entry:", err);
         }
     };
+    
     const deleteEntries = async (entries: KifLibraryEntry[]) => {
         try {
             if (entries.length === 0) return;

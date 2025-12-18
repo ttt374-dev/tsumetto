@@ -7,7 +7,6 @@ interface UseKifLearning {
     records: Record<string, KifLearningRecord>;
 
     getRecord(entryId: string | null): KifLearningRecord | null;
-
     markSolved(entryId: string): void;
     markFailed(entryId: string): void;
 
@@ -15,7 +14,6 @@ interface UseKifLearning {
 };
 
 const LEARNING_FILE = "kif-learning.json";
-
 
 export function useKifLearning(): UseKifLearning {
     const [records, setRecords] =
@@ -29,7 +27,6 @@ export function useKifLearning(): UseKifLearning {
             failedCount: 0,
         }
     }
-
 
     useEffect(() => {
         (async () => {

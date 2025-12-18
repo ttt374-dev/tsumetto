@@ -1,19 +1,9 @@
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Box,
-  Button,
-  TextField,
-  Typography,
-  Divider,
-} from "@mui/material"
+import { Dialog, DialogTitle, DialogContent, DialogActions,
+  Box, Button, TextField } from "@mui/material"
 import { useState, useEffect } from "react"
-//import { useKifLibrary } from "../hooks/useKifLibrary"
-//import { useKifLearning } from "../hooks/useKifLearning"
 import { useKif } from '../hooks/useKif'
 import { formatAccuracy } from "../utils/formatAccuracy"
+import { Navigate, useNavigate } from "react-router-dom"
 
 type Props = {
   open: boolean
@@ -45,23 +35,20 @@ export function KifEntryEditDialog({
   // handlers
   const handleDelete = () => {
     if (entry && window.confirm("本当に削除しますか？")){
-      deleteEntry(entry)      
+      //deleteEntry(entry)      
+      onDelete()
       onClose()
     }
 
    }
-  const handleSaveTitle = () => {
-    if (entry && title.trim()) {
-      updateTitle(entry.id, title.trim())
-
-    }
-  }
+  const navigate = useNavigate()
   const handleConfirm = () => {
     if (entry && title.trim()) {
       updateTitle(entry.id, title.trim())
 
     }
     onClose()
+    navigate("/player")
   }
   const handleCancel = () => {
     onClose()
