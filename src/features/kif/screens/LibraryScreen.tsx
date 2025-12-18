@@ -2,7 +2,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 
-import FileButton from "../../../shared/components/FileButton";
 import { AppLayout } from '../../../shared/components/AppLayout/AppLayout';
 import { useKif } from '../hooks/useKif'
 import LibraryList from '../components/LibraryList'
@@ -10,13 +9,10 @@ import LibraryControls from '../components/LibraryControls';
 import { useLibraryHandlers } from '../hooks/useLibraryHandlers'
 import MultipleFilesButton from '../../../shared/components/MultipleFilesButton';
 import { useKifSortedLibraryWithLearning } from '../hooks/useKifSortedLibraryWithLearning';
-import { Store } from '@mui/icons-material';
 
 export default function LibraryScreen() {
     const { kifLibrary, kifPlayer, kifLearning } = useKif()
     const navigate = useNavigate()
-    //const library = kifLibrary.library
-    //const sortedLibrary = kifLibrary.sortedLibrary
 
     const sortedLibrary =
         useKifSortedLibraryWithLearning(
@@ -25,8 +21,6 @@ export default function LibraryScreen() {
             kifLibrary.sortKey,
             kifLibrary.sortOrder
         );
-
-    //const { setSortKey, toggleSortOrder } = kifLibrary
 
     console.log("kifLibrary on screen", kifLibrary)
     const {
@@ -47,7 +41,6 @@ export default function LibraryScreen() {
     }, [open]);
 
     const handleMultipleFilesSelected = async (files: File[]) => {
-        //console.log(kifLibrary)
         kifLibrary.importFiles(files)
     };
 

@@ -36,7 +36,6 @@ export function useKifSortedLibraryWithLearning(
   return sortedEntries
 }
 
-// hooks/compareKifLibraryWithLearning.ts
 export function compareKifLibraryWithLearning(
   a: KifLibraryEntryWithLearning,
   b: KifLibraryEntryWithLearning,
