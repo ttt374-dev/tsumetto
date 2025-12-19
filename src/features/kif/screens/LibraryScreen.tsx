@@ -88,7 +88,10 @@ export default function LibraryScreen() {
             <KifEntryEditDialog
                 open={entryDialog.open}
                 entryId={entryDialog.entryId}
-                onConfirm={(entry: KifLibraryEntry) => kifPlayer.playByEntryId(entry.id)}
+                onConfirm={(entry: KifLibraryEntry) => { 
+                    console.log("confirm", entry.id)
+                    kifPlayer.playByEntryId(entry.id)}
+                 }
                 onClose={entryDialog.close}
                 onDelete={() => {
                     const entry = entryDialog.entryId && kifLibrary.findById(entryDialog.entryId)

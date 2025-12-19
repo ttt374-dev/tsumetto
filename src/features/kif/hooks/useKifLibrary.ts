@@ -6,7 +6,6 @@ import { useKifLibraryStore } from "./useKifLibraryStore";
 import { useKifLibraryPersist } from "./useLibraryPersist";
 import { useKifLibraryActions } from "./useKifLibraryActions";
 
-
 export function useKifLibrary() {
   const store = useKifLibraryStore()
   const persistApi = useKifLibraryPersist()
@@ -15,7 +14,7 @@ export function useKifLibrary() {
   const sortedLibrary = useSortedKifLibrary(library, store.state.sortKey, store.state.sortOrder)
   // 初期ロード
   useEffect(() => {
-    console.log("initial log on library")
+    //console.log("initial log on library")
     persistApi.load()
       .then(store.setLibrary)
       .catch(() => store.setLibrary([]))

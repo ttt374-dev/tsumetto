@@ -6,7 +6,7 @@ export function useLibraryHandlers(
     importFile: (file: File) => Promise<KifLibraryEntry>,
     deleteEntries: (entries: KifLibraryEntry[]) => void,
     
-    playLast: () => void,
+    playLast: (entries: KifLibraryEntry[]) => void,
     playByEntryId: (id: string) => void,
 
     navigate: (path: string) => void,
@@ -19,7 +19,7 @@ export function useLibraryHandlers(
             const newEntry = await importFile(file);
             const index = library.findIndex((e: KifLibraryEntry) => e.id === newEntry.id);
             if (index !== -1) {
-                playLast();
+                playLast(library);
                 navigate("/player");
             }
         } catch (err) {

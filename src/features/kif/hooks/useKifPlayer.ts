@@ -16,12 +16,15 @@ export function useKifPlayer(library: KifLibraryEntry[]) {
     return library.find(e => e.id === state.currentEntryId);
   }, [library, state.currentEntryId]);
 
+  /*
   const currentIndex = useMemo(() => {
     if (!state.currentEntryId) return undefined;
     const idx = library.findIndex(e => e.id === state.currentEntryId);
+    console.log("current index", idx)
+    console.log("library", library)
     return idx >= 0 ? idx : undefined;
   }, [library, state.currentEntryId]);
-
+*/
 
   /* =====================
    * entryId → state 同期
@@ -72,7 +75,7 @@ export function useKifPlayer(library: KifLibraryEntry[]) {
     if (!entry) return;
     playByEntryId(entry.id);
   }
-
+/*
   function playFirst() {
     if (library.length === 0) return;
     playByEntryId(library[0].id);
@@ -80,17 +83,52 @@ export function useKifPlayer(library: KifLibraryEntry[]) {
   function playLast() {
     if (library.length === 0) return;
     playByEntryId(library[library.length - 1].id);
+  }*/
+  function playFirst(list: KifLibraryEntry[]) {
+    if (list.length === 0) return;
+    playByEntryId(list[0].id);
   }
-  function playNext() {
+
+  function playLast(list: KifLibraryEntry[]) {
+    if (list.length === 0) return;
+    playByEntryId(list[list.length - 1].id);
+  }
+
+    /*
+    function playNext() {
     if (currentIndex == null) return;
     const next = library[currentIndex + 1];
     if (!next) return;
     playByEntryId(next.id);
+  }*/
+  function playNext(list: KifLibraryEntry[]) {
+    if (!state.currentEntryId) return;
+
+    const idx = list.findIndex(e => e.id === state.currentEntryId);
+    if (idx < 0) return;
+
+    const next = list[idx + 1];
+    if (!next) return;
+
+    playByEntryId(next.id);
   }
+/*
   function playPrev() {
     if (currentIndex == null) return;
     const prev = library[currentIndex - 1];
     if (!prev) return;
+    playByEntryId(prev.id);
+  }
+*/
+  function playPrev(list: KifLibraryEntry[]) {
+    if (!state.currentEntryId) return;
+
+    const idx = list.findIndex(e => e.id === state.currentEntryId);
+    if (idx <= 0) return;
+
+    const prev = list[idx - 1];
+    if (!prev) return;
+
     playByEntryId(prev.id);
   }
 
@@ -116,7 +154,7 @@ export function useKifPlayer(library: KifLibraryEntry[]) {
   return {
     kifPlayerState: {
       ...state,
-      currentLibraryIndex: currentIndex,
+      //currentLibraryIndex: currentIndex,
     },
     playByEntryId,
     playAtIndex,

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Box, IconButton } from "@mui/material";
 import { useSwipeable } from "react-swipeable";
 import { useNavigate, } from "react-router-dom";
@@ -20,23 +20,26 @@ export default function PlayerScreen() {
     const { kifLibrary, kifPlayer, kifLearning } = useKif()
     const { playNext, playPrev, playFirst, playLast, playByEntryId, playAtIndex } = kifPlayer
 
-    const library = kifLibrary.sortedLibrary
+    const sortedLibrary = kifLibrary.sortedLibrary
     const kifPlayerState = kifPlayer.kifPlayerState
     const navigate = useNavigate()
     const kifData = kifPlayerState.kifData
-    const curIndex = kifPlayerState.currentLibraryIndex
+    //const curIndex = kifPlayerState.currentLibraryIndex
     
+
     const { getRecord, markSolved, markFailed } = kifLearning
     const curEntryId = kifPlayerState.currentEntryId
+    const curIndex = sortedLibrary.findIndex(e => e.id === curEntryId);
     const learningRecord= getRecord(curEntryId)
+
 
     // スワイプハンドラ
     const swipeHandlers = useSwipeable({
         onSwipedLeft: () => {// 左スワイプ → 次の棋譜へ
-            playNext()
+            playNext(sortedLibrary)
         },
         onSwipedRight: () => {// 右スワイプ → 前の棋譜へ
-            playPrev()
+            playPrev(sortedLibrary)
         },
         onSwipedUp: () => {  kifPlayer.hideMoves()},
         onSwipedDown: () => { kifPlayer.showMoves()},
@@ -57,8 +60,8 @@ export default function PlayerScreen() {
     const handleDelete = () => {
         const entry = curEntryId && kifLibrary.findById(curEntryId)
         entry && kifLibrary.deleteEntry(entry)
-        const index = library.findIndex(e => e.id === curEntryId);
-        const nextEntry = library[index + 1] ?? library[index - 1] ?? null;
+        const index = sortedLibrary.findIndex(e => e.id === curEntryId);
+        const nextEntry = sortedLibrary[index + 1] ?? sortedLibrary[index - 1] ?? null;
         playByEntryId(nextEntry.id)
     }
     ///
@@ -93,11 +96,12 @@ export default function PlayerScreen() {
                 onDelete={handleDelete} entryId={curEntryId}/>
                 
                 {/* 内部リストを選択 */}
+                
                 <Box sx={{ display: "flex", flexDirection: "row"}}>
-                    {library.length > 0 &&
+                    {sortedLibrary.length > 0 &&
                         <SelectLibraryEntry
-                            currentIndex={kifPlayerState.currentLibraryIndex}
-                            library={library} onSelect={playAtIndex} />
+                            currentIndex={curIndex}
+                            library={sortedLibrary} onSelect={playAtIndex} />
                     }
                     <IconButton onClick={handleOpenEditDialog}>
                         <EditIcon />
@@ -114,10 +118,10 @@ export default function PlayerScreen() {
                     />
                 </Box>
                 <Box>
-                    <button onClick={playFirst} disabled={library.length == 0}>&lt;&lt;</button>
-                    <button onClick={playPrev} disabled={library.length == 0}>&lt;</button>
-                    <button onClick={playNext} disabled={library.length == 0}>&gt;</button>
-                    <button onClick={playLast} disabled={library.length == 0}>&gt;&gt;</button>
+                    <button onClick={() => playFirst(sortedLibrary)} disabled={sortedLibrary.length == 0}>&lt;&lt;</button>
+                    <button onClick={() => playPrev(sortedLibrary)} disabled={sortedLibrary.length == 0}>&lt;</button>
+                    <button onClick={() => playNext(sortedLibrary)} disabled={sortedLibrary.length == 0}>&gt;</button>
+                    <button onClick={() => playLast(sortedLibrary)} disabled={sortedLibrary.length == 0}>&gt;&gt;</button>
                 </Box>
 
                 <Box
