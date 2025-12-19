@@ -1,6 +1,7 @@
 
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
+import { Box, Button } from '@mui/material'
 
 import { AppLayout } from '../../../shared/components/AppLayout/AppLayout';
 import { useKif } from '../hooks/useKif'
@@ -12,15 +13,16 @@ import { useKifSortedLibraryWithLearning } from '../hooks/useKifSortedLibraryWit
 import { KifEntryEditDialog } from "../dialogs/KifEntryEditDialog";
 import type { KifLibraryEntry } from '../types/kifLibrary';
 import { KifBackupDialog } from '../dialogs/KifBackupDialog';
-import { Box, Button } from '@mui/material'
+import { useKifEntryEditDialog } from '../hooks/useKifEntryEditDialog';
+
 
 export default function LibraryScreen() {
     const { kifLibrary, kifPlayer, kifLearning } = useKif()
     const navigate = useNavigate()
-    const [editDialogOpen, setEditDialogOpen] = useState(false);
-    const [editEntryId, setEditEntryId] = useState<string | null>(null);
+    //const [editEntryId, setEditEntryId] = useState<string | null>(null);
     const [backupOpen, setBackupOpen] = useState(false)
-
+    const entryDialog = useKifEntryEditDialog()
+    //const [backupOpen, setBackupOpen] = useState(false)
 
     const sortedLibrary =
         useKifSortedLibraryWithLearning(
@@ -29,11 +31,8 @@ export default function LibraryScreen() {
             kifLibrary.sortKey,
             kifLibrary.sortOrder
         );
-
-    console.log("kifLibrary on screen", kifLibrary)
     const {
         checkedIds,
-        selectEntry,
         toggleCheckbox,
         selectAll,
         clearAll,
@@ -44,35 +43,17 @@ export default function LibraryScreen() {
             navigate
         );
 
-    useEffect(() => {
-        if (!open) clearAll();
-    }, [open]);
-
     const handleMultipleFilesSelected = async (files: File[]) => {
         kifLibrary.importFiles(files)
     };
 
     // handler
         // リストアイテムクリック時
-    const handleSelectEntry = (entry: KifLibraryEntry) => {
-        setEditEntryId(entry.id);
-        setEditDialogOpen(true);
-    };
 
-    const handleCloseDialog = () => {
-        setEditDialogOpen(false);
-        setEditEntryId(null);
-    };
-    const handleBackupOpen = () => {
-        console.log("backup dialog open")
-        setBackupOpen(true)
+    const handleSelectEntry = (entry: KifLibraryEntry) => {
+        entryDialog.openFor(entry.id)
     }
-    const handleConfirm = (entry: KifLibraryEntry) => {
-        //selectEntry(entry)
-        console.log("handle confirm", entry.id)
-        kifPlayer.playByEntryId(entry.id)
-    }
-    //const onBackup = () => {() => setBackupOpen(true)} 
+
     return (
         <AppLayout
             header={"Library"}
@@ -87,7 +68,7 @@ export default function LibraryScreen() {
                 <Button
                     variant="outlined"
                     size="small"
-                    onClick={() => handleBackupOpen()}
+                    onClick={() => setBackupOpen(true)}
                 >
                     バックアップ / 復元
                 </Button>
@@ -112,16 +93,14 @@ export default function LibraryScreen() {
 
             {/* Dialog を JSX の下に配置 */}
             <KifEntryEditDialog
-                open={editDialogOpen}
-                entryId={editEntryId}
-                onConfirm={handleConfirm}
-                onClose={handleCloseDialog}
+                open={entryDialog.open}
+                entryId={entryDialog.entryId}
+                onConfirm={(entry: KifLibraryEntry) => kifPlayer.playByEntryId(entry.id)}
+                onClose={entryDialog.close}
                 onDelete={() => {
-                    editEntryId && 
-                        kifLibrary.deleteEntry(kifLibrary.findById(editEntryId)!);
-                        //kifLearning.reset(editEntryId);
-                    
-                    handleCloseDialog();
+                    const entry = entryDialog.entryId && kifLibrary.findById(entryDialog.entryId)
+                    entry && kifLibrary.deleteEntry(entry);
+                    entryDialog.close;
                 }}
             />
               {/* ★ここに置く */}
