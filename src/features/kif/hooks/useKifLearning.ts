@@ -6,7 +6,7 @@ import { useKifLearningPersist } from './useKifLearningPersist';
 interface UseKifLearning {
     records: Record<string, KifLearningRecord>;
 
-    getRecord(entryId?: string): KifLearningRecord | undefined;
+    getRecord(entryId?: string): KifLearningRecord | null;
     markSolved(entryId: string): void;
     markFailed(entryId: string): void;
     reset(entryId: string): void;
@@ -19,14 +19,24 @@ export function useKifLearning(): UseKifLearning {
     const persistApi = useKifLearningPersist()
 
     useEffect(() => {
-        persistApi.load().then(setRecords).catch(() => setRecords({}))
+        console.log("kif learning: initial useeffect")
+        persistApi.load().then((r) => {
+            Object.entries(r).forEach(([key, value]) => {
+                console.log(`Loaded record key: ${key}`, value);
+            });
+            setRecords(r)
+        }
+        )
+        .catch((e) => {
+            console.error("KifLearning load failed:", e)
+            setRecords({})
+        }
+    )
     }, []);
 
-    useEffect(() => {
-        persistApi.save(records)
-    }, [records]);
-    const getRecord = (entryId?: string) => {
-        if (!entryId) return undefined
+
+    const getRecord = (entryId: string) => {
+        if (!entryId) return null
         return records[entryId] ?? {
             entryId,
             solvedCount: 0,
@@ -46,6 +56,7 @@ export function useKifLearning(): UseKifLearning {
                 [entryId]: updater(current),
             };
         });
+        persist()
     };
 
     const markSolved = (entryId: string) =>
@@ -68,6 +79,15 @@ export function useKifLearning(): UseKifLearning {
             delete next[entryId];
             return next;
         });
+    };
+    // 明示的に呼び出す永続化
+    const persist = async () => {
+        try {
+            await persistApi.save(records);
+            console.log("KifLearning persisted successfully.");
+        } catch (e) {
+            console.error("KifLearning persist failed:", e);
+        }
     };
 
     return { records, getRecord, markSolved, markFailed, reset };
