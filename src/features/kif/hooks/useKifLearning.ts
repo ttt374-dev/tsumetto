@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
-import { Filesystem, Directory, Encoding } from "@capacitor/filesystem";
 
 import type { KifLearningRecord, KifLearningStore } from "../types/kifLearning";
+import { useKifLearningPersist } from './useKifLearningPersist';
 
 interface UseKifLearning {
     records: Record<string, KifLearningRecord>;
@@ -9,15 +9,14 @@ interface UseKifLearning {
     getRecord(entryId: string | null): KifLearningRecord | null;
     markSolved(entryId: string): void;
     markFailed(entryId: string): void;
-
     reset(entryId: string): void;
 };
 
-const LEARNING_FILE = "kif-learning.json";
 
 export function useKifLearning(): UseKifLearning {
     const [records, setRecords] =
         useState<Record<string, KifLearningRecord>>({});
+    const persistApi = useKifLearningPersist()
 
     const getRecord = (entryId: string | null) => {
         if (!entryId) return null
@@ -30,52 +29,13 @@ export function useKifLearning(): UseKifLearning {
 
     useEffect(() => {
         (async () => {
-            try {
-                const result = await Filesystem.readFile({
-                    path: LEARNING_FILE,
-                    directory: Directory.Data,
-                    encoding: Encoding.UTF8,
-                });
-
-                const text =
-                    typeof result.data === "string"
-                        ? result.data
-                        : await result.data.text();
-
-                const parsed: unknown = JSON.parse(text);
-
-                if (
-                    typeof parsed === "object" &&
-                    parsed !== null &&
-                    (parsed as any).version === 1 &&
-                    typeof (parsed as any).records === "object"
-                ) {
-                    setRecords((parsed as KifLearningStore).records);
-                } else {
-                    setRecords({});
-                }
-            } catch {
-                // 初回起動 or 壊れている
-                setRecords({});
-            }
+            persistApi.load().then(setRecords).catch((e) =>
+            { setRecords({}) }
+        )
+            
         })();
     }, []);
 
-    useEffect(() => {
-        const store: KifLearningStore = {
-            version: 1,
-            records,
-        };
-
-        Filesystem.writeFile({
-            path: LEARNING_FILE,
-            directory: Directory.Data,
-            data: JSON.stringify(store),
-            encoding: Encoding.UTF8,
-        }).catch(() => {
-            // 保存失敗してもアプリは止めない
-        });
-    }, [records]);
 
     const update = (entryId: string, updater: (r: KifLearningRecord) => KifLearningRecord) => {
         setRecords(prev => {
@@ -89,6 +49,7 @@ export function useKifLearning(): UseKifLearning {
                 [entryId]: updater(current),
             };
         });
+        persist()
     };
 
     const markSolved = (entryId: string) =>
@@ -111,6 +72,15 @@ export function useKifLearning(): UseKifLearning {
             delete next[entryId];
             return next;
         });
+    };
+    // 明示的に呼び出す永続化
+    const persist = async () => {
+        try {
+            await persistApi.save(records);
+            console.log("KifLearning persisted successfully.");
+        } catch (e) {
+            console.error("KifLearning persist failed:", e);
+        }
     };
 
     return { records, getRecord, markSolved, markFailed, reset };
