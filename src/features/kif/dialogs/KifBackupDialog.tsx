@@ -35,8 +35,8 @@ export function KifBackupDialog({ open, onClose }: Props) {
         if (Capacitor.isNativePlatform()) {
             // Android / iOS
             await Filesystem.writeFile({
-                path: `kif-backup-${Date.now()}.json`,
-                directory: Directory.Documents,
+                path: `Download/kif-backup-${Date.now()}.json`,
+                directory: Directory.External,
                 data: json,
                 encoding: Encoding.UTF8,
             })
