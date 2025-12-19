@@ -42,11 +42,7 @@ export function KifEntryEditDialog({
 
    }
   const navigate = useNavigate()
-  const handleConfirm = () => {
-    if (entry && title.trim()) {
-      updateTitle(entry.id, title.trim())
-
-    }
+  const handleConfirm = () => {    
     onClose()
     navigate("/player")
   }
@@ -56,10 +52,13 @@ export function KifEntryEditDialog({
   const handleResetAccuracy = () => {
     entry && kifLearning.reset(entry.id)
   }
+  const handleSetTitle = () => {
+    entryId && updateTitle(entryId, title.trim())
+  }
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog open={open} onClose={onClose} maxWidth="xl">
       <DialogTitle>
-        棋譜エントリの編集
+        棋譜エントリの詳細
       </DialogTitle>
       <DialogContent>
         
@@ -72,6 +71,8 @@ export function KifEntryEditDialog({
             onChange={(e) => setTitle(e.target.value)}
            
           />
+          <Button onClick={handleSetTitle}>修正</Button>
+
         </Box>
         { /* 正答誤答*/ }
         <div>
@@ -87,7 +88,7 @@ export function KifEntryEditDialog({
         <Button color="error" onClick={handleDelete}>
           削除
         </Button>
-        <Button onClick={handleConfirm}>OK</Button>
+        <Button onClick={handleConfirm}>棋譜を表示</Button>
         <Button onClick={handleCancel}>キャンセル</Button>
         
       </DialogActions>

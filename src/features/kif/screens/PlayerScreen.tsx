@@ -11,6 +11,7 @@ import { useKif } from '../hooks/useKif'
 import type { KifLearningRecord } from '../types/kifLearning'
 //import { useKifLearning } from '../hooks/useKifLearning';
 import { KifEntryEditDialog } from "../dialogs/KifEntryEditDialog";
+import { formatAccuracy } from '../utils';
 
 export default function PlayerScreen() {
     const { kifLibrary, kifPlayer, kifLearning } = useKif()
@@ -60,13 +61,13 @@ export default function PlayerScreen() {
     ///
     const calcAccuracy = (
         record: KifLearningRecord | undefined
-    ): number | undefined => {
-        if (!record) return undefined;
+    ): number | null => {
+        if (!record) return null;
 
         const total = record.solvedCount + record.failedCount;
-        if (total === 0) return undefined;
+        if (total === 0) return null;
 
-        return (record.solvedCount / total) * 100;
+        return record.solvedCount / total;
     };
     
     ////////////////////////////////////////////////////////////////////////
@@ -149,7 +150,7 @@ export default function PlayerScreen() {
                         {learningRecord && learningRecord.solvedCount + learningRecord.failedCount > 0 &&
                             <>
                                 <div>
-                                    正答率：{`${calcAccuracy(learningRecord)}%`}
+                                    正答率：{formatAccuracy(calcAccuracy(learningRecord))}
                                 </div>
                                 <div>
                                     ( {learningRecord.solvedCount} /
