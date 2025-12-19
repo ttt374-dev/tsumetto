@@ -14,6 +14,7 @@ import { useKif } from '../hooks/useKif'
 import type { KifLearningRecord } from '../types/kifLearning'
 import { KifEntryEditDialog } from "../dialogs/KifEntryEditDialog";
 import { formatAccuracy } from '../utils';
+import type { KifLibraryEntry } from '../types/kifLibrary';
 
 export default function PlayerScreen() {
     const { kifLibrary, kifPlayer, kifLearning } = useKif()
@@ -87,6 +88,7 @@ export default function PlayerScreen() {
             <>
             <KifEntryEditDialog 
                 open={openEditDialog} 
+                onConfirm={(entry: KifLibraryEntry) => {playByEntryId(entry.id)}}
                 onClose={handleCloseEditDialog} 
                 onDelete={handleDelete} entryId={curEntryId}/>
                 

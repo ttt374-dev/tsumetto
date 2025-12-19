@@ -2,6 +2,8 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { Box, Button } from '@mui/material'
+import ImportExportIcon from '@mui/icons-material/ImportExport';
+
 
 import { AppLayout } from '../../../shared/components/AppLayout/AppLayout';
 import { useKif } from '../hooks/useKif'
@@ -19,10 +21,8 @@ import { useKifEntryEditDialog } from '../hooks/useKifEntryEditDialog';
 export default function LibraryScreen() {
     const { kifLibrary, kifPlayer, kifLearning } = useKif()
     const navigate = useNavigate()
-    //const [editEntryId, setEditEntryId] = useState<string | null>(null);
     const [backupOpen, setBackupOpen] = useState(false)
     const entryDialog = useKifEntryEditDialog()
-    //const [backupOpen, setBackupOpen] = useState(false)
 
     const sortedLibrary =
         useKifSortedLibraryWithLearning(
@@ -64,15 +64,7 @@ export default function LibraryScreen() {
                 </>
             }
         >
-            <Box display="flex" alignItems="center" gap={1}>
-                <Button
-                    variant="outlined"
-                    size="small"
-                    onClick={() => setBackupOpen(true)}
-                >
-                    バックアップ / 復元
-                </Button>
-            </Box>
+
             
             <LibraryControls
                 library={sortedLibrary}
@@ -84,6 +76,7 @@ export default function LibraryScreen() {
                 setSortKey={kifLibrary.setSortKey}
                 toggleSortOrder={kifLibrary.toggleSortOrder}
                 sortOrder={kifLibrary.sortOrder}
+                onBackup={() => setBackupOpen(true)}
             />
 
             <LibraryList 

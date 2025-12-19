@@ -14,7 +14,7 @@ export const useKifLearningPersist = () => {
             directory: Directory.Data,
             encoding: Encoding.UTF8,
         });
-        console.log("learning persist: loaded data", result.data)
+        //console.log("learning persist: loaded data", result.data)
         const text = typeof result.data === "string" ? result.data : await result.data.text();
         //console.log("load: result", text)
         const parsed: unknown = JSON.parse(text);
