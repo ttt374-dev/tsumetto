@@ -33,7 +33,7 @@ function LibraryList({
                         }}
                         onClick={() => onSelect(entry)}
                     >                        
-                        {i + 1}: {entry.kifData.title} ({new Date(entry.createdAt).toLocaleString("ja-JP")} [{formatAccuracy(entry.accuracy)}])
+                        {i + 1}: {entry.kifData.title} ({new Date(entry.createdAt).toLocaleString("ja-JP")}) [{formatAccuracy(entry.accuracy)}]
                     </ListItemText>
                 </ListItem>
             ))}

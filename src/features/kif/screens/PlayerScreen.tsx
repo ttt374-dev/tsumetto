@@ -1,7 +1,10 @@
 import { useState } from 'react'
-import { Box } from "@mui/material";
+import { Box, IconButton } from "@mui/material";
 import { useSwipeable } from "react-swipeable";
 import { useNavigate, } from "react-router-dom";
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CloseIcon from '@mui/icons-material/Close'
+import EditIcon from '@mui/icons-material/Edit'
 
 import BoardView from '../components/BoardView/BoardView'
 import SelectLibraryEntry from '../components/SelectLibraryEntry';
@@ -9,7 +12,6 @@ import MovesView from "../components/MovesView";
 import { AppLayout } from '../../../shared/components/AppLayout/AppLayout';
 import { useKif } from '../hooks/useKif'
 import type { KifLearningRecord } from '../types/kifLearning'
-//import { useKifLearning } from '../hooks/useKifLearning';
 import { KifEntryEditDialog } from "../dialogs/KifEntryEditDialog";
 import { formatAccuracy } from '../utils';
 
@@ -81,7 +83,6 @@ export default function PlayerScreen() {
             footer={
                 <button onClick={handleNavToLibrary}>ライブラリ管理</button>
             }
-
         >
             <>
             <KifEntryEditDialog 
@@ -90,11 +91,16 @@ export default function PlayerScreen() {
                 onDelete={handleDelete} entryId={curEntryId}/>
                 
                 {/* 内部リストを選択 */}
-                {library.length > 0 &&
-                    <SelectLibraryEntry
-                        currentIndex={kifPlayerState.currentLibraryIndex}
-                        library={library} onSelect={playAtIndex} />
-                }
+                <Box sx={{ display: "flex", flexDirection: "row"}}>
+                    {library.length > 0 &&
+                        <SelectLibraryEntry
+                            currentIndex={kifPlayerState.currentLibraryIndex}
+                            library={library} onSelect={playAtIndex} />
+                    }
+                    <IconButton onClick={handleOpenEditDialog}>
+                        <EditIcon />
+                    </IconButton>
+                </Box>
 
                 <Box {...swipeHandlers} sx={{
                     userSelect: "none", // 選択防止
@@ -133,38 +139,33 @@ export default function PlayerScreen() {
                         visible={kifPlayerState.showMoves}
                         onToggleVisible={kifPlayer.toggleShowMoves}
                         />
-
                     </Box>
-                    <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                        <button
-                            disabled={!curEntryId}
-                            onClick={() => curEntryId && markSolved(curEntryId)}>
-                            正答
-                        </button>
-                        <button
-                            disabled={!curEntryId}
-                            onClick={() => curEntryId && markFailed(curEntryId)}>
-                            誤答
-                        </button>
+                    <Box sx={{  gap: 2 }}>
+                        <Box>
+                            <IconButton
+                                disabled={!curEntryId}
+                                onClick={() => curEntryId && markSolved(curEntryId)}>
+                                <CheckCircleIcon />
+                            </IconButton>
+                            <IconButton
+                                disabled={!curEntryId}
+                                onClick={() => curEntryId && markFailed(curEntryId)}>
+                                <CloseIcon />
+                            </IconButton>
 
+                        </Box>
                         {learningRecord && learningRecord.solvedCount + learningRecord.failedCount > 0 &&
                             <>
                                 <div>
-                                    正答率：{formatAccuracy(calcAccuracy(learningRecord))}
-                                </div>
-                                <div>
+                                    正答率：{formatAccuracy(calcAccuracy(learningRecord)) }                
                                     ( {learningRecord.solvedCount} /
                                     {learningRecord.failedCount + learningRecord.solvedCount} )
                                 </div>
                             </>
-                        }
-                        <button onClick={handleOpenEditDialog}>
-                            編集・詳細
-                        </button>
+                        }                        
                     </Box>
                 </Box>
             </>
         </AppLayout>
     )
-
 }

@@ -1,9 +1,15 @@
+import { useState, useEffect, useRef } from "react"
+import { TextField, IconButton, Typography } from '@mui/material';
 import { Dialog, DialogTitle, DialogContent, DialogActions,
-  Box, Button, TextField } from "@mui/material"
-import { useState, useEffect } from "react"
+  Box, Button} from "@mui/material"
+import CheckIcon from '@mui/icons-material/Check'
+import DoneIcon from '@mui/icons-material/Done'
+import CloseIcon from '@mui/icons-material/Close'
+
+import EditIcon from '@mui/icons-material/Edit';
+
 import { useKif } from '../hooks/useKif'
-import { formatAccuracy } from "../utils/formatAccuracy"
-import { Navigate, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 
 type Props = {
   open: boolean
@@ -25,6 +31,8 @@ export function KifEntryEditDialog({
   const entry = entryId ? findById(entryId) : null
   const record = entryId ? getRecord(entryId) : null
   const [title, setTitle] = useState("")
+  const [editing, setEditing] = useState(false);
+  const [draft, setDraft] = useState(title);
 
   // initialize
   // entry 切り替え時に title を同期
@@ -32,6 +40,14 @@ export function KifEntryEditDialog({
     setTitle(entry?.kifData.title ?? "")
   }, [entryId, entry])
   
+  const inputRef = useRef<HTMLInputElement | null>(null)
+  useEffect(() => {
+  if (editing) {
+    inputRef.current?.focus()
+    //inputRef.current?.select() // ついでに全選択（おすすめ）
+  }
+}, [editing])
+
   // handlers
   const handleDelete = () => {
     if (entry && window.confirm("本当に削除しますか？")){
@@ -44,16 +60,27 @@ export function KifEntryEditDialog({
   const navigate = useNavigate()
   const handleConfirm = () => {    
     onClose()
+    setEditing(false);
     navigate("/player")
   }
   const handleCancel = () => {
+    setEditing(false);
     onClose()
   }
   const handleResetAccuracy = () => {
-    entry && kifLearning.reset(entry.id)
+    if (entry && window.confirm("本当に正答データをリセットしますか？")){
+        kifLearning.reset(entry.id)
+    }
   }
   const handleSetTitle = () => {
     entryId && updateTitle(entryId, title.trim())
+  }
+    const handleEdit = () => {
+    setDraft(title); // 現在のタイトルで初期化
+    setEditing(true);
+  };
+  const handleEditFinish = () => {
+    setEditing(false)
   }
   return (
     <Dialog open={open} onClose={onClose} maxWidth="xl">
@@ -63,16 +90,36 @@ export function KifEntryEditDialog({
       <DialogContent>
         
         {/* タイトル編集 */}
-        <Box display="flex" gap={2} mt={1}>
-          <TextField
-            label="タイトル"
-            fullWidth
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-           
-          />
-          <Button onClick={handleSetTitle}>修正</Button>
+        <Box display="flex" alignItems="center" gap={2} mt={1}>
+          { editing ? 
+            <>
+              <TextField
+                label="タイトル"
+                fullWidth
+                value={title}
+                inputRef={inputRef}
+                onChange={(e: any) => setTitle(e.target.value)}
+              />
+              <IconButton onClick={handleSetTitle}>
+                <DoneIcon />
+              </IconButton>
+              <IconButton onClick={handleEditFinish}>
+                <CloseIcon />
+              </IconButton>
 
+            </>
+            : (<>
+              <Typography flexGrow={1}>{title}</Typography>
+
+              <IconButton onClick={handleEdit}>
+                <EditIcon />
+              </IconButton>
+            </>)
+          }
+
+        </Box>
+        <Box>
+          登録日：{ (entry != null) ? new Date(entry.createdAt).toLocaleString("ja-JP") : "-" }
         </Box>
         { /* 正答誤答*/ }
         <div>
