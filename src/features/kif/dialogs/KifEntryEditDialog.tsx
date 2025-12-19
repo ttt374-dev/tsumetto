@@ -10,10 +10,12 @@ import EditIcon from '@mui/icons-material/Edit';
 
 import { useKif } from '../hooks/useKif'
 import { useNavigate } from "react-router-dom"
+import type { KifLibraryEntry } from "../types/kifLibrary";
 
 type Props = {
   open: boolean
   entryId: string | null
+  onConfirm: (entry: KifLibraryEntry) => void;
   onClose: () => void
   onDelete: () => void
 }
@@ -21,6 +23,7 @@ type Props = {
 export function KifEntryEditDialog({
   open,
   entryId,
+  onConfirm,
   onClose,
   onDelete,
 }: Props) {
@@ -61,6 +64,7 @@ export function KifEntryEditDialog({
   const handleConfirm = () => {    
     onClose()
     setEditing(false);
+    entry && onConfirm(entry);
     navigate("/player")
   }
   const handleCancel = () => {

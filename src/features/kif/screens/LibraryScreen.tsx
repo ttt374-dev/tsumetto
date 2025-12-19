@@ -67,7 +67,12 @@ export default function LibraryScreen() {
         console.log("backup dialog open")
         setBackupOpen(true)
     }
-    const onBackup = () => {() => setBackupOpen(true)} 
+    const handleConfirm = (entry: KifLibraryEntry) => {
+        //selectEntry(entry)
+        console.log("handle confirm", entry.id)
+        kifPlayer.playByEntryId(entry.id)
+    }
+    //const onBackup = () => {() => setBackupOpen(true)} 
     return (
         <AppLayout
             header={"Library"}
@@ -109,6 +114,7 @@ export default function LibraryScreen() {
             <KifEntryEditDialog
                 open={editDialogOpen}
                 entryId={editEntryId}
+                onConfirm={handleConfirm}
                 onClose={handleCloseDialog}
                 onDelete={() => {
                     editEntryId && 

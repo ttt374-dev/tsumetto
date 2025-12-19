@@ -18,7 +18,7 @@ export function useKifBackupRestore() {
   }
 
   const restore = (data: unknown) => {
-    console.log("restore", data)
+    //console.log("restore", data)
     if (!isValidBackup(data)) {
       throw new Error("Invalid backup file")
     }
