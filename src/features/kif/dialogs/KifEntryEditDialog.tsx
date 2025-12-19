@@ -90,7 +90,7 @@ export function KifEntryEditDialog({
       <DialogContent>
         
         {/* タイトル編集 */}
-        <Box display="flex" alignItems="center" gap={2} mt={1}>
+        <Box display="flex"  alignItems="center" gap={2} mt={1}>
           { editing ? 
             <>
               <TextField
