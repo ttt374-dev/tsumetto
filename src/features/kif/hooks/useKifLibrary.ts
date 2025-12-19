@@ -31,6 +31,13 @@ export function useKifLibrary() {
     store.state.library,
     persist
   )
+  const replaceAll = async (entries: KifLibraryEntry[]) => {
+    console.log("library replaceAll", entries)
+    
+    await persistApi.save(entries)
+    store.setLibrary(entries)
+  }
+
   return {
     ...store.state,
     sortedLibrary,
@@ -38,6 +45,7 @@ export function useKifLibrary() {
 
     findById,
     setSortKey: store.setSortKey,
+    replaceAll,
     toggleSortOrder: store.toggleSortOrder,
   };
 }

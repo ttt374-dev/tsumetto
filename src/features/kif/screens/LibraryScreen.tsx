@@ -11,12 +11,16 @@ import MultipleFilesButton from '../../../shared/components/MultipleFilesButton'
 import { useKifSortedLibraryWithLearning } from '../hooks/useKifSortedLibraryWithLearning';
 import { KifEntryEditDialog } from "../dialogs/KifEntryEditDialog";
 import type { KifLibraryEntry } from '../types/kifLibrary';
+import { KifBackupDialog } from '../dialogs/KifBackupDialog';
+import { Box, Button } from '@mui/material'
 
 export default function LibraryScreen() {
     const { kifLibrary, kifPlayer, kifLearning } = useKif()
     const navigate = useNavigate()
     const [editDialogOpen, setEditDialogOpen] = useState(false);
     const [editEntryId, setEditEntryId] = useState<string | null>(null);
+    const [backupOpen, setBackupOpen] = useState(false)
+
 
     const sortedLibrary =
         useKifSortedLibraryWithLearning(
@@ -59,6 +63,11 @@ export default function LibraryScreen() {
         setEditDialogOpen(false);
         setEditEntryId(null);
     };
+    const handleBackupOpen = () => {
+        console.log("backup dialog open")
+        setBackupOpen(true)
+    }
+    const onBackup = () => {() => setBackupOpen(true)} 
     return (
         <AppLayout
             header={"Library"}
@@ -69,7 +78,15 @@ export default function LibraryScreen() {
                 </>
             }
         >
-
+            <Box display="flex" alignItems="center" gap={1}>
+                <Button
+                    variant="outlined"
+                    size="small"
+                    onClick={() => handleBackupOpen()}
+                >
+                    バックアップ / 復元
+                </Button>
+            </Box>
             
             <LibraryControls
                 library={sortedLibrary}
@@ -100,7 +117,12 @@ export default function LibraryScreen() {
                     
                     handleCloseDialog();
                 }}
-                />
+            />
+              {/* ★ここに置く */}
+            <KifBackupDialog
+                open={backupOpen}
+                onClose={() => setBackupOpen(false)}
+            />
         </AppLayout>
 
     )

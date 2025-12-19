@@ -10,6 +10,7 @@ interface UseKifLearning {
     markSolved(entryId: string): void;
     markFailed(entryId: string): void;
     reset(entryId: string): void;
+    replaceAll(records: Record<string, KifLearningRecord>): void;
 };
 
 
@@ -83,5 +84,10 @@ export function useKifLearning(): UseKifLearning {
         }
     };
 
-    return { records, getRecord, markSolved, markFailed, reset };
+    const replaceAll = (records: Record<string, KifLearningRecord>) => {
+        setRecords(records)
+        persist()
+    }
+
+    return { records, getRecord, markSolved, markFailed, reset, replaceAll };
 }
