@@ -32,9 +32,9 @@ export default function PlayerScreen() {
     const curIndex: number | null =
         (i => (i === -1 ? null : i))(
             sortedLibrary.findIndex(e => e.id === curEntryId)
-  );
+        );
 
-    const learningRecord= getRecord(curEntryId)
+    const learningRecord = getRecord(curEntryId)
 
     // スワイプハンドラ
     const swipeHandlers = useSwipeable({
@@ -44,16 +44,16 @@ export default function PlayerScreen() {
         onSwipedRight: () => {// 右スワイプ → 前の棋譜へ
             playPrev(sortedLibrary)
         },
-        onSwipedUp: () => {  kifPlayer.hideMoves()},
-        onSwipedDown: () => { kifPlayer.showMoves()},
-        
+        onSwipedUp: () => { kifPlayer.hideMoves() },
+        onSwipedDown: () => { kifPlayer.showMoves() },
+
         trackMouse: true, // PCでもマウスでスワイプ可能
         preventScrollOnSwipe: true,
     });
     const handleNavToLibrary = () => {
         navigate("/library")
     }
-    const [ openEditDialog, setOpenEditDialog ] = useState(false)
+    const [openEditDialog, setOpenEditDialog] = useState(false)
     const handleOpenEditDialog = () => {
         setOpenEditDialog(true)
     }
@@ -78,29 +78,29 @@ export default function PlayerScreen() {
 
         return record.solvedCount / total;
     };
-    
+
     ////////////////////////////////////////////////////////////////////////
     return (
-        <AppLayout
-            header={<>
-                <h2>
-                    {curIndex ? `${curIndex + 1}: ${kifPlayerState.kifData.title}` : "unselected"}
-                </h2>
-            </>}
+        <AppLayout            
+                header={<>
+                    <h2>
+                        {curEntryId ? `${kifPlayerState.kifData.title}` : "unselected"}
+                    </h2>
+                </>}
             footer={
                 <button onClick={handleNavToLibrary}>ライブラリ管理</button>
             }
         >
             <>
-            <KifEntryEditDialog 
-                open={openEditDialog} 
-                onConfirm={(entry: KifLibraryEntry) => {playByEntryId(entry.id)}}
-                onClose={handleCloseEditDialog} 
-                onDelete={handleDelete} entryId={curEntryId}/>
-                
-                {/* 内部リストを選択 */}                
-                <Box sx={{ display: "flex", flexDirection: "row"}}>
-                    {sortedLibrary.length > 0 && 
+                <KifEntryEditDialog
+                    open={openEditDialog}
+                    onConfirm={(entry: KifLibraryEntry) => { playByEntryId(entry.id) }}
+                    onClose={handleCloseEditDialog}
+                    onDelete={handleDelete} entryId={curEntryId} />
+
+                {/* 内部リストを選択 */}
+                <Box sx={{ display: "flex", flexDirection: "row" }}>
+                    {sortedLibrary.length > 0 &&
                         <SelectLibraryEntry
                             currentIndex={curIndex}
                             library={sortedLibrary} onSelect={playAtIndex} />
@@ -126,54 +126,62 @@ export default function PlayerScreen() {
                     <button onClick={() => playPrev(sortedLibrary)} disabled={sortedLibrary.length == 0}>&lt;</button>
                     <button onClick={() => playNext(sortedLibrary)} disabled={sortedLibrary.length == 0}>&gt;</button>
                     <button onClick={() => playLast(sortedLibrary)} disabled={sortedLibrary.length == 0}>&gt;&gt;</button>
-                </Box>
 
+                </Box>
+                <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "center", margin: 2 }}>
+                    {learningRecord && learningRecord.solvedCount + learningRecord.failedCount > 0 &&
+                        
+                            <div>
+                                { /* 正答率：{formatAccuracy(calcAccuracy(learningRecord))} 
+                                ( {learningRecord.solvedCount} /
+                                {learningRecord.failedCount + learningRecord.solvedCount} )*/ }
+                            </div>
+                        
+                    }
+                    {/* 解答表示 */}
+                    < button onClick={kifPlayer.toggleShowMoves}
+                        disabled={kifData.moves.length === 0} >
+                        {kifPlayerState.showMoves ? "解答を隠す" : "解答を表示"}
+                    </button >
+                    <IconButton
+                        disabled={!curEntryId}
+                        onClick={() => curEntryId && markSolved(curEntryId)}>
+                        <CheckCircleIcon />
+                    </IconButton>
+                    <IconButton
+                        disabled={!curEntryId}
+                        onClick={() => curEntryId && markFailed(curEntryId)}>
+                        <CloseIcon />
+                    </IconButton>
+                </Box>
                 <Box
                     sx={{
                         display: "flex",
-                        justifyContent: "center",                                              
-                        
+                        justifyContent: "center",
+                        height: "100vh",
                         //width: "100%",
                         gap: 2,
+                        overflowY: "auto",
                     }}>
-                <Box sx={{
-                    display: "flex",
-                    //flexGrow: 1,
-                    flexDirection: "column",
-                    overflowY: "auto",
-                    gap: 2,
-                    //minWidth: 120,
-                }}>
+                    <div>
+                        
+                        {
+                            kifPlayerState.showMoves &&
+                            kifData.moves.map((m, i) => (
+                                <div key={i} style={{ padding: "2px 0" }}>
+                                    {i + 1}: {m.isBlack ? '▲' : '△'} {m.moveText} ({m.from})
+                                </div>
+                            ))
+                        }
+                    </div>
+
+{ /* 
                     <MovesView
                         moves={kifData.moves}
                         visible={kifPlayerState.showMoves}
                         onToggleVisible={kifPlayer.toggleShowMoves}
-                        />
-                    </Box>
-                    <Box sx={{  gap: 2 }}>
-                        <Box>
-                            <IconButton
-                                disabled={!curEntryId}
-                                onClick={() => curEntryId && markSolved(curEntryId)}>
-                                <CheckCircleIcon />
-                            </IconButton>
-                            <IconButton
-                                disabled={!curEntryId}
-                                onClick={() => curEntryId && markFailed(curEntryId)}>
-                                <CloseIcon />
-                            </IconButton>
-
-                        </Box>
-                        {learningRecord && learningRecord.solvedCount + learningRecord.failedCount > 0 &&
-                            <>
-                                <div>
-                                    正答率：{formatAccuracy(calcAccuracy(learningRecord)) }                
-                                    ( {learningRecord.solvedCount} /
-                                    {learningRecord.failedCount + learningRecord.solvedCount} )
-                                </div>
-                            </>
-                        }                        
-                    </Box>
+                    />
+*/ }
                 </Box>
             </>
         </AppLayout>

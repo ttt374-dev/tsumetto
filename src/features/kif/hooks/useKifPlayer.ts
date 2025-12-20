@@ -22,16 +22,20 @@ export function useKifPlayer(library: KifLibraryEntry[]) {
    * ===================== */
 
   useEffect(() => {
-    if (!currentEntry) return;
+    if (!currentEntry) {
+      //reset()
+    } else {
 
-    setState(prev =>
-      createPlayerState({
-        ...prev,
-        kifData: currentEntry.kifData,
-      })
-    );
+      setState(prev =>
+        createPlayerState({
+          ...prev,
+          kifData: currentEntry.kifData,
+        })
+      );
+    }
   }, [currentEntry]);
 
+  /*
 useEffect(() => {
   if (state.currentEntryId && !currentEntry) {
     console.log("player to reset")
@@ -40,7 +44,7 @@ useEffect(() => {
     
   }
 }, [currentEntry, state.currentEntryId]);
-
+*/
   /* =====================
    * library 変更時の補正
    * ===================== */

@@ -1,4 +1,4 @@
-import { List, ListItem, ListItemIcon, ListItemText, Checkbox } from "@mui/material";
+import { List, ListItem, ListItemIcon, ListItemText, Checkbox, Typography } from "@mui/material";
 import type { KifLibraryEntry, KifLibraryEntryWithLearning } from '../types/kifLibrary';
 import { formatAccuracy } from "../utils";
 
@@ -17,24 +17,51 @@ function LibraryList({
     return (
         <List sx={{ flex: 1, display: "flex", flexDirection: "column", overflowY: "auto" }}>
             {library.map((entry, i) => (
-                <ListItem key={entry.id}>
-                    <ListItemIcon>
+                <ListItem key={entry.id} sx={{
+                                  cursor: "pointer",
+                            transition: "background-color 0.2s",
+                            "&:hover": { backgroundColor: "#e0e0e0" },
+                        border: 1}
+                    } onClick={() => onSelect(entry)}>
+                    <ListItemIcon  sx={{ minWidth: 16 }}  onClick={(e) => e.stopPropagation()} >
                         <Checkbox
+                            size="small"
                             edge="start"
                             checked={checkedIds.has(entry.id)}
                             onChange={(e) => { e.stopPropagation(); handleCheckboxChange(entry.id); }}
+                        
                         />
                     </ListItemIcon>
                     <ListItemText
                         sx={{
-                            cursor: "pointer",
+                            //display: "flex",
+                            //justifyContent: "space-between",
+                            alignItems: "baseline",
+                            gap: 1,
+                            /*cursor: "pointer",
                             transition: "background-color 0.2s",
-                            "&:hover": { backgroundColor: "#e0e0e0" }
+                            "&:hover": { backgroundColor: "#e0e0e0" }*/
                         }}
-                        onClick={() => onSelect(entry)}
-                    >                        
-                        {i + 1}: {entry.kifData.title} -  {entry.id.slice(0, 5)} ({new Date(entry.createdAt).toLocaleString("ja-JP")}) [{formatAccuracy(entry.accuracy)}]
+                        
+                        primary={                        
+                        <Typography variant="body1" component="div" sx={{lineHeight:  1.3}}>
+                            {i + 1}: {entry.kifData.title}
+                        </Typography>
+                        }
+                        secondary={
+                        <Typography variant="body2" component="div">
+                            { `${new Date(entry.createdAt).toLocaleString("ja-JP")}, ${formatAccuracy(entry.accuracy)} ` }
+                            
+                        </Typography>
+                        }
+                        >
+
+
+                        { /* {i + 1}: {entry.kifData.title}  ({new Date(entry.createdAt).toLocaleString("ja-JP")}) [{formatAccuracy(entry.accuracy)}] */ }
                     </ListItemText>
+                    
+              
+                    
                 </ListItem>
             ))}
         </List>
