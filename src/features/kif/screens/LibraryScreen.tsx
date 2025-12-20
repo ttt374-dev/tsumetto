@@ -14,12 +14,12 @@ import type { KifLibraryEntry } from '../types/kifLibrary';
 import { KifBackupDialog } from '../dialogs/KifBackupDialog';
 import { useKifEntryEditDialog } from '../hooks/useKifEntryEditDialog';
 
-
 export default function LibraryScreen() {
     const { kifLibrary, kifPlayer, kifLearning } = useKif()
     const navigate = useNavigate()
     const [backupOpen, setBackupOpen] = useState(false)
     const entryDialog = useKifEntryEditDialog()
+    const [editMode, setEditMode] = useState(false);
 
     const sortedLibrary =
         useKifSortedLibraryWithLearning(
@@ -43,12 +43,17 @@ export default function LibraryScreen() {
     const handleMultipleFilesSelected = async (files: File[]) => {
         kifLibrary.importFiles(files)
     };
-
+    const toggleEditMode = () => {
+        setEditMode(!editMode)
+    }
     // handler
         // リストアイテムクリック時
-
     const handleSelectEntry = (entry: KifLibraryEntry) => {
-        entryDialog.openFor(entry.id)
+        if (editMode){
+            entryDialog.openFor(entry.id)
+        } else {
+            navigate("/player")
+        }
     }
 
     return (
@@ -56,30 +61,35 @@ export default function LibraryScreen() {
             header={"Library"}
             footer={
                 <>                    
-                    <MultipleFilesButton label="棋譜ファイルを登録" onFileSelected={handleMultipleFilesSelected}/>
-                    <button onClick={() => navigate("/player")}>戻る</button>
+                { /* <button onClick={() => toggleEditMode()}>選択削除モード</button> */ }
+                <MultipleFilesButton label="棋譜ファイルを登録" onFileSelected={handleMultipleFilesSelected}/>
+                <button onClick={() => navigate("/player")}>戻る</button>
                 </>
             }
-        >
-
-            
+        >            
             <LibraryControls
                 library={sortedLibrary}
                 checkedIds={checkedIds}
-                selectAll={selectAll}
-                clearAll={clearAll}
-                handleDeleteSelected={deleteSelected}
+                selectAllCheckbox={selectAll}
+                clearAllCheckbox={clearAll}
+                onDeleteSelected={deleteSelected}
+                editMode={editMode}
                 sortKey={kifLibrary.sortKey}
                 setSortKey={kifLibrary.setSortKey}
                 toggleSortOrder={kifLibrary.toggleSortOrder}
                 sortOrder={kifLibrary.sortOrder}
                 onBackup={() => setBackupOpen(true)}
+                
             />
 
             <LibraryList 
                 library={sortedLibrary} checkedIds={checkedIds} 
-                handleCheckboxChange={toggleCheckbox} 
-                onSelect={handleSelectEntry}/>
+                onCheckboxChange={toggleCheckbox} 
+                onSelect={handleSelectEntry}
+                editMode={editMode}
+                toggleEditMode={toggleEditMode}
+                clearAllCheckbox={clearAll}
+                />
 
             {/* Dialog を JSX の下に配置 */}
             <KifEntryEditDialog

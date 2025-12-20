@@ -6,15 +6,15 @@ import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 
-
 import type { KifLibraryEntry, SortKey, SortOrder } from "../types/kifLibrary";
 
 type LibraryControlsProps = {
     library: KifLibraryEntry[];
     checkedIds: Set<string>;
-    selectAll: () => void;
-    clearAll: () => void;
-    handleDeleteSelected: () => void;
+    selectAllCheckbox: () => void;
+    clearAllCheckbox: () => void;
+    onDeleteSelected: () => void;
+    editMode: boolean,
 
     sortKey: SortKey,
     sortOrder: SortOrder,
@@ -26,9 +26,10 @@ type LibraryControlsProps = {
 
 export function LibraryControls({    
     checkedIds,
-    selectAll,
-    clearAll,
-    handleDeleteSelected,
+    selectAllCheckbox,
+    clearAllCheckbox,
+    onDeleteSelected,
+    editMode,
 
     sortKey,    
     setSortKey,
@@ -42,34 +43,35 @@ export function LibraryControls({
 
     return (
         <Box sx={{ display: "flex", flexShrink: 0  } } alignItems="center">
-            {/* 全選択 */}
-            <Tooltip title="全選択">
-                <IconButton
-                    //onClick={() => setCheckedIds(new Set(library.map((e) => e.id)))}
-                    onClick={selectAll}
-                    color="primary"
-                >
-                    <CheckBoxIcon />
-                </IconButton>
-            </Tooltip>
+            { editMode && ( <>
+                {/* 全選択 */}
+                <Tooltip title="全選択">
+                    <IconButton
+                        //onClick={() => setCheckedIds(new Set(library.map((e) => e.id)))}
+                        onClick={selectAllCheckbox}
+                        color="primary"
+                    >
+                        <CheckBoxIcon />
+                    </IconButton>
+                </Tooltip>
 
-            {/* 全解除 */}
-            <Tooltip title="全解除">
-                <IconButton
-                    //onClick={() => setCheckedIds(new Set())}
-                    onClick={clearAll}
-                    color="primary"
-                >
-                    <CheckBoxOutlineBlankIcon />
-                </IconButton>
-            </Tooltip>
+                {/* 全解除 */}
+                <Tooltip title="全解除">
+                    <IconButton
+                        //onClick={() => setCheckedIds(new Set())}
+                        onClick={clearAllCheckbox}
+                        color="primary"
+                    >
+                        <CheckBoxOutlineBlankIcon />
+                    </IconButton>
+                </Tooltip>
 
-            <Tooltip title="選択した棋譜を削除">
-                <IconButton onClick={handleDeleteSelected} disabled={checkedIds.size === 0} color="error">
-                    <DeleteIcon />
-                </IconButton>
-            </Tooltip>  
-            
+                <Tooltip title="選択した棋譜を削除">
+                    <IconButton onClick={onDeleteSelected} disabled={checkedIds.size === 0} color="error">
+                        <DeleteIcon />
+                    </IconButton>
+                </Tooltip>
+            </>)}
             <Box display="flex" alignItems="center" gap={1}>
                 <IconButton onClick={() => onBackup()}>
                     <ImportExportIcon />
@@ -91,9 +93,6 @@ export function LibraryControls({
                     : <ArrowDownwardIcon />
                 }
             </IconButton>
-
-         
-
         </Box>
     )
 }
