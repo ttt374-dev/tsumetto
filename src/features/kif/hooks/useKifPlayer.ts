@@ -32,6 +32,15 @@ export function useKifPlayer(library: KifLibraryEntry[]) {
     );
   }, [currentEntry]);
 
+useEffect(() => {
+  if (state.currentEntryId && !currentEntry) {
+    console.log("player to reset")
+    reset();
+    //setCurrentEntryId(null);
+    
+  }
+}, [currentEntry, state.currentEntryId]);
+
   /* =====================
    * library 変更時の補正
    * ===================== */
@@ -136,6 +145,9 @@ export function useKifPlayer(library: KifLibraryEntry[]) {
         showMoves: !prev.showMoves,
       })
     );
+  }
+  function reset() {
+    setState(prev => createPlayerState())    
   }
 
   /* =====================
