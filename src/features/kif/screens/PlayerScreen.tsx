@@ -24,14 +24,17 @@ export default function PlayerScreen() {
     const kifPlayerState = kifPlayer.kifPlayerState
     const navigate = useNavigate()
     const kifData = kifPlayerState.kifData
-    //const curIndex = kifPlayerState.currentLibraryIndex
-    
+    //const curIndex = kifPlayerState.currentLibraryIndex    
 
     const { getRecord, markSolved, markFailed } = kifLearning
     const curEntryId = kifPlayerState.currentEntryId
-    const curIndex = sortedLibrary.findIndex(e => e.id === curEntryId);
-    const learningRecord= getRecord(curEntryId)
+    //const curIndex = sortedLibrary.findIndex(e => e.id === curEntryId);
+    const curIndex: number | null =
+        (i => (i === -1 ? null : i))(
+            sortedLibrary.findIndex(e => e.id === curEntryId)
+  );
 
+    const learningRecord= getRecord(curEntryId)
 
     // スワイプハンドラ
     const swipeHandlers = useSwipeable({
@@ -81,7 +84,7 @@ export default function PlayerScreen() {
         <AppLayout
             header={<>
                 <h2>
-                    {curIndex !== undefined && `${curIndex + 1}: ${kifPlayerState.kifData.title}`}
+                    {curIndex ? `${curIndex + 1}: ${kifPlayerState.kifData.title}` : "unselected"}
                 </h2>
             </>}
             footer={
@@ -95,17 +98,18 @@ export default function PlayerScreen() {
                 onClose={handleCloseEditDialog} 
                 onDelete={handleDelete} entryId={curEntryId}/>
                 
-                {/* 内部リストを選択 */}
-                
+                {/* 内部リストを選択 */}                
                 <Box sx={{ display: "flex", flexDirection: "row"}}>
-                    {sortedLibrary.length > 0 &&
+                    {sortedLibrary.length > 0 && 
                         <SelectLibraryEntry
                             currentIndex={curIndex}
                             library={sortedLibrary} onSelect={playAtIndex} />
                     }
-                    <IconButton onClick={handleOpenEditDialog}>
-                        <EditIcon />
-                    </IconButton>
+                    {curEntryId &&
+                        <IconButton onClick={handleOpenEditDialog}>
+                            <EditIcon />
+                        </IconButton>
+                    }
                 </Box>
 
                 <Box {...swipeHandlers} sx={{

@@ -3,7 +3,7 @@ import React from "react";
 import { type KifLibraryEntry } from "../types/kifLibrary";
 
 interface SelectLibraryEntryProps {
-    currentIndex?: number;
+    currentIndex: number | null;
     library: KifLibraryEntry[];
     onSelect: (index: number) => void;
 }
@@ -12,10 +12,11 @@ const SelectLibraryEntry: React.FC<SelectLibraryEntryProps> = ({ currentIndex, l
         onSelect(Number(e.target.value))
     }
 
+    const value = currentIndex ?? 0
     return (
         <select style={{ width: "300px",  display: "block",
     margin: "12px auto",}}
-            value={currentIndex}
+            value={value}
             onChange={handleSelectLibrary}>
             {
 

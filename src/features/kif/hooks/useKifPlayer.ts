@@ -16,15 +16,6 @@ export function useKifPlayer(library: KifLibraryEntry[]) {
     return library.find(e => e.id === state.currentEntryId);
   }, [library, state.currentEntryId]);
 
-  /*
-  const currentIndex = useMemo(() => {
-    if (!state.currentEntryId) return undefined;
-    const idx = library.findIndex(e => e.id === state.currentEntryId);
-    console.log("current index", idx)
-    console.log("library", library)
-    return idx >= 0 ? idx : undefined;
-  }, [library, state.currentEntryId]);
-*/
 
   /* =====================
    * entryId → state 同期
