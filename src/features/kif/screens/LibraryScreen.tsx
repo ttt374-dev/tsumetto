@@ -52,6 +52,7 @@ export default function LibraryScreen() {
         if (editMode){
             entryDialog.openFor(entry.id)
         } else {
+            kifPlayer.playByEntryId(entry.id)
             navigate("/player")
         }
     }

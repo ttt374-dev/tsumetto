@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Box, IconButton } from "@mui/material";
+import { Box, IconButton, Typography } from "@mui/material";
 import { useSwipeable } from "react-swipeable";
 import { useNavigate, } from "react-router-dom";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -18,7 +18,7 @@ import type { KifLibraryEntry } from '../types/kifLibrary';
 
 export default function PlayerScreen() {
     const { kifLibrary, kifPlayer, kifLearning } = useKif()
-    const { playNext, playPrev, playFirst, playLast, playByEntryId, playAtIndex } = kifPlayer
+    const { playNext, playPrev, playFirst, playLast, playByEntryId } = kifPlayer
 
     const sortedLibrary = kifLibrary.sortedLibrary
     const kifPlayerState = kifPlayer.kifPlayerState
@@ -83,9 +83,9 @@ export default function PlayerScreen() {
     return (
         <AppLayout            
                 header={<>
-                    <h2>
+                    <Typography variant='h6'>
                         {curEntryId ? `${kifPlayerState.kifData.title}` : "unselected"}
-                    </h2>
+                    </Typography>
                 </>}
             footer={
                 <button onClick={handleNavToLibrary}>ライブラリ管理</button>
@@ -100,10 +100,11 @@ export default function PlayerScreen() {
 
                 {/* 内部リストを選択 */}
                 <Box sx={{ display: "flex", flexDirection: "row" }}>
+                    
                     {sortedLibrary.length > 0 &&
                         <SelectLibraryEntry
-                            currentIndex={curIndex}
-                            library={sortedLibrary} onSelect={playAtIndex} />
+                            currentEntryId={curEntryId}
+                            library={sortedLibrary} onSelect={(id) => kifPlayer.playByEntryId(id)} />
                     }
                     {curEntryId &&
                         <IconButton onClick={handleOpenEditDialog}>
@@ -128,7 +129,7 @@ export default function PlayerScreen() {
                     <button onClick={() => playLast(sortedLibrary)} disabled={sortedLibrary.length == 0}>&gt;&gt;</button>
 
                 </Box>
-                <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "center", margin: 2 }}>
+                <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "center", margin: 1 }}>
                     {learningRecord && learningRecord.solvedCount + learningRecord.failedCount > 0 &&
                         
                             <div>

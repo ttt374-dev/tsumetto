@@ -28,6 +28,7 @@ export function useLibraryHandlers(
     };
 
     const selectEntry = (entry: KifLibraryEntry) => {
+        console.log("select entry", entry.id)
         playByEntryId(entry.id);
         //navigate("/player");
     };

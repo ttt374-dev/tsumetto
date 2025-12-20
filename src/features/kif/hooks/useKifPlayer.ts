@@ -74,11 +74,13 @@ useEffect(() => {
       currentEntryId: entryId,
     }));
   }
+  /*
   function playAtIndex(index: number) {
     const entry = library[index];
     if (!entry) return;
     playByEntryId(entry.id);
   }
+    */
 /*
   function playFirst() {
     if (library.length === 0) return;
@@ -164,7 +166,7 @@ useEffect(() => {
       //currentLibraryIndex: currentIndex,
     },
     playByEntryId,
-    playAtIndex,
+    //playAtIndex,
     playFirst,
     playLast,
     playNext,
