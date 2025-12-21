@@ -1,4 +1,4 @@
-import type { KifData } from './kif'
+import type { KifData } from './kifData'
 
 export type KifLibraryEntry = {
   id: string;         // 一意の識別子

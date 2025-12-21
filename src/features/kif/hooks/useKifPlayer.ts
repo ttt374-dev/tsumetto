@@ -1,9 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 
-import { type Board, type KifData, type KifPlayerState } from "../types/kif";
-import { type KifLibraryEntry, } from '../types/kifLibrary'
+import type { Board, KifData, KifPlayerState, KifLibraryEntry } from "../types/";
 import type { useKifNavigation } from "./useKifNavigation";
-
 
 export function useKifPlayer(library: KifLibraryEntry[], navigation: ReturnType<typeof useKifNavigation>) {
   const [state, setState] = useState<KifPlayerState>(createPlayerState());
@@ -38,16 +36,6 @@ export function useKifPlayer(library: KifLibraryEntry[], navigation: ReturnType<
     }
   }, [currentEntry]);
 
-  /*
-useEffect(() => {
-  if (currentEntryId && !currentEntry) {
-    console.log("player to reset")
-    reset();
-    //setCurrentEntryId(null);
-    
-  }
-}, [currentEntry, currentEntryId]);
-*/
   /* =====================
    * library 変更時の補正
    * ===================== */
@@ -77,22 +65,7 @@ useEffect(() => {
       currentEntryId: entryId,
     }));
   }
-  /*
-  function playAtIndex(index: number) {
-    const entry = library[index];
-    if (!entry) return;
-    playByEntryId(entry.id);
-  }
-    */
-/*
-  function playFirst() {
-    if (library.length === 0) return;
-    playByEntryId(library[0].id);
-  }
-  function playLast() {
-    if (library.length === 0) return;
-    playByEntryId(library[library.length - 1].id);
-  }*/
+
   function playFirst(list: KifLibraryEntry[]) {
     if (list.length === 0) return;
     playByEntryId(list[0].id);
@@ -103,13 +76,7 @@ useEffect(() => {
     playByEntryId(list[list.length - 1].id);
   }
 
-    /*
-    function playNext() {
-    if (currentIndex == null) return;
-    const next = library[currentIndex + 1];
-    if (!next) return;
-    playByEntryId(next.id);
-  }*/
+
   function playNext(list: KifLibraryEntry[]) {
     if (!currentEntryId) return;
 
@@ -121,14 +88,7 @@ useEffect(() => {
 
     playByEntryId(next.id);
   }
-/*
-  function playPrev() {
-    if (currentIndex == null) return;
-    const prev = library[currentIndex - 1];
-    if (!prev) return;
-    playByEntryId(prev.id);
-  }
-*/
+
   function playPrev(list: KifLibraryEntry[]) {
     if (!currentEntryId) return;
 
@@ -140,22 +100,7 @@ useEffect(() => {
 
     playByEntryId(prev.id);
   }
-/*
-  function showMoves(){
-    setState(prev => createPlayerState({...prev, isMovesVisible: true}))
-  }
-  function hideMoves(){
-    setState(prev => createPlayerState({...prev, isMovesVisible: false}))
-  }
-  function toggleMovesVisible() {
-    setState(prev =>
-      createPlayerState({
-        ...prev,
-        isMovesVisible: !prev.isMovesVisible,
-      })
-    );
-  }
-    */
+
   function reset() {
     setState(prev => createPlayerState())    
   }
@@ -165,19 +110,13 @@ useEffect(() => {
    * ===================== */
 
   return {
-    kifPlayerState: {
-      ...state,
-      //currentLibraryIndex: currentIndex,
-    },
+    kifPlayerState: state,
     playByEntryId,
-    //playAtIndex,
+    
     playFirst,
     playLast,
     playNext,
     playPrev,
-    //showMoves,
-    //hideMoves,
-    //toggleShowMoves: toggleMovesVisible,
   };
 }
 

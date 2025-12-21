@@ -13,7 +13,7 @@ import SelectLibraryEntry from '../components/SelectLibraryEntry';
 import MovesView from "../components/MovesView";
 import { AppLayout } from '../../../shared/components/AppLayout/AppLayout';
 import { useKif } from '../hooks/useKif'
-import type { KifLearningRecord } from '../types/kifLearning'
+import type { KifLearningRecord } from '../types/'
 import { KifEntryEditDialog } from "../dialogs/KifEntryEditDialog";
 import { formatAccuracy } from '../utils';
 import type { KifLibraryEntry } from '../types/kifLibrary';
