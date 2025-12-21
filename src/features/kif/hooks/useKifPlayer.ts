@@ -2,19 +2,22 @@ import { useState, useEffect, useMemo } from "react";
 
 import { type Board, type KifData, type KifPlayerState } from "../types/kif";
 import { type KifLibraryEntry, } from '../types/kifLibrary'
+import type { useKifNavigation } from "./useKifNavigation";
 
 
-export function useKifPlayer(library: KifLibraryEntry[]) {
+export function useKifPlayer(library: KifLibraryEntry[], navigation: ReturnType<typeof useKifNavigation>) {
   const [state, setState] = useState<KifPlayerState>(createPlayerState());
   //const [currentEntryId, setCurrentEntryId] = useState<string | undefined>();
 
   /* =====================
    * 派生値
    * ===================== */
+  //const currentEntryId = navigation.currentEntryId
+  const currentEntryId = state.currentEntryId
   const currentEntry = useMemo(() => {
-    if (!state.currentEntryId) return undefined;
-    return library.find(e => e.id === state.currentEntryId);
-  }, [library, state.currentEntryId]);
+    if (!currentEntryId) return undefined;
+    return library.find(e => e.id === currentEntryId);
+  }, [library, currentEntryId]);
 
 
   /* =====================
@@ -37,30 +40,30 @@ export function useKifPlayer(library: KifLibraryEntry[]) {
 
   /*
 useEffect(() => {
-  if (state.currentEntryId && !currentEntry) {
+  if (currentEntryId && !currentEntry) {
     console.log("player to reset")
     reset();
     //setCurrentEntryId(null);
     
   }
-}, [currentEntry, state.currentEntryId]);
+}, [currentEntry, currentEntryId]);
 */
   /* =====================
    * library 変更時の補正
    * ===================== */
   useEffect(() => {
-    if (!state.currentEntryId && library.length > 0) {
+    if (!currentEntryId && library.length > 0) {
       playByEntryId(library[0].id);
       return;
     }
 
     if (
-      state.currentEntryId &&
-      !library.some(e => e.id === state.currentEntryId)
+      currentEntryId &&
+      !library.some(e => e.id === currentEntryId)
     ) {
       playByEntryId(library[0]?.id);
     }
-  }, [library, state.currentEntryId]);
+  }, [library, currentEntryId]);
 
 
   /* =====================
@@ -70,7 +73,7 @@ useEffect(() => {
   function playByEntryId(entryId: string) {
     setState(prev => ({
       ...prev,
-      showMoves: false,
+      isMovesVisible: false,
       currentEntryId: entryId,
     }));
   }
@@ -108,9 +111,9 @@ useEffect(() => {
     playByEntryId(next.id);
   }*/
   function playNext(list: KifLibraryEntry[]) {
-    if (!state.currentEntryId) return;
+    if (!currentEntryId) return;
 
-    const idx = list.findIndex(e => e.id === state.currentEntryId);
+    const idx = list.findIndex(e => e.id === currentEntryId);
     if (idx < 0) return;
 
     const next = list[idx + 1];
@@ -127,9 +130,9 @@ useEffect(() => {
   }
 */
   function playPrev(list: KifLibraryEntry[]) {
-    if (!state.currentEntryId) return;
+    if (!currentEntryId) return;
 
-    const idx = list.findIndex(e => e.id === state.currentEntryId);
+    const idx = list.findIndex(e => e.id === currentEntryId);
     if (idx <= 0) return;
 
     const prev = list[idx - 1];
@@ -137,21 +140,22 @@ useEffect(() => {
 
     playByEntryId(prev.id);
   }
-
+/*
   function showMoves(){
-    setState(prev => createPlayerState({...prev, showMoves: true}))
+    setState(prev => createPlayerState({...prev, isMovesVisible: true}))
   }
   function hideMoves(){
-    setState(prev => createPlayerState({...prev, showMoves: false}))
+    setState(prev => createPlayerState({...prev, isMovesVisible: false}))
   }
-  function toggleShowMoves() {
+  function toggleMovesVisible() {
     setState(prev =>
       createPlayerState({
         ...prev,
-        showMoves: !prev.showMoves,
+        isMovesVisible: !prev.isMovesVisible,
       })
     );
   }
+    */
   function reset() {
     setState(prev => createPlayerState())    
   }
@@ -171,9 +175,9 @@ useEffect(() => {
     playLast,
     playNext,
     playPrev,
-    showMoves,
-    hideMoves,
-    toggleShowMoves,
+    //showMoves,
+    //hideMoves,
+    //toggleShowMoves: toggleMovesVisible,
   };
 }
 
@@ -183,7 +187,7 @@ export const createPlayerState = (
   partial?: Partial<KifPlayerState>
 ): KifPlayerState => ({
   kifData: createKifData(),
-  showMoves: false,
+  //isMovesVisible: false,
   currentEntryId: null,
   ...partial,
 });

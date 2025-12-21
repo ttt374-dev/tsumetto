@@ -19,7 +19,7 @@ import { formatAccuracy } from '../utils';
 import type { KifLibraryEntry } from '../types/kifLibrary';
 
 export default function PlayerScreen() {
-    const { kifLibrary, kifPlayer, kifLearning } = useKif()
+    const { kifLibrary, kifPlayer, kifLearning, kifPlayerUI } = useKif()
     const { playNext, playPrev, playFirst, playLast, playByEntryId } = kifPlayer
 
     const sortedLibrary = kifLibrary.sortedLibrary
@@ -28,6 +28,7 @@ export default function PlayerScreen() {
     const kifData = kifPlayerState.kifData
     //const curIndex = kifPlayerState.currentLibraryIndex    
 
+    const { isMovesVisible, toggleMovesVisible } = kifPlayerUI
     const { getRecord, markSolved, markFailed } = kifLearning
     const curEntryId = kifPlayerState.currentEntryId
     //const curIndex = sortedLibrary.findIndex(e => e.id === curEntryId);
@@ -46,8 +47,8 @@ export default function PlayerScreen() {
         onSwipedRight: () => {// 右スワイプ → 前の棋譜へ
             playPrev(sortedLibrary)
         },
-        onSwipedUp: () => { kifPlayer.hideMoves() },
-        onSwipedDown: () => { kifPlayer.showMoves() },
+        onSwipedUp: () => { kifPlayerUI.hideMoves() },
+        onSwipedDown: () => { kifPlayerUI.showMoves() },
 
         trackMouse: true, // PCでもマウスでスワイプ可能
         preventScrollOnSwipe: true,
@@ -147,9 +148,10 @@ export default function PlayerScreen() {
                         
                     }
                     {/* 解答表示 */}
-                    < button onClick={kifPlayer.toggleShowMoves}
+                    < button onClick={toggleMovesVisible}
                         disabled={kifData.moves.length === 0} >
-                        {kifPlayerState.showMoves ? "解答を隠す" : "解答を表示"}
+                        {isMovesVisible ? "解答を隠す" : "解答を表示"}
+                        
                     </button >
                     <IconButton
                         disabled={!curEntryId}
@@ -174,7 +176,7 @@ export default function PlayerScreen() {
                     <div>
                         
                         {
-                            kifPlayerState.showMoves &&
+                            isMovesVisible &&
                             kifData.moves.map((m, i) => (
                                 <div key={i} style={{ padding: "2px 0" }}>
                                     {i + 1}: {m.isBlack ? '▲' : '△'} {m.moveText} ({m.from})
@@ -183,13 +185,7 @@ export default function PlayerScreen() {
                         }
                     </div>
 
-{ /* 
-                    <MovesView
-                        moves={kifData.moves}
-                        visible={kifPlayerState.showMoves}
-                        onToggleVisible={kifPlayer.toggleShowMoves}
-                    />
-*/ }
+
                 </Box>
             </>
         </AppLayout>

@@ -10,9 +10,9 @@ import { KifProvider } from './providers/KifProvider';
 
 
 // ステータスバーをオーバーレイにしない
-StatusBar.setOverlaysWebView({ overlay: false });
+//StatusBar.setOverlaysWebView({ overlay: false });
 // ステータスバーの色を変更
-StatusBar.setStyle({ style: Style.Dark });
+//StatusBar.setStyle({ style: Style.Dark });
 
 export default function App() {
   /*

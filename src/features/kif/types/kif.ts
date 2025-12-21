@@ -36,7 +36,7 @@ export type KifPlayerState = {
   //playMode: "single" | "seq" | "random";
   //source?: string;
 
-  showMoves: boolean;
+  //isMovesVisible: boolean;
   currentEntryId: string | null;
   //currentLibraryIndex: number | null
 };
