@@ -5,6 +5,8 @@ import { useNavigate, } from "react-router-dom";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CloseIcon from '@mui/icons-material/Close'
 import EditIcon from '@mui/icons-material/Edit'
+import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
+import MenuBookIcon from '@mui/icons-material/MenuBook';
 
 import BoardView from '../components/BoardView/BoardView'
 import SelectLibraryEntry from '../components/SelectLibraryEntry';
@@ -88,7 +90,16 @@ export default function PlayerScreen() {
                     </Typography>
                 </>}
             footer={
-                <button onClick={handleNavToLibrary}>ライブラリ管理</button>
+                <>
+
+                    <IconButton onClick={handleOpenEditDialog} disabled={!curEntryId}>
+                        <EditIcon />
+                    </IconButton>
+
+                    <IconButton onClick={handleNavToLibrary}>
+                        <LibraryBooksIcon />
+                    </IconButton>
+                </>
             }
         >
             <>
@@ -106,11 +117,7 @@ export default function PlayerScreen() {
                             currentEntryId={curEntryId}
                             library={sortedLibrary} onSelect={(id) => kifPlayer.playByEntryId(id)} />
                     }
-                    {curEntryId &&
-                        <IconButton onClick={handleOpenEditDialog}>
-                            <EditIcon />
-                        </IconButton>
-                    }
+                    
                 </Box>
 
                 <Box {...swipeHandlers} sx={{
