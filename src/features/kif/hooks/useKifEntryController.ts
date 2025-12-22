@@ -27,11 +27,16 @@ export function useKifEntryController(){
         // ライブラリからエントリーリストの読み込み
         persistApi.load()
             .then(store.setLibrary)
-            .catch(() => store.setLibrary([]))
-        store.state.library.length > 0 &&
-            setCurrentEntryId(store.state.library[0].id)
+            .catch(() => store.setLibrary([]))        
             
     }, [])
+
+    useEffect(() => {
+        if (store.state.library.length > 0 && !currentEntryId) {
+            setCurrentEntryId(store.state.library[0].id);
+        }
+    }, [store.state.library, currentEntryId]);
+
 
     // ナビゲーター
     const navigateTo = (dest: string) => {
