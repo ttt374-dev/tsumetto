@@ -18,22 +18,32 @@ import { KifEntryEditDialog } from "../dialogs/KifEntryEditDialog";
 import { formatAccuracy } from '../utils';
 import type { KifEntry } from '../types/kifEntity';
 import { createBoard, createPlayerState } from '../hooks/useKifPlayerOrig';
-import { useKifEntityController } from '../hooks/useKifEntityController';
+import { useKifEntryController } from '../hooks/useKifEntryController';
 import type { Move } from '../types/'
 
 
 export default function PlayerScreen() {
     //const { kifLibrary, kifPlayer, kifLearning, kifPlayerUI } = useKif()
-
+    const { kifEntryController } = useKif()
     const { 
         currentEntry,
         setCurrentEntryId,
         sortedEntries,
-     } = useKifEntityController()
+     } = kifEntryController
+    const navigate = useNavigate()
     const kifData = currentEntry?.kifData ?? createKifData()
     //////////
     return (
-        <AppLayout header={kifData.title}>
+        <AppLayout
+            header={`${kifData.title} - ${currentEntry?.id}`}
+            footer={
+                <>
+                    <IconButton onClick={() => navigate("/library")}>
+                        <LibraryBooksIcon />
+                    </IconButton>
+                </>
+            }
+        >
             <>
                 <Box sx={{ display: "flex", flexDirection: "row" }}>
                     <SelectLibraryEntry

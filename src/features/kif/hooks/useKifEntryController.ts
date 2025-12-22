@@ -1,15 +1,15 @@
 import { useEffect, useState, useMemo } from 'react'
 import { v4 as uuidv4 } from "uuid";
 
-import { createBoard } from '../types/'
-import type { KifEntry, Move } from '../types/'
+import { createBoard } from '../types'
+import type { KifEntry, Move } from '../types'
 import { createKifData } from './useKifPlayerOrig';
 import { useKifLibraryStore } from "./useKifLibraryStore";
 import { useKifLibraryPersist } from "./useLibraryPersist";
 import { Store } from '@mui/icons-material';
-import { createEntity } from '../types/';
+import { createEntity } from '../types';
 
-export function useKifEntityController(){
+export function useKifEntryController(){
     const [ currentEntityId, setCurrentEntryId ] = useState<string | null>(null)
     //const [ sortedEntries, setSortedEntries] = useState<KifEntry[]>([])
 
@@ -31,7 +31,10 @@ export function useKifEntityController(){
             
     }, [])
 
-
+    // ライブラリで entry が変更されたとき
+    useEffect(()=>{
+        
+    }, [])
 
 
     const currentEntry = useMemo(() => {
