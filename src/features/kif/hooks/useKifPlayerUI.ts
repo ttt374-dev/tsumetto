@@ -1,7 +1,8 @@
 import { useState } from "react";
 
 export function useKifPlayerUI() {
-  const [isMovesVisible, setIsMovesVisible] = useState<boolean>(false);
+  const [isMovesVisible, setIsMovesVisible] = useState(false);
+  const [openEditDialog, setOpenEditDialog] = useState(false)
 
 
     function showMoves(){
@@ -21,5 +22,8 @@ export function useKifPlayerUI() {
     isMovesVisible,
     //setIsMovesVisible,
     toggleMovesVisible,
+
+    openEditDialog,
+    setOpenEditDialog,
   };
 }

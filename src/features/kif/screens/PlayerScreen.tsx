@@ -24,23 +24,33 @@ import type { Move } from '../types/'
 
 export default function PlayerScreen() {
     //const { kifLibrary, kifPlayer, kifLearning, kifPlayerUI } = useKif()
-    const { kifEntryController } = useKif()
+    const { kifEntryController, kifPlayerUI } = useKif()
     const { 
         currentEntry,
         currentEntryId,
         setCurrentEntryId,
         sortedEntries,
-
-        navigateTo
+        
+        navigateTo,
+        updateTitle,
      } = kifEntryController
+     const {
+        isMovesVisible, toggleMovesVisible,
+        openEditDialog, setOpenEditDialog
+     } = kifPlayerUI
+
     const navigate = useNavigate()
     const kifData = currentEntry?.kifData ?? createKifData()
     //////////
     return (
         <AppLayout
-            header={`${kifData.title} - ${currentEntry?.id} (${currentEntryId})`}
+            header={`${kifData.title} } (${currentEntryId?.slice(0, 3)})`}
             footer={
                 <>
+                
+                    <IconButton onClick={() => setOpenEditDialog(true)} disabled={!currentEntryId}>
+                        <EditIcon />
+                    </IconButton>
                     <IconButton onClick={() => navigate("/library")}>
                         <LibraryBooksIcon />
                     </IconButton>
@@ -50,7 +60,7 @@ export default function PlayerScreen() {
             <>
                 <Box>
                     <SelectLibraryEntry
-                        currentEntryId={currentEntry?.id ?? null}
+                        currentEntryId={currentEntryId}
                         entities={sortedEntries}
                         onSelect={(id) => {
                             setCurrentEntryId(id)
@@ -68,7 +78,25 @@ export default function PlayerScreen() {
                     
 
                 </Box>
-                <MovesView moves={kifData.moves} />
+                {/* 解答表示 */}
+                < button onClick={toggleMovesVisible}
+                    disabled={kifData.moves.length === 0} >
+                    {isMovesVisible ? "解答を隠す" : "解答を表示"}
+
+                </button >
+                { isMovesVisible &&
+                   <MovesView moves={kifData.moves} />}
+
+                { /* ダイアログ　*/ }
+                { currentEntry &&
+                <KifEntryEditDialog
+                    open={openEditDialog}
+                    onUpdateTitle={(title: string) => updateTitle(currentEntry.id, title)}
+                    onConfirm={() => {}}
+                    onClose={() => setOpenEditDialog(false)}
+                    onDelete={() => alert("delete")} entry={currentEntry} />
+                }
+
             </>
         </AppLayout>
     )

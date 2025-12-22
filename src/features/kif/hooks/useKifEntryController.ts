@@ -20,7 +20,8 @@ export function useKifEntryController(){
     const persistApi = useKifLibraryPersist()
 
     // entitry
-    const sortedEntries = store.state.library
+    const entries = store.state.library
+    const sortedEntries = entries
 
     // 初期ロード
     useEffect(()=>{        
@@ -30,7 +31,6 @@ export function useKifEntryController(){
             .catch(() => store.setLibrary([]))        
             
     }, [])
-
     useEffect(() => {
         if (store.state.library.length > 0 && !currentEntryId) {
             setCurrentEntryId(store.state.library[0].id);
@@ -64,6 +64,27 @@ export function useKifEntryController(){
                 break;
         }
     }
+    // エントリ更新
+    const updateTitle = async (entryId: string, newTitle: string) => {
+        // 重複チェック（任意）
+        const existingTitles = new Set(entries.map(e => e.kifData.title));
+        if (existingTitles.has(newTitle)) {
+            throw new Error("タイトルが重複しています");
+        }
+
+        const nextEntries = entries.map(e =>
+            e.id === entryId
+                ? { ...e, kifData: { ...e.kifData, title: newTitle } }
+                : e
+        );
+
+        await persist(nextEntries); 
+
+    };
+    const persist = async (next: KifEntry[]) => {
+        await persistApi.save(next)
+        store.setLibrary(next)
+    }
 
 
     const currentEntry = useMemo(() => {
@@ -85,6 +106,8 @@ export function useKifEntryController(){
         sortedEntries,   
 
         navigateTo,
+
+        updateTitle,
         //selectEntry,
         //selectNextEntry,
         //selectPrevEntry,

@@ -2,14 +2,12 @@ import { useNavigate } from "react-router-dom";
 import { List, ListItem, ListItemIcon, ListItemText, Checkbox, Typography } from "@mui/material";
 
 import { AppLayout } from "../../../shared/components/AppLayout/AppLayout";
-import { useKifEntryController } from "../hooks/useKifEntryController";
 import { useKif } from '../hooks/useKif'
 
 
 export default function LibraryScreen() {
     const { kifEntryController } = useKif()
         const { 
-            currentEntry,
             setCurrentEntryId,
             sortedEntries,
          } = kifEntryController
@@ -23,6 +21,7 @@ export default function LibraryScreen() {
             <List>
                 {sortedEntries.map((entry, i) => (
                     <ListItem
+                        key={entry.id}
                         onClick={() => {
                             setCurrentEntryId(entry.id)
                             navigate("/player")
@@ -34,8 +33,6 @@ export default function LibraryScreen() {
                         </ListItemText>
                     </ListItem>
                 ))}
-
-
             </List>
         </AppLayout>
     )

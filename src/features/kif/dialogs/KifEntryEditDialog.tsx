@@ -8,13 +8,15 @@ import CloseIcon from '@mui/icons-material/Close'
 
 import EditIcon from '@mui/icons-material/Edit';
 
-import { useKif } from '../hooks/useKif'
+//import { useKif } from '../hooks/useKif'
 import { useNavigate } from "react-router-dom"
 import type { KifEntry } from "../types/kifEntity";
 
 type Props = {
   open: boolean
-  entryId: string | null
+  //entryId: string | null
+  entry: KifEntry,
+  onUpdateTitle: (title: string) => void;
   onConfirm: (entry: KifEntry) => void;
   onClose: () => void
   onDelete: () => void
@@ -22,17 +24,19 @@ type Props = {
 
 export function KifEntryEditDialog({
   open,
-  entryId,
+  //entryId,
+  entry,
+  onUpdateTitle,
   onConfirm,
   onClose,
   onDelete,
 }: Props) {
-  const { kifLibrary, kifLearning } = useKif()
-  const { findById, updateTitle, deleteEntry } = kifLibrary
-  const { getRecord } = kifLearning
+  //const { kifLibrary, kifLearning } = useKif()
+  //const { findById, updateTitle, deleteEntry } = kifLibrary
+  //const { getRecord } = kifLearning
 
-  const entry = entryId ? findById(entryId) : null
-  const record = entryId ? getRecord(entryId) : null
+  //const entry = entryId ? findById(entryId) : null
+  //const record = entryId ? getRecord(entryId) : null
   const [title, setTitle] = useState("")
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(title);
@@ -41,7 +45,7 @@ export function KifEntryEditDialog({
   // entry 切り替え時に title を同期
   useEffect(() => {
     setTitle(entry?.kifData.title ?? "")
-  }, [entryId, entry])
+  }, [entry])
   
   const inputRef = useRef<HTMLInputElement | null>(null)
   useEffect(() => {
@@ -73,11 +77,11 @@ export function KifEntryEditDialog({
   }
   const handleResetAccuracy = () => {
     if (entry && window.confirm("本当に正答データをリセットしますか？")){
-        kifLearning.reset(entry.id)
+        //kifLearning.reset(entry.id)
     }
   }
   const handleSetTitle = () => {
-    entryId && updateTitle(entryId, title.trim())
+    entry && onUpdateTitle(title.trim())
   }
     const handleEdit = () => {
     setDraft(title); // 現在のタイトルで初期化
@@ -127,7 +131,7 @@ export function KifEntryEditDialog({
         </Box>
         { /* 正答誤答*/ }
         <div>
-          { record && `正答：${record.solvedCount}, 誤答：${record.failedCount}` }
+         {/*  { record && `正答：${record.solvedCount}, 誤答：${record.failedCount}` }*/}
         
         <Button onClick= {handleResetAccuracy}>
           リセット
