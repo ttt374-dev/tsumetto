@@ -3,13 +3,13 @@ import { List, ListItem, ListItemIcon, ListItemText, Checkbox, Typography } from
 
 import { AppLayout } from "../../../shared/components/AppLayout/AppLayout";
 import { useKif } from '../hooks/useKif'
-
+import MultipleFilesButton from '../../../shared/components/MultipleFilesButton';
 
 export default function LibraryScreen() {
     const { kifEntryController, kifNavigation } = useKif()
-        const { 
-            
+        const {             
             sortedEntries,
+            importFiles,
          } = kifEntryController
         const {
             setCurrentEntryId,
@@ -20,6 +20,16 @@ export default function LibraryScreen() {
     return (
         <AppLayout
             header={"Library"}
+            footer={
+                <MultipleFilesButton 
+                    label="棋譜ファイルを登録" 
+                    onFileSelected={
+                        async (files: File[]) => {
+                            importFiles(files)
+                        }
+                    }
+                />
+            }
         >
             <List>
                 {sortedEntries.map((entry, i) => (
