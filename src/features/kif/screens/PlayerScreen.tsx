@@ -6,7 +6,6 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CloseIcon from '@mui/icons-material/Close'
 import EditIcon from '@mui/icons-material/Edit'
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
-import MenuBookIcon from '@mui/icons-material/MenuBook';
 
 import BoardView from '../components/BoardView/BoardView'
 import SelectLibraryEntry from '../components/SelectLibraryEntry';
@@ -23,17 +22,19 @@ import type { Move } from '../types/'
 
 
 export default function PlayerScreen() {
-    //const { kifLibrary, kifPlayer, kifLearning, kifPlayerUI } = useKif()
-    const { kifEntryController, kifPlayerUI } = useKif()
-    const { 
+    const { kifEntryController, kifPlayerUI, kifNavigation } = useKif()
+    const {         
+        sortedEntries,       
+        
+        updateTitle,
+        deleteEntry,
+     } = kifEntryController
+     const {
         currentEntry,
         currentEntryId,
         setCurrentEntryId,
-        sortedEntries,
-        
         navigateTo,
-        updateTitle,
-     } = kifEntryController
+     } = kifNavigation
      const {
         isMovesVisible, toggleMovesVisible,
         openEditDialog, setOpenEditDialog
@@ -46,8 +47,7 @@ export default function PlayerScreen() {
         <AppLayout
             header={`${kifData.title} } (${currentEntryId?.slice(0, 3)})`}
             footer={
-                <>
-                
+                <>                
                     <IconButton onClick={() => setOpenEditDialog(true)} disabled={!currentEntryId}>
                         <EditIcon />
                     </IconButton>
@@ -58,6 +58,7 @@ export default function PlayerScreen() {
             }
         >
             <>
+                { /* エントリーリスト */}
                 <Box>
                     <SelectLibraryEntry
                         currentEntryId={currentEntryId}
@@ -67,14 +68,16 @@ export default function PlayerScreen() {
                         }}
                     />
                 </Box>
+                { /* 盤面表示 */}
                 <BoardView
                     board={kifData.board}
                     hands={kifData.hands}
                 />
                 <Box>
-                    
-                    <button onClick={() => navigateTo("prev")} disabled={sortedEntries.length == 0}>&lt;</button>
-                    <button onClick={() => navigateTo("next")} disabled={sortedEntries.length == 0}>&gt;</button>
+                    <button onClick={() => navigateTo("first", sortedEntries)} disabled={sortedEntries.length == 0}>&lt;&lt;</button>
+                    <button onClick={() => navigateTo("prev", sortedEntries)} disabled={sortedEntries.length == 0}>&lt;</button>
+                    <button onClick={() => navigateTo("next", sortedEntries)} disabled={sortedEntries.length == 0}>&gt;</button>
+                    <button onClick={() => navigateTo("last", sortedEntries)} disabled={sortedEntries.length == 0}>&gt;&gt;</button>
                     
 
                 </Box>
@@ -89,12 +92,14 @@ export default function PlayerScreen() {
 
                 { /* ダイアログ　*/ }
                 { currentEntry &&
-                <KifEntryEditDialog
-                    open={openEditDialog}
-                    onUpdateTitle={(title: string) => updateTitle(currentEntry.id, title)}
-                    onConfirm={() => {}}
-                    onClose={() => setOpenEditDialog(false)}
-                    onDelete={() => alert("delete")} entry={currentEntry} />
+                    <KifEntryEditDialog
+                        open={openEditDialog}
+                        entry={currentEntry}
+                        onUpdateTitle={(title: string) => updateTitle(currentEntry.id, title)}
+                        onConfirm={() => { }}
+                        onClose={() => setOpenEditDialog(false)}
+                        onDelete={() => deleteEntry(currentEntry.id)}
+                    />
                 }
 
             </>

@@ -6,11 +6,14 @@ import { useKif } from '../hooks/useKif'
 
 
 export default function LibraryScreen() {
-    const { kifEntryController } = useKif()
+    const { kifEntryController, kifNavigation } = useKif()
         const { 
-            setCurrentEntryId,
+            
             sortedEntries,
          } = kifEntryController
+        const {
+            setCurrentEntryId,
+        } = kifNavigation
     //const { sortedEntries, setCurrentEntryId } = useKifEntryController()
     console.log("sorted entries on library", sortedEntries)
     const navigate = useNavigate()

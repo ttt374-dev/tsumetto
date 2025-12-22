@@ -12,12 +12,12 @@ export const KifContext = createContext<KifContextValue | null>(null);
 
 // Provider 関数は型注釈なしで安全
 export const KifProvider = ({ children }: { children: ReactNode }) => {
-  const kifLibrary = useKifLibrary();
-  const kifNavigation = useKifNavigation()
+  const kifLibrary = useKifLibrary();  
   const kifPlayer = useKifPlayer(kifLibrary.library);
   const kifLearning = useKifLearning()
   const kifPlayerUI = useKifPlayerUI()
   const kifEntryController = useKifEntryController()
+  const kifNavigation = useKifNavigation(kifEntryController.sortedEntries)
   
   return (    
     <KifContext.Provider value={{ 
