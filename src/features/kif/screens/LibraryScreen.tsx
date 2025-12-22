@@ -13,15 +13,17 @@ import { useKif } from '../hooks/useKif'
 import MultipleFilesButton from '../../../shared/components/MultipleFilesButton';
 
 export default function LibraryScreen() {
-    const { kifEntryController, kifNavigation, kifLibrarySort } = useKif()
+    const { kifEntryController, kifNavigation,         
+        kifLibrarySort, sortedEntries } = useKif()
     const {
-        entries,
+        //entries,
         importFiles,
     } = kifEntryController
-
+    
     const {
         setCurrentEntryId,
     } = kifNavigation
+    
     const { sort, setSortOrder, setSortKey } = kifLibrarySort
     //const { sortedEntries, setCurrentEntryId } = useKifEntryController()
     //console.log("sorted entries on library", entries)
@@ -47,7 +49,10 @@ export default function LibraryScreen() {
                 <option key="accuracy" value="accuracy">正答率</option>
             </select>
 
-            <IconButton onClick={() => setSortOrder(sort.order == "asc" ? "desc" : "asc")}>
+            <IconButton onClick={() => {
+                console.log("toggle sort order")
+                setSortOrder(sort.order == "asc" ? "desc" : "asc")}
+                }>
                 {sort.order === 'asc'
                     ? <ArrowUpwardIcon />
                     : <ArrowDownwardIcon />
@@ -56,7 +61,7 @@ export default function LibraryScreen() {
             </Box>
             { /*  エントリーリスト */ }
             <List>
-                {entries.map((entry, i) => (
+                {sortedEntries.map((entry, i) => (
                     <ListItem
                         key={entry.id}
                         onClick={() => {

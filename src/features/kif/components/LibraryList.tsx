@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import { List, ListItem, ListItemIcon, ListItemText, Checkbox, Typography } from "@mui/material";
-import type { KifEntry, KifEntryWithLearning } from '../types/kifEntity';
+import type { KifEntry, KifEntryWithLearning } from '../types/kifEntry';
 import { formatAccuracy } from "../utils";
 import { Check } from "@mui/icons-material";
 

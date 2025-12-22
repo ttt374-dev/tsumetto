@@ -1,6 +1,6 @@
 // hooks/useKifLibrary.ts
 import { Filesystem, Directory, Encoding } from "@capacitor/filesystem";
-import { type KifEntry } from "../types/kifEntity";
+import { type KifEntry } from "../types/kifEntry";
 
 const LIB_FILE = "kifLibrary.json";
 

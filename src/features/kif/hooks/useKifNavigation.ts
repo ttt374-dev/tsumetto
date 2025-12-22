@@ -18,7 +18,7 @@ export function useKifNavigation(sortedEntries: KifEntry[]) {
     
 
   // ナビゲーター
-      const navigateTo = (dest: string, sortedEntries: KifEntry[]) => {
+      const navigateTo = (dest: string) => {
           if (!currentEntryId) return;
           const currentIndex = sortedEntries.findIndex(e => e.id === currentEntryId)        
           console.log("current index", currentIndex)

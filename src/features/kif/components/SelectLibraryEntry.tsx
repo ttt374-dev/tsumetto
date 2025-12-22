@@ -1,6 +1,6 @@
 // components/SelectLibraryEntry.tsx
 import React from "react";
-import { type KifEntry } from "../types/kifEntity";
+import { type KifEntry } from "../types/kifEntry";
 
 interface SelectLibraryEntryProps {
     //currentIndex: number | null;

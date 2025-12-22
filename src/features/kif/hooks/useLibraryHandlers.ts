@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { KifEntry } from "../types/kifEntity";
+import type { KifEntry } from "../types/kifEntry";
 
 export function useLibraryHandlers(
     library: KifEntry[], 

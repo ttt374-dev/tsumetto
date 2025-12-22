@@ -1,4 +1,4 @@
-import type { KifEntry } from "./kifEntity"
+import type { KifEntry } from "./kifEntry"
 import type { KifLearningRecord } from "./kifLearning"
 
 export type KifBackupV1 = {

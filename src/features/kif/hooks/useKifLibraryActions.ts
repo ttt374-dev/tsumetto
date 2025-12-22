@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 import { parseKif } from "../utils/kifParser";
-import { type KifEntry, type KifLibraryState } from "../types/kifEntity";
+import { type KifEntry, type KifLibraryState } from "../types/kifEntry";
 
 
 export function useKifLibraryActions(

@@ -10,7 +10,7 @@ import EditIcon from '@mui/icons-material/Edit';
 
 //import { useKif } from '../hooks/useKif'
 import { useNavigate } from "react-router-dom"
-import type { KifEntry } from "../types/kifEntity";
+import type { KifEntry } from "../types/kifEntry";
 
 type Props = {
   open: boolean

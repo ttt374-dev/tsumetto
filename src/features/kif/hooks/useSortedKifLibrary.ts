@@ -1,6 +1,6 @@
 // hooks/useKifLibrary.ts
 import { useState, useEffect, useMemo } from "react";
-import type { SortKey, SortOrder, KifEntry,  } from "../types/kifEntity";
+import type { SortKey, SortOrder, KifEntry,  } from "../types/kifEntry";
 import type { KifLearningRecord } from '../types/kifLearning'
 
 

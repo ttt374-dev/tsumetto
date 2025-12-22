@@ -40,6 +40,8 @@ export function useKifSortedEntries(
       return 0
     })
 
+    console.log("sorted:", sorted)
+
     return sorted
   }, [entities, sort.key, sort.order])
 }

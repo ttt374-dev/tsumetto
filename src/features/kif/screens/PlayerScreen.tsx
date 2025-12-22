@@ -15,16 +15,16 @@ import { useKif } from '../hooks/useKif'
 import { createKifData, type KifLearningRecord } from '../types'
 import { KifEntryEditDialog } from "../dialogs/KifEntryEditDialog";
 import { formatAccuracy } from '../utils';
-import type { KifEntry } from '../types/kifEntity';
+import type { KifEntry } from '../types/kifEntry';
 import { createBoard, createPlayerState } from '../hooks/useKifPlayerOrig';
 import { useKifEntryController } from '../hooks/useKifEntryController';
 import type { Move } from '../types/'
 
 
 export default function PlayerScreen() {
-    const { kifEntryController, kifPlayerUI, kifNavigation } = useKif()
+    const { kifEntryController, kifPlayerUI, kifNavigation, sortedEntries } = useKif()
     const {         
-        entries,       
+        //entries,       
         
         updateTitle,
         deleteEntry,
@@ -62,7 +62,7 @@ export default function PlayerScreen() {
                 <Box>
                     <SelectLibraryEntry
                         currentEntryId={currentEntryId}
-                        entities={entries}
+                        entities={sortedEntries}
                         onSelect={(id) => {
                             setCurrentEntryId(id)
                         }}
@@ -74,10 +74,10 @@ export default function PlayerScreen() {
                     hands={kifData.hands}
                 />
                 <Box>
-                    <button onClick={() => navigateTo("first", entries)} disabled={entries.length == 0}>&lt;&lt;</button>
-                    <button onClick={() => navigateTo("prev", entries)} disabled={entries.length == 0}>&lt;</button>
-                    <button onClick={() => navigateTo("next", entries)} disabled={entries.length == 0}>&gt;</button>
-                    <button onClick={() => navigateTo("last", entries)} disabled={entries.length == 0}>&gt;&gt;</button>
+                    <button onClick={() => navigateTo("first")} disabled={sortedEntries.length == 0}>&lt;&lt;</button>
+                    <button onClick={() => navigateTo("prev")} disabled={sortedEntries.length == 0}>&lt;</button>
+                    <button onClick={() => navigateTo("next")} disabled={sortedEntries.length == 0}>&gt;</button>
+                    <button onClick={() => navigateTo("last")} disabled={sortedEntries.length == 0}>&gt;&gt;</button>
                     
 
                 </Box>

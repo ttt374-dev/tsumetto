@@ -1,6 +1,6 @@
 export * from './kifData'
 export * from './kifState'
-export * from './kifEntity'
+export * from './kifEntry'
 export * from './kifLearning'
 export * from './kifContextValue'
 export * from './kifBackup'

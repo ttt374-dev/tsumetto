@@ -1,5 +1,5 @@
 import type { Board, Hand, KifData } from './kifData'
-import type { KifEntry } from './kifEntity';
+import type { KifEntry } from './kifEntry';
 import { createBoard, createKifData } from './kifData';
 
 
