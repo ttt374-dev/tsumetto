@@ -1,6 +1,10 @@
-import type { KifData } from './kifData'
+import type { Board, Hand, KifData } from './kifData'
+import type { KifEntry } from './kifEntity';
+import { createBoard, createKifData } from './kifData';
 
-export type KifPlayerState = {
+
+// player
+export type KifPlayerStateOrig = {
   kifData: KifData;
   //title: string,
   //mode: "temp" | "library";
@@ -12,3 +16,37 @@ export type KifPlayerState = {
   //currentLibraryIndex: number | null
 };
 
+export type KifPlayerState = {
+  board: Board,
+  hands: Hand,
+  moves: [],
+  moveIndex: number | null,
+  currentEntryId: string | null;
+
+  kifData: KifData;  
+}
+
+///////////////////////////////////
+// hooks/usePlayerState.ts
+export const createPlayerState = (
+  partial?: Partial<KifPlayerState>
+): KifPlayerState => ({
+  kifData: createKifData(),
+  //isMovesVisible: false,
+  currentEntryId: null,
+  board: createBoard(),
+  hands: {white: "", black: ""},
+  moves: [],
+  moveIndex: null,
+  ...partial,
+});
+// library 
+
+export type SortKey = 'createdAt' | 'title' | 'moveCount' | 'accuracy';
+export type SortOrder = 'asc' | 'desc';
+
+export type KifLibraryState = {
+  library: KifEntry[];
+  sortKey: SortKey;
+  sortOrder: SortOrder;
+}

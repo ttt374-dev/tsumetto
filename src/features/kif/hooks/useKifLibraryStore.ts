@@ -3,8 +3,8 @@ import { useState, useEffect, useMemo } from "react";
 import { Filesystem, Directory, Encoding } from "@capacitor/filesystem";
 import { v4 as uuidv4 } from "uuid";
 import { parseKif } from "../utils/kifParser";
-import { type KifLibraryEntry, type KifLibraryState } from "../types/kifLibrary";
-import type { SortKey, SortOrder } from '../types/kifLibrary'
+import { type KifEntry, type KifLibraryState } from "../types/";
+import type { SortKey, SortOrder } from '../types/'
 import { useSortedKifLibrary } from "./useSortedKifLibrary";
 
 
@@ -15,7 +15,7 @@ export function useKifLibraryStore() {
     sortOrder: "asc",
   })
 
-  const setLibrary = (library: KifLibraryEntry[]) =>
+  const setLibrary = (library: KifEntry[]) =>
     setState(prev => ({ ...prev, library }))
 
   const setSortKey = (sortKey: SortKey) =>

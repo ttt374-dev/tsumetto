@@ -1,12 +1,12 @@
 import { useState } from "react";
-import type { KifLibraryEntry } from "../types/kifLibrary";
+import type { KifEntry } from "../types/kifEntity";
 
 export function useLibraryHandlers(
-    library: KifLibraryEntry[], 
-    importFile: (file: File) => Promise<KifLibraryEntry>,
-    deleteEntries: (entries: KifLibraryEntry[]) => void,
+    library: KifEntry[], 
+    importFile: (file: File) => Promise<KifEntry>,
+    deleteEntries: (entries: KifEntry[]) => void,
     
-    playLast: (entries: KifLibraryEntry[]) => void,
+    playLast: (entries: KifEntry[]) => void,
     playByEntryId: (id: string) => void,
 
     navigate: (path: string) => void,
@@ -17,7 +17,7 @@ export function useLibraryHandlers(
     const importFileAndPlay = async (file: File) => {
         try {
             const newEntry = await importFile(file);
-            const index = library.findIndex((e: KifLibraryEntry) => e.id === newEntry.id);
+            const index = library.findIndex((e: KifEntry) => e.id === newEntry.id);
             if (index !== -1) {
                 playLast(library);
                 navigate("/player");
@@ -27,7 +27,7 @@ export function useLibraryHandlers(
         }
     };
 
-    const selectEntry = (entry: KifLibraryEntry) => {
+    const selectEntry = (entry: KifEntry) => {
         console.log("select entry", entry.id)
         playByEntryId(entry.id);
         //navigate("/player");
@@ -42,7 +42,7 @@ export function useLibraryHandlers(
         });
     };
 
-    const selectAll = () => setCheckedIds(new Set(library.map((e: KifLibraryEntry) => e.id)));
+    const selectAll = () => setCheckedIds(new Set(library.map((e: KifEntry) => e.id)));
     const clearAll = () => setCheckedIds(new Set());
 
     const deleteSelected = async () => {
@@ -50,7 +50,7 @@ export function useLibraryHandlers(
         const ok = window.confirm(`選択された ${checkedIds.size} 件を削除しますか？`);
         if (!ok) return;
 
-        const entriesToDelete = library.filter((e: KifLibraryEntry) => checkedIds.has(e.id));
+        const entriesToDelete = library.filter((e: KifEntry) => checkedIds.has(e.id));
         console.log("delete selected", entriesToDelete)
         if (entriesToDelete.length === 0) {
             clearAll();

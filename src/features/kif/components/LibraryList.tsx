@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import { List, ListItem, ListItemIcon, ListItemText, Checkbox, Typography } from "@mui/material";
-import type { KifLibraryEntry, KifLibraryEntryWithLearning } from '../types/kifLibrary';
+import type { KifEntry, KifEntryWithLearning } from '../types/kifEntity';
 import { formatAccuracy } from "../utils";
 import { Check } from "@mui/icons-material";
 
@@ -13,10 +13,10 @@ function LibraryList({
     toggleEditMode,
     clearAllCheckbox,
 }: {
-    library: KifLibraryEntryWithLearning[];
+    library: KifEntryWithLearning[];
     checkedIds: Set<string>;
     onCheckboxChange: (id: string) => void;
-    onSelect: (entry: KifLibraryEntry) => void;
+    onSelect: (entry: KifEntry) => void;
     editMode: boolean;
     toggleEditMode: () => void;
     clearAllCheckbox: () => void;

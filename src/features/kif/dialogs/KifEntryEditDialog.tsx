@@ -10,12 +10,12 @@ import EditIcon from '@mui/icons-material/Edit';
 
 import { useKif } from '../hooks/useKif'
 import { useNavigate } from "react-router-dom"
-import type { KifLibraryEntry } from "../types/kifLibrary";
+import type { KifEntry } from "../types/kifEntity";
 
 type Props = {
   open: boolean
   entryId: string | null
-  onConfirm: (entry: KifLibraryEntry) => void;
+  onConfirm: (entry: KifEntry) => void;
   onClose: () => void
   onDelete: () => void
 }

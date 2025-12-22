@@ -1,16 +1,16 @@
 import { useMemo } from "react"
 
-import type { KifLibraryEntry, KifLibraryEntryWithLearning } from '../types/kifLibrary'
+import type { KifEntry, KifEntryWithLearning } from '../types/kifEntity'
 import type { KifLearningRecord } from "../types/kifLearning"
-import type { SortKey, SortOrder } from '../types/kifLibrary'
+import type { SortKey, SortOrder } from '../types/kifEntity'
 
 export function useKifSortedLibraryWithLearning(
-  library: KifLibraryEntry[],
+  library: KifEntry[],
   records: Record<string, KifLearningRecord>,
   sortKey: SortKey,
   sortOrder: SortOrder
 ) {
-  const viewEntries = useMemo<KifLibraryEntryWithLearning[]>(() => {
+  const viewEntries = useMemo<KifEntryWithLearning[]>(() => {
     return library.map(entry => {
       const r = records[entry.id]
       const solved = r?.solvedCount ?? 0
@@ -37,8 +37,8 @@ export function useKifSortedLibraryWithLearning(
 }
 
 export function compareKifLibraryWithLearning(
-  a: KifLibraryEntryWithLearning,
-  b: KifLibraryEntryWithLearning,
+  a: KifEntryWithLearning,
+  b: KifEntryWithLearning,
   sortKey: SortKey
 ) {
   switch (sortKey) {

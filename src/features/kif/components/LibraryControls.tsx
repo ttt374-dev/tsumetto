@@ -6,10 +6,10 @@ import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 
-import type { KifLibraryEntry, SortKey, SortOrder } from "../types/kifLibrary";
+import type { KifEntry, SortKey, SortOrder } from "../types/kifEntity";
 
 type LibraryControlsProps = {
-    library: KifLibraryEntry[];
+    library: KifEntry[];
     checkedIds: Set<string>;
     selectAllCheckbox: () => void;
     clearAllCheckbox: () => void;

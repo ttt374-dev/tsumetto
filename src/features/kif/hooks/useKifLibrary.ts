@@ -1,6 +1,6 @@
 // hooks/useKifLibrary.ts
 import { useEffect, } from "react";
-import type { KifLibraryEntry } from "../types/kifLibrary";
+import type { KifEntry } from "../types/kifEntity";
 import { useSortedKifLibrary } from "./useSortedKifLibrary";
 import { useKifLibraryStore } from "./useKifLibraryStore";
 import { useKifLibraryPersist } from "./useLibraryPersist";
@@ -10,7 +10,7 @@ export function useKifLibrary() {
   const store = useKifLibraryStore()
   const persistApi = useKifLibraryPersist()
   const library = store.state.library
-  
+
   const sortedLibrary = useSortedKifLibrary(library, store.state.sortKey, store.state.sortOrder)
   // 初期ロード
   useEffect(() => {
@@ -20,19 +20,20 @@ export function useKifLibrary() {
       .catch(() => store.setLibrary([]))
   }, [])
 
-  const persist = async (next: KifLibraryEntry[]) => {
+  const persist = async (next: KifEntry[]) => {
     await persistApi.save(next)
     store.setLibrary(next)
   }
 
   const findById = (id: string) => library.find((e) => e.id === id);
- const actions = useKifLibraryActions(
+
+  const actions = useKifLibraryActions(
     store.state.library,
     persist
   )
-  const replaceAll = async (entries: KifLibraryEntry[]) => {
+  const replaceAll = async (entries: KifEntry[]) => {
     console.log("library replaceAll", entries)
-    
+
     await persistApi.save(entries)
     store.setLibrary(entries)
   }
@@ -40,7 +41,7 @@ export function useKifLibrary() {
   return {
     ...store.state,
     sortedLibrary,
-    ...actions,    
+    ...actions,
 
     findById,
     setSortKey: store.setSortKey,

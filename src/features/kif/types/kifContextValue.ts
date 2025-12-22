@@ -1,5 +1,5 @@
 import type { useKifLibrary } from '../hooks/useKifLibrary'
-import type { useKifPlayer } from "../hooks/useKifPlayer";
+import type { useKifPlayer } from "../hooks/useKifPlayerOrig";
 import type { useKifLearning} from '../hooks/useKifLearning'
 import type { useKifNavigation } from '../hooks/useKifNavigation';
 import type { useKifPlayerUI} from '../hooks/useKifPlayerUI'

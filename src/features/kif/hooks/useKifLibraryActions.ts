@@ -1,18 +1,18 @@
 import { v4 as uuidv4 } from "uuid";
 import { parseKif } from "../utils/kifParser";
-import { type KifLibraryEntry, type KifLibraryState } from "../types/kifLibrary";
+import { type KifEntry, type KifLibraryState } from "../types/kifEntity";
 
 
 export function useKifLibraryActions(
-    library: KifLibraryEntry[],
-    persist: (next: KifLibraryEntry[]) => Promise<void>
+    library: KifEntry[],
+    persist: (next: KifEntry[]) => Promise<void>
 ) {
 
     // 単体ファイルをインポートして保存
     const importFile = async (
         file: File,
-        extraEntries: KifLibraryEntry[] = [] // importFiles から呼ぶ場合に追加分を渡す
-    ): Promise<KifLibraryEntry> => {
+        extraEntries: KifEntry[] = [] // importFiles から呼ぶ場合に追加分を渡す
+    ): Promise<KifEntry> => {
         const buf = await file.arrayBuffer();
         const text = new TextDecoder("shift_jis").decode(buf);
         const kifData = parseKif(text);
@@ -36,7 +36,7 @@ export function useKifLibraryActions(
         }
         kifData.title = newTitle;
 
-        const entry: KifLibraryEntry = {
+        const entry: KifEntry = {
             id: uuidv4(),
             kifData,
             createdAt: Date.now(),
@@ -48,8 +48,8 @@ export function useKifLibraryActions(
     };
 
     // 複数ファイルをまとめてインポート
-    const importFiles = async (files: File[]): Promise<KifLibraryEntry[]> => {
-        const results: KifLibraryEntry[] = [];
+    const importFiles = async (files: File[]): Promise<KifEntry[]> => {
+        const results: KifEntry[] = [];
         for (const file of files) {
             try {
                 const entry = await importFile(file, results);
@@ -76,7 +76,7 @@ export function useKifLibraryActions(
         await persist(nextLibrary);
     };
 
-    const deleteEntry = async (entry: KifLibraryEntry) => {
+    const deleteEntry = async (entry: KifEntry) => {
         try {
             const nextLibrary = library.filter((e) => e.id !== entry.id);
             await persist(nextLibrary);
@@ -86,7 +86,7 @@ export function useKifLibraryActions(
         }
     };
     
-    const deleteEntries = async (entries: KifLibraryEntry[]) => {
+    const deleteEntries = async (entries: KifEntry[]) => {
         try {
             if (entries.length === 0) return;
 

@@ -26,3 +26,24 @@ export type KifData = {
   title: string;
   source?: string;  
 }
+
+//////////////////
+// 初期化関数
+export const createBoard = (): Board =>
+  Array.from({ length: 9 }, () =>
+    Array.from({ length: 9 }, () => null)
+  );
+
+
+export function createKifData(
+  partial?: Partial<KifData>
+): KifData {
+  return {
+    board: createBoard(),
+    hands: { black: "", white: "" },
+    moves: [],
+    title: "",
+    //createdAt: Date.now(),
+    ...partial,
+  };
+}

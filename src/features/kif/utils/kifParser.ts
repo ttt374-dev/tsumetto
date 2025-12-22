@@ -1,6 +1,6 @@
 // parseKif.ts
 import type { KifData, Board, Hand, Move } from "../types/kif";
-import { createBoard } from "../hooks/useKifPlayer";
+import { createBoard } from "../hooks/useKifPlayerOrig";
 import { parseMoveLine } from "./kifParseMoveLine";
 
 

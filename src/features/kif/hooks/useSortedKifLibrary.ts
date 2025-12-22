@@ -1,11 +1,11 @@
 // hooks/useKifLibrary.ts
 import { useState, useEffect, useMemo } from "react";
-import type { SortKey, SortOrder, KifLibraryEntry,  } from "../types/kifLibrary";
+import type { SortKey, SortOrder, KifEntry,  } from "../types/kifEntity";
 import type { KifLearningRecord } from '../types/kifLearning'
 
 
 export function useSortedKifLibrary(
-  library: KifLibraryEntry[],
+  library: KifEntry[],
   sortKey: SortKey,
   sortOrder: "asc" | "desc"
 ) {

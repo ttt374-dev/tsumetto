@@ -13,7 +13,7 @@ export const KifContext = createContext<KifContextValue | null>(null);
 export const KifProvider = ({ children }: { children: ReactNode }) => {
   const kifLibrary = useKifLibrary();
   const kifNavigation = useKifNavigation()
-  const kifPlayer = useKifPlayer(kifLibrary.library, kifNavigation);
+  const kifPlayer = useKifPlayer(kifLibrary.library);
   const kifLearning = useKifLearning()
   const kifPlayerUI = useKifPlayerUI()
   
