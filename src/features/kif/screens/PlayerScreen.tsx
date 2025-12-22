@@ -27,15 +27,18 @@ export default function PlayerScreen() {
     const { kifEntryController } = useKif()
     const { 
         currentEntry,
+        currentEntryId,
         setCurrentEntryId,
         sortedEntries,
+
+        navigateTo
      } = kifEntryController
     const navigate = useNavigate()
     const kifData = currentEntry?.kifData ?? createKifData()
     //////////
     return (
         <AppLayout
-            header={`${kifData.title} - ${currentEntry?.id}`}
+            header={`${kifData.title} - ${currentEntry?.id} (${currentEntryId})`}
             footer={
                 <>
                     <IconButton onClick={() => navigate("/library")}>
@@ -45,7 +48,7 @@ export default function PlayerScreen() {
             }
         >
             <>
-                <Box sx={{ display: "flex", flexDirection: "row" }}>
+                <Box>
                     <SelectLibraryEntry
                         currentEntryId={currentEntry?.id ?? null}
                         entities={sortedEntries}
@@ -58,6 +61,13 @@ export default function PlayerScreen() {
                     board={kifData.board}
                     hands={kifData.hands}
                 />
+                <Box>
+                    
+                    <button onClick={() => navigateTo("prev")} disabled={sortedEntries.length == 0}>&lt;</button>
+                    <button onClick={() => navigateTo("next")} disabled={sortedEntries.length == 0}>&gt;</button>
+                    
+
+                </Box>
                 <MovesView moves={kifData.moves} />
             </>
         </AppLayout>
