@@ -6,7 +6,7 @@ import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 
-import type { KifEntry, SortKey, SortOrder } from "../types/kifEntity";
+import type { KifEntry, SortKey, SortOrder } from "../types";
 
 type LibraryControlsProps = {
     library: KifEntry[];

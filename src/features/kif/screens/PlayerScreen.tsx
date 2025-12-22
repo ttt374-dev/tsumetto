@@ -24,7 +24,7 @@ import type { Move } from '../types/'
 export default function PlayerScreen() {
     const { kifEntryController, kifPlayerUI, kifNavigation } = useKif()
     const {         
-        sortedEntries,       
+        entries,       
         
         updateTitle,
         deleteEntry,
@@ -62,7 +62,7 @@ export default function PlayerScreen() {
                 <Box>
                     <SelectLibraryEntry
                         currentEntryId={currentEntryId}
-                        entities={sortedEntries}
+                        entities={entries}
                         onSelect={(id) => {
                             setCurrentEntryId(id)
                         }}
@@ -74,10 +74,10 @@ export default function PlayerScreen() {
                     hands={kifData.hands}
                 />
                 <Box>
-                    <button onClick={() => navigateTo("first", sortedEntries)} disabled={sortedEntries.length == 0}>&lt;&lt;</button>
-                    <button onClick={() => navigateTo("prev", sortedEntries)} disabled={sortedEntries.length == 0}>&lt;</button>
-                    <button onClick={() => navigateTo("next", sortedEntries)} disabled={sortedEntries.length == 0}>&gt;</button>
-                    <button onClick={() => navigateTo("last", sortedEntries)} disabled={sortedEntries.length == 0}>&gt;&gt;</button>
+                    <button onClick={() => navigateTo("first", entries)} disabled={entries.length == 0}>&lt;&lt;</button>
+                    <button onClick={() => navigateTo("prev", entries)} disabled={entries.length == 0}>&lt;</button>
+                    <button onClick={() => navigateTo("next", entries)} disabled={entries.length == 0}>&gt;</button>
+                    <button onClick={() => navigateTo("last", entries)} disabled={entries.length == 0}>&gt;&gt;</button>
                     
 
                 </Box>

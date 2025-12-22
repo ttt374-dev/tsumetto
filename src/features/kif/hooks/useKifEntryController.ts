@@ -1,10 +1,10 @@
 import { useEffect, useState, useMemo } from 'react'
 import { v4 as uuidv4 } from "uuid";
 
-import { createBoard } from '../types'
+import { createBoard,  } from '../types'
 import type { KifEntry, Move } from '../types'
 import { createKifData } from './useKifPlayerOrig';
-import { useKifLibraryStore } from "./useKifLibraryStore";
+//import { useKifLibraryStore } from "./useKifLibraryStore";
 import { useKifLibraryPersist } from "./useLibraryPersist";
 import { Store } from '@mui/icons-material';
 import { createEntity } from '../types';
@@ -14,21 +14,24 @@ export function useKifEntryController() {
     //const [ currentEntryId, setCurrentEntryId ] = useState<string | null>(null)
     //const [ sortedEntries, setSortedEntries] = useState<KifEntry[]>([])
     //const navigate = useNavigate()
+    const [ entries, setEntries ] = useState<KifEntry[]>([])
 
     // カスタムフック
-    const store = useKifLibraryStore()
+    //const store = useKifLibraryStore()
     const persistApi = useKifLibraryPersist()
 
     // entitry
-    const entries = store.state.library
-    const sortedEntries = entries
+    //const entries = store.state.library
+    //const sortedEntries = entries
 
     // 初期ロード
     useEffect(() => {
         // ライブラリからエントリーリストの読み込み
         persistApi.load()
-            .then(store.setLibrary)
-            .catch(() => store.setLibrary([]))
+            .then(setEntries)
+            .catch(() => setEntries([]))
+            //.then(store.setLibrary)
+            //.catch(() => store.setLibrary([]))
 
     }, [])
 
@@ -112,13 +115,13 @@ export function useKifEntryController() {
     }
     const persist = async (next: KifEntry[]) => {
         await persistApi.save(next)
-        store.setLibrary(next)
+        //store.setLibrary(next)
+        setEntries(next)
     }
 
 
     return {
         entries,
-        sortedEntries,
 
         updateTitle,
         deleteEntry,

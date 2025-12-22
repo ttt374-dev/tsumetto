@@ -2,12 +2,12 @@
 import { useEffect, } from "react";
 import type { KifEntry } from "../types/kifEntity";
 import { useSortedKifLibrary } from "./useSortedKifLibrary";
-import { useKifLibraryStore } from "./useKifLibraryStore";
+//import { useKifLibraryStore } from "./useKifLibraryStore";
 import { useKifLibraryPersist } from "./useLibraryPersist";
 import { useKifLibraryActions } from "./useKifLibraryActions";
 
 export function useKifLibrary() {
-  const store = useKifLibraryStore()
+  //const store = useKifLibraryStore()
   const persistApi = useKifLibraryPersist()
   const library = store.state.library
 

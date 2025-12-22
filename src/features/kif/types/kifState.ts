@@ -40,13 +40,11 @@ export const createPlayerState = (
   moveIndex: null,
   ...partial,
 });
+/*
 // library 
-
-export type SortKey = 'createdAt' | 'title' | 'moveCount' | 'accuracy';
-export type SortOrder = 'asc' | 'desc';
-
 export type KifLibraryState = {
   library: KifEntry[];
   sortKey: SortKey;
   sortOrder: SortOrder;
 }
+*/
