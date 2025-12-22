@@ -11,7 +11,39 @@ import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import { AppLayout } from "../../../shared/components/AppLayout/AppLayout";
 import { useKif } from '../hooks/useKif'
 import MultipleFilesButton from '../../../shared/components/MultipleFilesButton';
+import type { SortState, SortKey, SortOrder } from "../types";
 
+function SortControle({sort, setSortKey, setSortOrder }: {
+    sort: SortState,
+    setSortKey: (order: SortKey) => void
+    setSortOrder: (order: SortOrder) => void,
+}) {
+    const handleChangeKey = (e: any) => {
+        setSortKey(e.target.value)
+    }
+    return (
+        <Box>
+            <select value={sort.key} onChange={handleChangeKey}>
+                <option key="createdAt" value="createdAt">追加順</option>
+                <option key="title" value="title">名前順</option>
+                <option key="accuracy" value="accuracy">正答率</option>
+            </select>
+
+            <IconButton onClick={() => {
+                console.log("toggle sort order")
+                setSortOrder(sort.order == "asc" ? "desc" : "asc")
+            }
+            }>
+                {sort.order === 'asc'
+                    ? <ArrowUpwardIcon />
+                    : <ArrowDownwardIcon />
+                }
+            </IconButton>
+        </Box>
+    )
+}
+
+//////////////
 export default function LibraryScreen() {
     const { kifEntryController, kifNavigation,         
         kifLibrarySort, sortedEntries } = useKif()
@@ -42,24 +74,8 @@ export default function LibraryScreen() {
                 />
             }
         >
-            <Box>
-                <select value={sort.key} onChange={() => setSortKey}>
-                <option key="createdAt" value="createdAt">追加順</option>
-                <option key="title" value="title">名前順</option>
-                <option key="accuracy" value="accuracy">正答率</option>
-            </select>
-
-            <IconButton onClick={() => {
-                console.log("toggle sort order")
-                setSortOrder(sort.order == "asc" ? "desc" : "asc")}
-                }>
-                {sort.order === 'asc'
-                    ? <ArrowUpwardIcon />
-                    : <ArrowDownwardIcon />
-                }
-            </IconButton>
-            </Box>
-            { /*  エントリーリスト */ }
+            <SortControle sort={sort} setSortKey={setSortKey} setSortOrder={setSortOrder}/>
+            { /*  エントリーリスト */}
             <List>
                 {sortedEntries.map((entry, i) => (
                     <ListItem

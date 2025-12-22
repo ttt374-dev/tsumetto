@@ -20,28 +20,58 @@ import { createBoard, createPlayerState } from '../hooks/useKifPlayerOrig';
 import { useKifEntryController } from '../hooks/useKifEntryController';
 import type { Move } from '../types/'
 
-
+function Learning({ record, currentEntryId, markSolved, markFailed,}: 
+    { 
+        record: KifLearningRecord,
+        currentEntryId: string,
+        markSolved: (id: string) => void,
+        markFailed: (id: string) => void,
+    }) {
+    return (
+        <>
+            <Box>
+                <IconButton
+                    disabled={!currentEntryId}
+                    onClick={() => currentEntryId && markSolved(currentEntryId)}>
+                    <CheckCircleIcon />
+                </IconButton>
+                <IconButton
+                    disabled={!currentEntryId}
+                    onClick={() => currentEntryId && markFailed(currentEntryId)}>
+                    <CloseIcon />
+                </IconButton>
+            </Box>
+            <Box>
+                {record.solvedCount} | {record.failedCount}
+            </Box >
+        </>
+    )
+}
+/////////////////////////////
 export default function PlayerScreen() {
-    const { kifEntryController, kifPlayerUI, kifNavigation, sortedEntries } = useKif()
-    const {         
-        //entries,       
-        
+    const {
+        kifEntryController, kifPlayerUI, kifNavigation,
+        kifLearning,
+        sortedEntries
+    } = useKif()
+    const {
         updateTitle,
         deleteEntry,
-     } = kifEntryController
-     const {
+    } = kifEntryController
+    const {
         currentEntry,
         currentEntryId,
         setCurrentEntryId,
         navigateTo,
-     } = kifNavigation
-     const {
+    } = kifNavigation
+    const {
         isMovesVisible, toggleMovesVisible,
         openEditDialog, setOpenEditDialog
-     } = kifPlayerUI
-
+    } = kifPlayerUI
+    const { getRecord, markSolved, markFailed } = kifLearning
     const navigate = useNavigate()
     const kifData = currentEntry?.kifData ?? createKifData()
+    const learningRecord = getRecord(currentEntryId)
     //////////
     return (
         <AppLayout
@@ -69,26 +99,39 @@ export default function PlayerScreen() {
                     />
                 </Box>
                 { /* 盤面表示 */}
-                <BoardView
-                    board={kifData.board}
-                    hands={kifData.hands}
-                />
+                <Box>
+                    <BoardView
+                        board={kifData.board}
+                        hands={kifData.hands}
+                    />
+                </Box>
                 <Box>
                     <button onClick={() => navigateTo("first")} disabled={sortedEntries.length == 0}>&lt;&lt;</button>
                     <button onClick={() => navigateTo("prev")} disabled={sortedEntries.length == 0}>&lt;</button>
                     <button onClick={() => navigateTo("next")} disabled={sortedEntries.length == 0}>&gt;</button>
-                    <button onClick={() => navigateTo("last")} disabled={sortedEntries.length == 0}>&gt;&gt;</button>
-                    
-
+                    <button onClick={() => navigateTo("last")} disabled={sortedEntries.length == 0}>&gt;&gt;</button>                    
                 </Box>
-                {/* 解答表示 */}
-                < button onClick={toggleMovesVisible}
-                    disabled={kifData.moves.length === 0} >
-                    {isMovesVisible ? "解答を隠す" : "解答を表示"}
-
-                </button >
-                { isMovesVisible &&
-                   <MovesView moves={kifData.moves} />}
+                <Box sx={{display: "flex",flexDirection: "row", justifyContent: "center", margin: 1 }}>
+                    <Box>
+                        {/* 解答表示 */}
+                        < button onClick={toggleMovesVisible}
+                            disabled={kifData.moves.length === 0} >
+                            {isMovesVisible ? "解答を隠す" : "解答を表示"}
+                        </button >
+                        {isMovesVisible &&
+                            <MovesView moves={kifData.moves} />}
+                    </Box>
+                    <Box>
+                        { learningRecord && currentEntryId &&
+                            <Learning 
+                                record={learningRecord}
+                                currentEntryId={currentEntryId}
+                                markSolved={markSolved}
+                                markFailed={markFailed}
+                            />
+                        }                        
+                    </Box>
+                </Box>
 
                 { /* ダイアログ　*/ }
                 { currentEntry &&

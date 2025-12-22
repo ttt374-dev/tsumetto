@@ -2,7 +2,7 @@ import { useMemo } from "react"
 
 import type { KifEntry, KifEntryWithLearning } from '../types/kifEntry'
 import type { KifLearningRecord } from "../types/kifLearning"
-import type { SortKey, SortOrder } from '../types/kifEntry'
+import type { SortKey, SortOrder } from '../types/'
 
 export function useKifSortedLibraryWithLearning(
   library: KifEntry[],
