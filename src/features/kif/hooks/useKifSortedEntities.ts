@@ -1,20 +1,35 @@
 // features/kif/hooks/useSortedEntries.ts
 import { useMemo } from "react"
-import type { KifEntry, SortState } from "../types/"
+import type { KifEntry, KifLearningRecord, SortState } from "../types/"
 
 
 
 export function useKifSortedEntries(
   entities: KifEntry[],
+  learningRecords: Record<string, KifLearningRecord>,
   sort: SortState
 ): KifEntry[] {
 
   console.log("sorted entries:", entities, sort)
+  
+
+    const calcAccuracy = (
+        record: KifLearningRecord | undefined
+    ): number | null => {
+        if (!record) return null;
+
+        const total = record.solvedCount + record.failedCount;
+        if (total === 0) return null;
+
+        return record.solvedCount / total;
+    };
+
 
   return useMemo(() => {
     if (!entities || entities.length === 0) return []
 
     const sorted = [...entities]
+
 
     sorted.sort((a, b) => {
       let vA: any
@@ -29,6 +44,11 @@ export function useKifSortedEntries(
         case "createdAt":
           vA = a.createdAt
           vB = b.createdAt
+          break
+
+        case "accuracy":
+          vA = calcAccuracy(learningRecords[a.id])
+          vB = calcAccuracy(learningRecords[b.id])
           break
 
         default:
