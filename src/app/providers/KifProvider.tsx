@@ -7,8 +7,8 @@ import { useKifPlayerUI } from "../../features/kif/hooks/player/useKifPlayerUI";
 
 import type { KifContextValue } from "../../features/kif/types/kifContextValue";
 import { useKifEntryController } from "../../features/kif/hooks/useKifEntryController";
-import { useKifSortedEntries } from "../../features/kif/hooks/useKifSortedEntities";
-import { useKifLibrarySort } from "../../features/kif/hooks/useKifLilbrarySort";
+import { useKifSortedEntries } from "../../features/kif/hooks/library/useKifSortedEntities";
+import { useKifLibrarySort } from "../../features/kif/hooks/library/useKifLilbrarySort";
 
 export const KifContext = createContext<KifContextValue | null>(null);
 

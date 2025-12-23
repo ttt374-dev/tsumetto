@@ -3,7 +3,7 @@ import { Filesystem, Directory, Encoding } from '@capacitor/filesystem'
 import { Dialog, DialogTitle, DialogContent, DialogActions,
     Button, Box, Typography, Divider } from "@mui/material"
 import { useRef } from "react"
-import { useKifBackupRestore } from "../hooks/useKifBackupRestore"
+import { useKifBackupRestore } from "../hooks/library/useKifBackupRestore"
 
 type Props = {
     open: boolean

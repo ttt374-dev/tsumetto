@@ -5,7 +5,7 @@ import { createBoard,  } from '../types'
 import type { KifEntry, Move } from '../types'
 //import { createKifData } from './useKifPlayerOrig';
 //import { useKifLibraryStore } from "./useKifLibraryStore";
-import { useKifLibraryPersist } from "./useLibraryPersist";
+import { useKifLibraryPersist } from "./library/useLibraryPersist";
 import { Store } from '@mui/icons-material';
 import { createEntity } from '../types';
 import { parseKif } from "../utils/kifParser";
