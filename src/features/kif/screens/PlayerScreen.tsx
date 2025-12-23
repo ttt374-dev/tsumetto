@@ -7,9 +7,9 @@ import CloseIcon from '@mui/icons-material/Close'
 import EditIcon from '@mui/icons-material/Edit'
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 
-import BoardView from '../components/BoardView/BoardView'
-import SelectLibraryEntry from '../components/SelectLibraryEntry';
-import MovesView from "../components/MovesView";
+import BoardView from '../components/player/BoardView/BoardView'
+import LibrarySelectEntry from '../components/library/LibrarySelectEntry';
+import MovesView from "../components/player/MovesView";
 import { AppLayout } from '../../../shared/components/AppLayout/AppLayout';
 import { useKif } from '../hooks/useKif'
 import { createKifData, type KifLearningRecord } from '../types'
@@ -90,7 +90,7 @@ export default function PlayerScreen() {
             <>
                 { /* エントリーリスト */}
                 <Box>
-                    <SelectLibraryEntry
+                    <LibrarySelectEntry
                         currentEntryId={currentEntryId}
                         entities={sortedEntries}
                         onSelect={(id) => {

@@ -1,14 +1,14 @@
 // components/SelectLibraryEntry.tsx
 import React from "react";
-import { type KifEntry } from "../types/kifEntry";
+import { type KifEntry } from "../../types/kifEntry";
 
-interface SelectLibraryEntryProps {
+interface Props {
     //currentIndex: number | null;
     currentEntryId: string | null;
     entities: KifEntry[];
     onSelect: (entryId: string) => void;
 }
-const SelectLibraryEntry: React.FC<SelectLibraryEntryProps> = ({ currentEntryId, entities, onSelect }) => {
+const LibrarySelectEntry: React.FC<Props> = ({ currentEntryId, entities, onSelect }) => {
     const handleSelectLibrary = (e: React.ChangeEvent<HTMLSelectElement>) => {
         onSelect(e.target.value)
     }
@@ -29,4 +29,4 @@ const SelectLibraryEntry: React.FC<SelectLibraryEntryProps> = ({ currentEntryId,
     )
 
 }
-export default SelectLibraryEntry;
+export default LibrarySelectEntry;
