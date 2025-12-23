@@ -1,18 +1,18 @@
-import { useKifLearning } from "./useKifLearning"
-import { useKifLibrary } from "./useKifLibrary"
+//import { useKifLearning } from "../learning/useKifLearning"
+//import { useKifLibrary } from "./useKifLibrary"
 import type { KifBackupV1 } from "../types/kifBackup"
 import { useKif } from './useKif'
 
 export function useKifBackupRestore() {
   //const kifLibrary = useKifLibrary()
   //const kifLearning = useKifLearning()
-  const { kifLibrary, kifLearning } = useKif()
+  const { kifEntryController, kifLearning } = useKif()
 
   const backup = (): KifBackupV1 => {
     return {
       version: 1,
       exportedAt: Date.now(),
-      library: kifLibrary.library,
+      library: kifEntryController.entries,
       learning: kifLearning.records,
     }
   }
@@ -24,7 +24,7 @@ export function useKifBackupRestore() {
     }
 
     // ⚠️ 順序重要
-    kifLibrary.replaceAll(data.library)
+    kifEntryController.replaceAll(data.library)
     kifLearning.replaceAll(data.learning)
   }
 

@@ -1,9 +1,9 @@
 import React, { createContext, useContext, type ReactNode } from "react";
 //import { useKifLibrary } from '../../features/kif/hooks/useKifLibrary'
-import { useKifPlayer } from "../../features/kif/hooks/useKifPlayer";
-import { useKifLearning } from "../../features/kif/hooks/useKifLearning";
+import { useKifPlayer } from "../../features/kif/hooks/player/useKifPlayer";
+import { useKifLearning } from "../../features/kif/hooks/learning/useKifLearning";
 import { useKifNavigation } from '../../features/kif/hooks/useKifNavigation'
-import { useKifPlayerUI } from "../../features/kif/hooks/useKifPlayerUI";
+import { useKifPlayerUI } from "../../features/kif/hooks/player/useKifPlayerUI";
 
 import type { KifContextValue } from "../../features/kif/types/kifContextValue";
 import { useKifEntryController } from "../../features/kif/hooks/useKifEntryController";

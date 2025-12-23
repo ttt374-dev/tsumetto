@@ -1,8 +1,8 @@
 import { useState, useEffect, useMemo } from "react";
 
-import type { Board, KifData, KifPlayerState, KifEntry } from "../types";
-import type { useKifNavigation } from "./useKifNavigation";
-import { createBoard, createKifData, createPlayerState } from "../types";
+import type { Board, KifData, KifPlayerState, KifEntry } from "../../types";
+import type { useKifNavigation } from "../useKifNavigation";
+import { createBoard, createKifData, createPlayerState } from "../../types";
 
 export function useKifPlayer(library: KifEntry[]){
     const [state, setState] = useState<KifPlayerState>(createPlayerState());

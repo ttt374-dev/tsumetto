@@ -16,7 +16,7 @@ import { createKifData, type KifLearningRecord } from '../types'
 import { KifEntryEditDialog } from "../dialogs/KifEntryEditDialog";
 import { formatAccuracy } from '../utils';
 import type { KifEntry } from '../types/kifEntry';
-import { createBoard, createPlayerState } from '../hooks/useKifPlayerOrig';
+//import { createBoard, createPlayerState } from '../hooks/useKifPlayerOrig';
 import { useKifEntryController } from '../hooks/useKifEntryController';
 import type { Move } from '../types/'
 

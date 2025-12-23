@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import { createBoard,  } from '../types'
 import type { KifEntry, Move } from '../types'
-import { createKifData } from './useKifPlayerOrig';
+//import { createKifData } from './useKifPlayerOrig';
 //import { useKifLibraryStore } from "./useKifLibraryStore";
 import { useKifLibraryPersist } from "./useLibraryPersist";
 import { Store } from '@mui/icons-material';
@@ -118,6 +118,13 @@ export function useKifEntryController() {
         //store.setLibrary(next)
         setEntries(next)
     }
+    const replaceAll = async (entries: KifEntry[]) => {
+        console.log("library replaceAll", entries)
+
+        await persistApi.save(entries)
+        setEntries(entries)
+    }
+
 
 
     return {
@@ -126,6 +133,7 @@ export function useKifEntryController() {
         updateTitle,
         deleteEntry,
         importFiles,
+        replaceAll,
         
     }
 }

@@ -1,4 +1,4 @@
-import { type Move } from "../types/";
+import { type Move } from "../../types";
 
 interface Props {
     moves: Move[];
