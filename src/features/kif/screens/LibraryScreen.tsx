@@ -1,57 +1,21 @@
-import { useState } from 'react'
-import { useNavigate } from "react-router-dom";
-import { List, ListItem, ListItemIcon, ListItemText, Checkbox, Typography } from "@mui/material";
-import { Box, IconButton, Tooltip, Button } from "@mui/material";
-import ImportExportIcon from '@mui/icons-material/ImportExport';
-import DeleteIcon from '@mui/icons-material/Delete';
-import CheckBoxIcon from '@mui/icons-material/CheckBox';
-import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import { Stack, Box,  } from "@mui/material";
 
 import { AppLayout } from "../../../shared/components/AppLayout/AppLayout";
 import { useKif } from '../hooks/useKif'
 import MultipleFilesButton from '../../../shared/components/MultipleFilesButton';
-import type { KifEntry, SortState, SortKey, SortOrder } from "../types";
+import type { KifEntry } from "../types";
 import { useKifLibraryList } from '../hooks/library/useLibraryList';
-import LibrarySelection from '../components/library/LibrarySelection';
-
-function SortControle({sort, setSortKey, setSortOrder }: {
-    sort: SortState,
-    setSortKey: (order: SortKey) => void
-    setSortOrder: (order: SortOrder) => void,
-}) {
-    const handleChangeKey = (e: any) => {
-        setSortKey(e.target.value)
-    }
-    return (
-        <Box>
-            <select value={sort.key} onChange={handleChangeKey}>
-                <option key="createdAt" value="createdAt">追加順</option>
-                <option key="title" value="title">名前順</option>
-                <option key="accuracy" value="accuracy">正答率</option>
-            </select>
-
-            <IconButton onClick={() => {
-                console.log("toggle sort order")
-                setSortOrder(sort.order == "asc" ? "desc" : "asc")
-            }
-            }>
-                {sort.order === 'asc'
-                    ? <ArrowUpwardIcon />
-                    : <ArrowDownwardIcon />
-                }
-            </IconButton>
-        </Box>
-    )
-}
+import LibraryBulkSelectionControl from '../components/library/LibraryBulkSelectionControl';
+import LibrarySortControl from '../components/library/LibrarySortControl';
+import LibraryDeleteControl from '../components/library/LibraryDeleteControl';
+import LibraryList from '../components/library/LibraryList';
 
 //////////////
 export default function LibraryScreen() {
+    
     const { kifEntryController, kifNavigation,         
         kifLibrarySort, sortedEntries } = useKif()
     const {
-        //entries,
         importFiles,
         deleteEntries,
     } = kifEntryController
@@ -60,28 +24,9 @@ export default function LibraryScreen() {
         setCurrentEntryId,
     } = kifNavigation
     
-    const { sort, setSortOrder, setSortKey } = kifLibrarySort
-    //const [checkedIds, setCheckedIds] = useState<Set<string>>(new Set());
-    //const { sortedEntries, setCurrentEntryId } = useKifEntryController()
-    //console.log("sorted entries on library", entries)
+    const { sort, setSortOrder, setSortKey } = kifLibrarySort    
     const {checkedIds, isChecked, toggleChecked, clearChecked, selectAllChecked} = useKifLibraryList(sortedEntries)
-    const handleDeleteChecked = async () => {
-        if (checkedIds.size === 0) return;
-        const ok = window.confirm(`選択された ${checkedIds.size} 件を削除しますか？`);
-        if (!ok) return;
 
-        const entriesToDelete = sortedEntries.filter((e: KifEntry) => checkedIds.has(e.id));
-        console.log("delete selected", entriesToDelete)
-        if (entriesToDelete.length === 0) {
-            clearChecked();
-            return;
-        }
-
-        await deleteEntries(entriesToDelete);
-        clearChecked();
-    }
-
-    const navigate = useNavigate()
     return (
         <AppLayout
             header={"Library"}
@@ -96,50 +41,30 @@ export default function LibraryScreen() {
                 />
             }
         >
-            <LibrarySelection 
-                entries={sortedEntries}
-                checkedIds={checkedIds}
-                selectAllCheckbox={selectAllChecked}
-                clearAllCheckbox={clearChecked}
+            { /* コントロール */}   
+            <Stack direction="row">
+                <LibraryBulkSelectionControl
+                    entries={sortedEntries}
+                    checkedIds={checkedIds}
+                    selectAllCheckbox={selectAllChecked}
+                    clearAllCheckbox={clearChecked}
+                />
+                <LibraryDeleteControl 
+                    entries={sortedEntries}
+                    checkedIds={checkedIds}
+                    onDelete={(entries: KifEntry[]) => deleteEntries(entries)}
+                />
+                <Box sx={{ flexGrow: 1 }} />
+                <LibrarySortControl sort={sort} setSortKey={setSortKey} setSortOrder={setSortOrder} />
+            </Stack>
+            { /*  エントリーリスト */}
+            <LibraryList 
+                sortedEntries={sortedEntries}
+                setCurrentEntryId={setCurrentEntryId}
+                isChecked={isChecked}
+                toggleChecked={toggleChecked}
             />
             
-            <Tooltip title="選択した棋譜を削除">
-                <IconButton onClick={handleDeleteChecked}
-                 disabled={checkedIds.size === 0} color="error">
-                    <DeleteIcon />
-                </IconButton>
-            </Tooltip>
-            <SortControle sort={sort} setSortKey={setSortKey} setSortOrder={setSortOrder}/>
-            { /*  エントリーリスト */}
-
-            <List>
-                {sortedEntries.map((entry, i) => (
-                    <ListItem
-                        key={entry.id}
-                        onClick={() => {
-                            setCurrentEntryId(entry.id)
-                            navigate("/player")
-                        }}
-                    >
-                        <ListItemIcon onClick={(e) =>  e.stopPropagation()}>
-                            <Checkbox
-                                size="small"
-                                edge="start"
-
-                                checked={isChecked(entry.id)}
-                                onChange={ (e) => { e.stopPropagation(); 
-                                    toggleChecked(entry.id)
-                                 }}
-
-                            />
-                        </ListItemIcon>
-                        <ListItemText>
-                            { entry.kifData.title } -
-                            { entry.id.slice(0, 3) }
-                        </ListItemText>
-                    </ListItem>
-                ))}
-            </List>
         </AppLayout>
     )
 }

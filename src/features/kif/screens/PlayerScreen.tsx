@@ -8,7 +8,7 @@ import EditIcon from '@mui/icons-material/Edit'
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 
 import BoardView from '../components/player/BoardView/BoardView'
-import LibrarySelectEntry from '../components/library/LibrarySelectEntry';
+import SelectEntry from '../components/player/SelectEntry';
 import MovesView from "../components/player/MovesView";
 import { AppLayout } from '../../../shared/components/AppLayout/AppLayout';
 import { useKif } from '../hooks/useKif'
@@ -19,34 +19,7 @@ import type { KifEntry } from '../types/kifEntry';
 //import { createBoard, createPlayerState } from '../hooks/useKifPlayerOrig';
 import { useKifEntryController } from '../hooks/useKifEntryController';
 import type { Move } from '../types/'
-
-function Learning({ record, currentEntryId, markSolved, markFailed,}: 
-    { 
-        record: KifLearningRecord,
-        currentEntryId: string,
-        markSolved: (id: string) => void,
-        markFailed: (id: string) => void,
-    }) {
-    return (
-        <>
-            <Box>
-                <IconButton
-                    disabled={!currentEntryId}
-                    onClick={() => currentEntryId && markSolved(currentEntryId)}>
-                    <CheckCircleIcon />
-                </IconButton>
-                <IconButton
-                    disabled={!currentEntryId}
-                    onClick={() => currentEntryId && markFailed(currentEntryId)}>
-                    <CloseIcon />
-                </IconButton>
-            </Box>
-            <Box>
-                {record.solvedCount} | {record.failedCount}
-            </Box >
-        </>
-    )
-}
+import MarkLearning from '../components/player/MarkLearning';
 /////////////////////////////
 export default function PlayerScreen() {
     const {
@@ -75,7 +48,7 @@ export default function PlayerScreen() {
     //////////
     return (
         <AppLayout
-            header={`${kifData.title} } (${currentEntryId?.slice(0, 3)})`}
+            header={`${kifData.title}`}
             footer={
                 <>                
                     <IconButton onClick={() => setOpenEditDialog(true)} disabled={!currentEntryId}>
@@ -90,7 +63,7 @@ export default function PlayerScreen() {
             <>
                 { /* エントリーリスト */}
                 <Box>
-                    <LibrarySelectEntry
+                    <SelectEntry
                         currentEntryId={currentEntryId}
                         entities={sortedEntries}
                         onSelect={(id) => {
@@ -123,7 +96,7 @@ export default function PlayerScreen() {
                     </Box>
                     <Box>
                         { learningRecord && currentEntryId &&
-                            <Learning 
+                            <MarkLearning 
                                 record={learningRecord}
                                 currentEntryId={currentEntryId}
                                 markSolved={markSolved}

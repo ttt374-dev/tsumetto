@@ -18,7 +18,7 @@ type Props = {
 };
 
 
-export function LibrarySelection({    
+export function LibraryBulkSelectionControl({    
     checkedIds,
     selectAllCheckbox,
     clearAllCheckbox,
@@ -53,4 +53,4 @@ export function LibrarySelection({
         </Box>
     )
 }
-export default LibrarySelection
+export default LibraryBulkSelectionControl

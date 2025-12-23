@@ -8,7 +8,7 @@ interface Props {
     entities: KifEntry[];
     onSelect: (entryId: string) => void;
 }
-const LibrarySelectEntry: React.FC<Props> = ({ currentEntryId, entities, onSelect }) => {
+const SelectEntry: React.FC<Props> = ({ currentEntryId, entities, onSelect }) => {
     const handleSelectLibrary = (e: React.ChangeEvent<HTMLSelectElement>) => {
         onSelect(e.target.value)
     }
@@ -29,4 +29,4 @@ const LibrarySelectEntry: React.FC<Props> = ({ currentEntryId, entities, onSelec
     )
 
 }
-export default LibrarySelectEntry;
+export default SelectEntry;

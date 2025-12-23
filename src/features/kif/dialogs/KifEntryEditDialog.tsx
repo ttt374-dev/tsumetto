@@ -129,6 +129,9 @@ export function KifEntryEditDialog({
         <Box>
           登録日：{ (entry != null) ? new Date(entry.createdAt).toLocaleString("ja-JP") : "-" }
         </Box>
+        <Box>
+          UUID: { entry.id.slice(0, 5)}...
+        </Box>
         { /* 正答誤答*/ }
         <div>
          {/*  { record && `正答：${record.solvedCount}, 誤答：${record.failedCount}` }*/}
