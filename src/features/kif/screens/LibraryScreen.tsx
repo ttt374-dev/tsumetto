@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useNavigate } from "react-router-dom";
 import { List, ListItem, ListItemIcon, ListItemText, Checkbox, Typography } from "@mui/material";
 import { Box, IconButton, Tooltip, Button } from "@mui/material";
@@ -11,7 +12,9 @@ import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import { AppLayout } from "../../../shared/components/AppLayout/AppLayout";
 import { useKif } from '../hooks/useKif'
 import MultipleFilesButton from '../../../shared/components/MultipleFilesButton';
-import type { SortState, SortKey, SortOrder } from "../types";
+import type { KifEntry, SortState, SortKey, SortOrder } from "../types";
+import { useKifLibraryList } from '../hooks/library/useLibraryList';
+import LibrarySelection from '../components/library/LibrarySelection';
 
 function SortControle({sort, setSortKey, setSortOrder }: {
     sort: SortState,
@@ -50,6 +53,7 @@ export default function LibraryScreen() {
     const {
         //entries,
         importFiles,
+        deleteEntries,
     } = kifEntryController
     
     const {
@@ -57,8 +61,26 @@ export default function LibraryScreen() {
     } = kifNavigation
     
     const { sort, setSortOrder, setSortKey } = kifLibrarySort
+    //const [checkedIds, setCheckedIds] = useState<Set<string>>(new Set());
     //const { sortedEntries, setCurrentEntryId } = useKifEntryController()
     //console.log("sorted entries on library", entries)
+    const {checkedIds, isChecked, toggleChecked, clearChecked, selectAllChecked} = useKifLibraryList(sortedEntries)
+    const handleDeleteChecked = async () => {
+        if (checkedIds.size === 0) return;
+        const ok = window.confirm(`選択された ${checkedIds.size} 件を削除しますか？`);
+        if (!ok) return;
+
+        const entriesToDelete = sortedEntries.filter((e: KifEntry) => checkedIds.has(e.id));
+        console.log("delete selected", entriesToDelete)
+        if (entriesToDelete.length === 0) {
+            clearChecked();
+            return;
+        }
+
+        await deleteEntries(entriesToDelete);
+        clearChecked();
+    }
+
     const navigate = useNavigate()
     return (
         <AppLayout
@@ -74,8 +96,22 @@ export default function LibraryScreen() {
                 />
             }
         >
+            <LibrarySelection 
+                entries={sortedEntries}
+                checkedIds={checkedIds}
+                selectAllCheckbox={selectAllChecked}
+                clearAllCheckbox={clearChecked}
+            />
+            
+            <Tooltip title="選択した棋譜を削除">
+                <IconButton onClick={handleDeleteChecked}
+                 disabled={checkedIds.size === 0} color="error">
+                    <DeleteIcon />
+                </IconButton>
+            </Tooltip>
             <SortControle sort={sort} setSortKey={setSortKey} setSortOrder={setSortOrder}/>
             { /*  エントリーリスト */}
+
             <List>
                 {sortedEntries.map((entry, i) => (
                     <ListItem
@@ -85,6 +121,18 @@ export default function LibraryScreen() {
                             navigate("/player")
                         }}
                     >
+                        <ListItemIcon onClick={(e) =>  e.stopPropagation()}>
+                            <Checkbox
+                                size="small"
+                                edge="start"
+
+                                checked={isChecked(entry.id)}
+                                onChange={ (e) => { e.stopPropagation(); 
+                                    toggleChecked(entry.id)
+                                 }}
+
+                            />
+                        </ListItemIcon>
                         <ListItemText>
                             { entry.kifData.title } -
                             { entry.id.slice(0, 3) }

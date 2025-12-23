@@ -111,8 +111,25 @@ export function useKifEntryController() {
         } catch (err) {
             console.error("Failed to delete entry:", err);
         }
-
     }
+    const deleteEntries = async (entriesToDelete: KifEntry[]) => {
+            try {
+                if (entriesToDelete.length === 0) return;
+    
+                const deleteIds = new Set(entriesToDelete.map(e => e.id));
+    
+                console.log("delete IDs", deleteIds)
+                const nextEntries = entries.filter(
+                    (e) => !deleteIds.has(e.id)
+                );
+                console.log("next entries", nextEntries)
+                //console.log("delete entries", entries, deleteIds, nextLibrary)
+                await persist(nextEntries);
+                // setLibrary(nextLibrary)
+            } catch (err) {
+                console.error("Failed to delete entries:", err);
+            }
+        };
     const persist = async (next: KifEntry[]) => {
         await persistApi.save(next)
         //store.setLibrary(next)
@@ -132,6 +149,7 @@ export function useKifEntryController() {
 
         updateTitle,
         deleteEntry,
+        deleteEntries,
         importFiles,
         replaceAll,
         

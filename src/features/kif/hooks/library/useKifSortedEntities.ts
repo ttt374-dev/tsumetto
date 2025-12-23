@@ -10,7 +10,7 @@ export function useKifSortedEntries(
   sort: SortState
 ): KifEntry[] {
 
-  console.log("sorted entries:", entities, sort)
+  //console.log("sorted entries:", entities, sort)
   
 
     const calcAccuracy = (

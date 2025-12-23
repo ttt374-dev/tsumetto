@@ -25,7 +25,7 @@ export const KifProvider = ({ children }: { children: ReactNode }) => {
   const kifLibrarySort = useKifLibrarySort()  
   const { records } = kifLearning  
   const sortedEntries = useKifSortedEntries(entries, records, kifLibrarySort.sort,)
-  console.log("sorted entries on provider", sortedEntries, kifLibrarySort.sort)
+  //nsole.log("sorted entries on provider", sortedEntries, kifLibrarySort.sort)
 
   const kifPlayer = useKifPlayer(sortedEntries);
   const kifNavigation = useKifNavigation(sortedEntries)

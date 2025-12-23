@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-import type { KifLearningRecord, KifLearningStore } from "../types/kifLearning";
+import type { KifLearningRecord} from "../../types/";
 import { useKifLearningPersist } from './useKifLearningPersist';
 
 interface UseKifLearning {
