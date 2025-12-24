@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useRef } from 'react'
 import { List, ListItem, ListItemIcon, ListItemText, Checkbox, IconButton, Typography } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 
@@ -10,21 +10,47 @@ import { useNavigate} from 'react-router-dom'
 
 function LibraryList({
     sortedEntries,    
-    setCurrentEntryId,
     isChecked,
-    toggleChecked,
+    toggleChecked,    
+    onEntryClick,
+
     editMode,
-    onEdit,
-    
+    toggleEditMode,
+    clearAllCheckbox,
 }: {
     sortedEntries: KifEntry[];
-    setCurrentEntryId: (id: string) => void,
-    isChecked: (id: string) => boolean,    
-    toggleChecked: (id: string) => void;       
-    editMode: boolean,
-    onEdit: (entryId: string) => void,
+    isChecked: (id: string) => boolean    
+    toggleChecked: (id: string) => void;           
+    onEntryClick: (entryId: string) => void
+    editMode: boolean
+    toggleEditMode: () => void;
+    clearAllCheckbox: () => void;
 }) {
+    // 長押しで edit mode / view mode 切り替え
+    const LONG_PRESS_MS = 500;
+    const timerRef = useRef<number | null>(null);
+    const longPressedRef = useRef(false);
 
+    const onPressStart = (entryId: string) => {
+        longPressedRef.current = false;
+
+        timerRef.current = window.setTimeout(() => {
+            longPressedRef.current = true;
+            if (editMode){
+                toggleChecked(entryId)
+            } else {
+                clearAllCheckbox()
+            }
+            toggleEditMode()
+        }, LONG_PRESS_MS);
+    }
+
+    const onPressEnd = () => {
+        if (timerRef.current) {
+            clearTimeout(timerRef.current);
+            timerRef.current = null;
+        }
+    };
     const navigate = useNavigate()
     /////////////////////////////////////////////////////
     
@@ -39,28 +65,29 @@ function LibraryList({
                         "&:hover": { backgroundColor: "#e0e0e0" },
                         border: 1
                     }}
+                    onMouseDown={() => onPressStart(entry.id)}
+                    onMouseUp={onPressEnd}
+                    onMouseLeave={onPressEnd}
+                    onTouchStart={() => onPressStart(entry.id)}
+                    onTouchEnd={onPressEnd}
                     onClick={() => {
-                        if (editMode){
-                            onEdit(entry.id)
-                        } else {
-                            setCurrentEntryId(entry.id)
-                            navigate("/player")
-                        }
-                    }}
+                        if (longPressedRef.current) return;
+                         onEntryClick(entry.id)}
+                    }
                 >
                     <ListItemIcon sx={{ minWidth: 16 }} onClick={(e) => e.stopPropagation()}>
-                        { editMode &&
-                        <Checkbox
-                            size="small"
-                            edge="start"
+                        {editMode &&
+                            <Checkbox
+                                size="small"
+                                edge="start"
 
-                            checked={isChecked(entry.id)}
-                            onChange={(e) => {
-                                e.stopPropagation();
-                                toggleChecked(entry.id)
-                            }}
-                        />
-}
+                                checked={isChecked(entry.id)}
+                                onChange={(e) => {
+                                    e.stopPropagation();
+                                    toggleChecked(entry.id)
+                                }}
+                            />
+                        }
                         
                     </ListItemIcon>
                     <ListItemText>

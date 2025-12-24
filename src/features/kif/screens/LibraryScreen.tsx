@@ -11,6 +11,7 @@ import LibrarySortControl from '../components/library/LibrarySortControl';
 import LibraryDeleteControl from '../components/library/LibraryDeleteControl';
 import LibraryList from '../components/library/LibraryList';
 import { KifEntryEditDialog } from '../dialogs/KifEntryEditDialog';
+import { useNavigate } from 'react-router-dom';
 
 //////////////
 export default function LibraryScreen() {    
@@ -43,6 +44,8 @@ export default function LibraryScreen() {
         updateTitle,
         deleteEntry,
     } = kifEntryController
+    const navigate = useNavigate()
+
     return (
         <AppLayout
             header={"Library"}
@@ -81,14 +84,20 @@ export default function LibraryScreen() {
             { /*  エントリーリスト */}
             <LibraryList 
                 sortedEntries={sortedEntries}
-                setCurrentEntryId={setCurrentEntryId}
                 isChecked={isChecked}
                 toggleChecked={toggleChecked}
-                onEdit={(entryId: string) => {
-                    setEntryToEditId(entryId)
-                    setOpenEditDialog(true)
+                onEntryClick={(entryId: string) => {
+                    if (editMode) {
+                        setEntryToEditId(entryId)
+                        setOpenEditDialog(true)
+                    } else {
+                        setCurrentEntryId(entryId)
+                        navigate("/player")
+                    }
                 }}
                 editMode={editMode}
+                toggleEditMode={() => setEditMode(prev => !prev)}
+                clearAllCheckbox={clearChecked}
             />
             { /* ダイアログ　*/ }
             {entryToEditId &&
