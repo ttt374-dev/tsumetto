@@ -1,5 +1,6 @@
 import styles from "./BoardView.module.css";
-import { type Board, type Hand } from "../../../types";
+import type { PieceTypeKey, Board, Hand } from '../../../types/'
+import { PieceTypes } from "../../../types/";
 
 interface Props {
   board: Board;
@@ -10,8 +11,17 @@ interface Props {
 const fileLabels = ["９","８","７","６","５","４","３","２","１"];
 const rankLabels = ["一","二","三","四","五","六","七","八","九"];
 
-function BoardView({ board, hands}: Props) {
-  
+function displayPiece(type: PieceTypeKey): string {
+  const piece = PieceTypes[type]
+
+  if (!piece) {
+    console.warn(`Unknown PieceTypeKey: ${type}`)
+    return "？"
+  }
+
+  return piece.display
+}
+function BoardView({ board, hands}: Props) { 
 
   return (
     <div className={styles.container}>
@@ -49,7 +59,9 @@ function BoardView({ board, hands}: Props) {
                   key={c}
                   className={`${styles.cell} ${cell.isBlack ? "" : styles.white}`}
                 >
-                  {cell.name}
+                  { /* {cell.key} */ }
+                  { displayPiece(cell.key)}
+
                 </div>
               );
             })}

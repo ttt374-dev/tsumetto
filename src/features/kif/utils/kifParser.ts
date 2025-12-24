@@ -1,7 +1,8 @@
 // parseKif.ts
-import type { KifData, Board, Hand, Move } from "../types";
+import type { KifData, Board, Hand, Move } from "../types/";
 import { createBoard } from "../types";
 import { parseMoveLine } from "./kifParseMoveLine";
+import type { PieceTypeKey } from "../types/pieceType";
 
 
 export function parseKif(text: string): KifData  {
@@ -17,6 +18,7 @@ export function parseKif(text: string): KifData  {
 ////////
 export function parseMoves(lines: string[]): Move[] {
   const moves: Move[] = [];
+  let prevTo = undefined
   let inMoves = false;
 
   for (const line of lines) {
@@ -26,11 +28,17 @@ export function parseMoves(lines: string[]): Move[] {
     }
     if (!inMoves) continue;
     
-    const move = parseMoveLine(line)
+    const move = parseMoveLine(line, prevTo)        
     if (!move) continue
+    if ("type" in move) {
+  
+    break // 終局
+  }
+    prevTo = move?.position    
     moves.push(move);
 
   }
+  console.log("parsed moves: ", moves)
   return moves
 }
 function parseBoard(lines: string[]): Board {
@@ -71,7 +79,7 @@ function parseBoard(lines: string[]): Board {
 
       //console.log("parsed:", file, rank, name, isGote ? "gote" : "sente")
       board[rank][file] = {
-        name,
+        key: name as PieceTypeKey,
         isBlack: !isGote,        
       };
     }

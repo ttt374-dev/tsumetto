@@ -21,6 +21,7 @@ import { useKifEntryController } from '../hooks/useKifEntryController';
 import type { Move } from '../types/'
 import MarkLearning from '../components/player/MarkLearning';
 import { useKifPlayerUI } from '../hooks/player/useKifPlayerUI';
+import { useKifReplay } from '../hooks/player/useKifReplay';
 /////////////////////////////
 export default function PlayerScreen() {
     const {
@@ -47,27 +48,31 @@ export default function PlayerScreen() {
     const navigate = useNavigate()
     const kifData = currentEntry?.kifData ?? createKifData()
     const learningRecord = getRecord(currentEntryId)
-        
-      // スワイプハンドラ
-      const swipeHandlers = useSwipeable({
-          onSwipedLeft: () => {// 左スワイプ → 次の棋譜へ
-              navigateTo("next")
-          },
-          onSwipedRight: () => {// 右スワイプ → 前の棋譜へ
-              navigateTo("prev")
-          },
-          onSwipedUp: () => { hideMoves() },
-          onSwipedDown: () => { showMoves() },
-  
-          trackMouse: true, // PCでもマウスでスワイプ可能
-          preventScrollOnSwipe: true,
-      });
+
+    // スワイプハンドラ
+    const swipeHandlers = useSwipeable({
+        onSwipedLeft: () => {// 左スワイプ → 次の棋譜へ
+            navigateTo("next")
+        },
+        onSwipedRight: () => {// 右スワイプ → 前の棋譜へ
+            navigateTo("prev")
+        },
+        onSwipedUp: () => { hideMoves() },
+        onSwipedDown: () => { showMoves() },
+
+        trackMouse: true, // PCでもマウスでスワイプ可能
+        preventScrollOnSwipe: true,
+    });
+
+    const initialBoard = kifData.board
+    const { board, currentIndex, setCurrentIndex } = useKifReplay(initialBoard, kifData.hands, kifData.moves)
+
     //////////
     return (
         <AppLayout
             header={`${kifData.title}`}
             footer={
-                <>                
+                <>
                     <IconButton onClick={() => setOpenEditDialog(true)} disabled={!currentEntryId}>
                         <EditIcon />
                     </IconButton>
@@ -94,7 +99,7 @@ export default function PlayerScreen() {
                     touchAction: "pan-y", // 縦スクロールは阻害しない
                 }}>
                     <BoardView
-                        board={kifData.board}
+                        board={board}
                         hands={kifData.hands}
                     />
                 </Box>
@@ -102,9 +107,9 @@ export default function PlayerScreen() {
                     <button onClick={() => navigateTo("first")} disabled={sortedEntries.length == 0}>&lt;&lt;</button>
                     <button onClick={() => navigateTo("prev")} disabled={sortedEntries.length == 0}>&lt;</button>
                     <button onClick={() => navigateTo("next")} disabled={sortedEntries.length == 0}>&gt;</button>
-                    <button onClick={() => navigateTo("last")} disabled={sortedEntries.length == 0}>&gt;&gt;</button>                    
+                    <button onClick={() => navigateTo("last")} disabled={sortedEntries.length == 0}>&gt;&gt;</button>
                 </Box>
-                <Box sx={{display: "flex",flexDirection: "row", justifyContent: "center", margin: 1 }}>
+                <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "center", margin: 1 }}>
                     <Box>
                         {/* 解答表示 */}
                         < button onClick={toggleMovesVisible}
@@ -115,19 +120,19 @@ export default function PlayerScreen() {
                             <MovesView moves={kifData.moves} />}
                     </Box>
                     <Box>
-                        { learningRecord && currentEntryId &&
-                            <MarkLearning 
+                        {learningRecord && currentEntryId &&
+                            <MarkLearning
                                 record={learningRecord}
                                 currentEntryId={currentEntryId}
                                 markSolved={markSolved}
                                 markFailed={markFailed}
                             />
-                        }                        
+                        }
                     </Box>
                 </Box>
 
-                { /* ダイアログ　*/ }
-                { currentEntryId &&
+                { /* ダイアログ　*/}
+                {currentEntryId &&
                     <KifEntryEditDialog
                         open={openEditDialog}
                         entryId={currentEntryId}

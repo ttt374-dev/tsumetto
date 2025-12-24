@@ -1,6 +1,8 @@
+import type { PieceTypeKey } from "./pieceType";
 
 export type Piece = {
-  name: string;
+  //name: string;
+  key: PieceTypeKey;
   isBlack: boolean;
 };
 
