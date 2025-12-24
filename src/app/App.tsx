@@ -6,7 +6,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import PlayerScreen from '../features/kif/screens/PlayerScreen'
 import LibraryScreen from '../features/kif/screens/LibraryScreen';
 import { KifProvider } from './providers/KifProvider';
-import PieceReplayScreen from '../features/kif/screens/PieceReplayScreen';
+import ReplayScreen from '../features/kif/screens/ReplayScreen';
 
 
 // ステータスバーをオーバーレイにしない
@@ -27,7 +27,7 @@ export default function App() {
         <Routes>
           <Route path="/player" element={<PlayerScreen />}/>
           <Route path="/library" element={<LibraryScreen />}/>
-          <Route path="/replay" element={<PieceReplayScreen/>} />
+          <Route path="/replay" element={<ReplayScreen/>} />
                     <Route path="/" element={<Navigate to="/player"/>} />
         </Routes>
       </BrowserRouter>

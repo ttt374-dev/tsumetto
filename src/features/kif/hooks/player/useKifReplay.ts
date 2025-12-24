@@ -22,7 +22,8 @@ export function useKifReplay(initialBoard: Board, hands: Hand, moves: Move[]) {
         board[y][x] = move.piece
         
         if (move.from !== null){
-            
+            const { x: x2,  y: y2} = posToIndex(move.from)
+            board[y2][x2] = null
         }
         //board[move.position.file][move.position.rank] = move.piece
 
