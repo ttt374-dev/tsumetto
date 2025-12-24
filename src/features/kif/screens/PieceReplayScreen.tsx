@@ -8,7 +8,7 @@ import { parseMoves } from '../utils/kifParser'
 import { PreviewSharp } from '@mui/icons-material'
 import { useKifReplay } from '../hooks/player/useKifReplay'
 
-function PieceReplayScreen() {
+export default function PieceReplayScreen() {
     const initialBoard = createBoard()
     const hands = { black: "", white: "" }
 

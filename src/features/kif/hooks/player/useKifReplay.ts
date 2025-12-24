@@ -20,6 +20,10 @@ export function useKifReplay(initialBoard: Board, hands: Hand, moves: Move[]) {
     function applyMove(board: Board, hands: Hand, move: Move) {
         const { x, y } = posToIndex(move.position)
         board[y][x] = move.piece
+        
+        if (move.from !== null){
+            
+        }
         //board[move.position.file][move.position.rank] = move.piece
 
     }

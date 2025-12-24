@@ -58,7 +58,11 @@ export default function PlayerScreen() {
             navigateTo("prev")
         },
         onSwipedUp: () => { hideMoves() },
-        onSwipedDown: () => { showMoves() },
+        onSwipedDown: () => { 
+            showMoves()
+            currentIndex < kifData.moves.length - 1 && setCurrentIndex(currentIndex + 1) 
+
+         },
 
         trackMouse: true, // PCでもマウスでスワイプ可能
         preventScrollOnSwipe: true,
