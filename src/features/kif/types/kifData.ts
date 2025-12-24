@@ -18,12 +18,13 @@ export type Hand = {
 
 
 export type HandNew = Record<OwnerType, Record<HandPieceKey, number>>;
-export type HandPieceKey = {
+export type HandPieceKeyAuto = {
   [K in PieceTypeKey]:
     typeof PieceTypes[K] extends { promoted: false }
       ? K
       : never
 }[PieceTypeKey];
+export type HandPieceKey = "歩" | "香" | "桂" | "銀" | "金" | "角" | "飛"
 
 export function createEmptyHand(): Record<HandPieceKey, number> {
   const hand = {} as Record<HandPieceKey, number>;
