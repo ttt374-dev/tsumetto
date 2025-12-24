@@ -1,6 +1,6 @@
 import React, { createContext, useContext, type ReactNode } from "react";
 //import { useKifLibrary } from '../../features/kif/hooks/useKifLibrary'
-import { useKifPlayer } from "../../features/kif/hooks/player/useKifPlayer";
+//import { useKifPlayer } from "../../features/kif/hooks/player/useKifPlayer";
 import { useKifLearning } from "../../features/kif/hooks/learning/useKifLearning";
 import { useKifNavigation } from '../../features/kif/hooks/useKifNavigation'
 import { useKifPlayerUI } from "../../features/kif/hooks/player/useKifPlayerUI";
@@ -27,7 +27,7 @@ export const KifProvider = ({ children }: { children: ReactNode }) => {
   const sortedEntries = useKifSortedEntries(entries, records, kifLibrarySort.sort,)
   //nsole.log("sorted entries on provider", sortedEntries, kifLibrarySort.sort)
 
-  const kifPlayer = useKifPlayer(sortedEntries);
+  //const kifPlayer = useKifPlayer(sortedEntries);
   const kifNavigation = useKifNavigation(sortedEntries)
   
   //const kifPlayer = useKifPlayer(entries);
@@ -36,7 +36,7 @@ export const KifProvider = ({ children }: { children: ReactNode }) => {
 
   return (    
     <KifContext.Provider value={{ 
-       kifPlayer, kifLearning, kifNavigation, kifPlayerUI, 
+       kifLearning, kifNavigation, kifPlayerUI, 
        kifEntryController, kifLibrarySort, sortedEntries }}>
       {children}
     </KifContext.Provider>

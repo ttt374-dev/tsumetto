@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Stack, Box,  } from "@mui/material";
 
 import { AppLayout } from "../../../shared/components/AppLayout/AppLayout";
@@ -9,12 +10,13 @@ import LibraryBulkSelectionControl from '../components/library/LibraryBulkSelect
 import LibrarySortControl from '../components/library/LibrarySortControl';
 import LibraryDeleteControl from '../components/library/LibraryDeleteControl';
 import LibraryList from '../components/library/LibraryList';
+import { KifEntryEditDialog } from '../dialogs/KifEntryEditDialog';
 
 //////////////
-export default function LibraryScreen() {
-    
+export default function LibraryScreen() {    
     const { kifEntryController, kifNavigation,         
-        kifLibrarySort, sortedEntries } = useKif()
+        kifLibrarySort, sortedEntries
+    } = useKif()
     const {
         importFiles,
         deleteEntries,
@@ -25,12 +27,30 @@ export default function LibraryScreen() {
     } = kifNavigation
     
     const { sort, setSortOrder, setSortKey } = kifLibrarySort    
-    const {checkedIds, isChecked, toggleChecked, clearChecked, selectAllChecked} = useKifLibraryList(sortedEntries)
+    const {
+        checkedIds, isChecked, toggleChecked, 
+        clearChecked, selectAllChecked
+    } = useKifLibraryList(sortedEntries)
 
+    // edit mode
+    const [ editMode, setEditMode ] = useState(false)
+    const toggleEditMode = () => {
+        setEditMode(prev => !prev)
+    }
+    const [openEditDialog, setOpenEditDialog] = useState(false)
+    const [entryToEdit, setEntryToEdit ] = useState<KifEntry | null>(null)
+        const {
+        updateTitle,
+        deleteEntry,
+    } = kifEntryController
     return (
         <AppLayout
             header={"Library"}
             footer={
+                <>
+                <button onClick={toggleEditMode}>
+                    { editMode ? "Edit" : "View"} Mode
+                </button>
                 <MultipleFilesButton 
                     label="棋譜ファイルを登録" 
                     onFileSelected={
@@ -39,6 +59,7 @@ export default function LibraryScreen() {
                         }
                     }
                 />
+                </>
             }
         >
             { /* コントロール */}   
@@ -63,7 +84,24 @@ export default function LibraryScreen() {
                 setCurrentEntryId={setCurrentEntryId}
                 isChecked={isChecked}
                 toggleChecked={toggleChecked}
+                onEdit={(entry: KifEntry) => {
+                    setEntryToEdit(entry)
+                    setOpenEditDialog(true)
+                }}
+                editMode={editMode}
             />
+            { /* ダイアログ　*/ }
+            {entryToEdit &&
+                <KifEntryEditDialog
+                    open={openEditDialog}
+                    entry={entryToEdit}
+                    onUpdateTitle={(title: string) => updateTitle(entryToEdit.id, title)}
+                    onConfirm={() => { }}
+                    onClose={() => setOpenEditDialog(false)}
+                    onDelete={() => deleteEntry(entryToEdit.id)}
+                />
+            }
+            
             
         </AppLayout>
     )

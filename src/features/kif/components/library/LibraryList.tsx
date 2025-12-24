@@ -4,7 +4,7 @@ import EditIcon from '@mui/icons-material/Edit';
 
 import type { KifEntry, KifEntryWithLearning } from '../../types/kifEntry';
 import { formatAccuracy } from "../../utils";
-import { Check } from "@mui/icons-material";
+import { Check, OndemandVideoTwoTone } from "@mui/icons-material";
 import { useNavigate} from 'react-router-dom'
 
 function LibraryList({
@@ -12,12 +12,16 @@ function LibraryList({
     setCurrentEntryId,
     isChecked,
     toggleChecked,
+    editMode,
+    onEdit,
     
 }: {
     sortedEntries: KifEntry[];
     setCurrentEntryId: (id: string) => void,
     isChecked: (id: string) => boolean,    
     toggleChecked: (id: string) => void;       
+    editMode: boolean,
+    onEdit: (entry: KifEntry) => void,
 }) {
     
     /////////////////////////////////////////////////////
@@ -34,11 +38,16 @@ function LibraryList({
                         border: 1
                     }}
                     onClick={() => {
-                        setCurrentEntryId(entry.id)
-                        navigate("/player")
+                        if (editMode){
+                            onEdit(entry)
+                        } else {
+                            setCurrentEntryId(entry.id)
+                            navigate("/player")
+                        }
                     }}
                 >
-                    <ListItemIcon onClick={(e) => e.stopPropagation()}>
+                    <ListItemIcon sx={{ minWidth: 16 }} onClick={(e) => e.stopPropagation()}>
+                        { editMode &&
                         <Checkbox
                             size="small"
                             edge="start"
@@ -49,12 +58,8 @@ function LibraryList({
                                 toggleChecked(entry.id)
                             }}
                         />
-                        <IconButton
-                            size="small"
-
-                        >
-                            <EditIcon />
-                        </IconButton>
+}
+                        
                     </ListItemIcon>
                     <ListItemText>
                         {entry.kifData.title} -
