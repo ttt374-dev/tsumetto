@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useMemo } from "react"
 import { TextField, IconButton, Typography } from '@mui/material';
 import { Dialog, DialogTitle, DialogContent, DialogActions,
   Box, Button} from "@mui/material"
@@ -11,11 +11,13 @@ import EditIcon from '@mui/icons-material/Edit';
 //import { useKif } from '../hooks/useKif'
 import { useNavigate } from "react-router-dom"
 import type { KifEntry } from "../types/kifEntry";
+import { useKif } from '../hooks/useKif'
 
 type Props = {
   open: boolean
   //entryId: string | null
-  entry: KifEntry,
+  //entry: KifEntry,
+  entryId: string,
   onUpdateTitle: (title: string) => void;
   onConfirm: (entry: KifEntry) => void;
   onClose: () => void
@@ -24,8 +26,8 @@ type Props = {
 
 export function KifEntryEditDialog({
   open,
-  //entryId,
-  entry,
+  entryId,
+  //entry,
   onUpdateTitle,
   onConfirm,
   onClose,
@@ -40,7 +42,11 @@ export function KifEntryEditDialog({
   const [title, setTitle] = useState("")
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(title);
-
+  const entries = useKif().kifEntryController.entries
+  const entry = useMemo(
+    () => entries.find(e => e.id === entryId),
+    [entries, entryId]
+  );
   // initialize
   // entry 切り替え時に title を同期
   useEffect(() => {
@@ -130,7 +136,7 @@ export function KifEntryEditDialog({
           登録日：{ (entry != null) ? new Date(entry.createdAt).toLocaleString("ja-JP") : "-" }
         </Box>
         <Box>
-          UUID: { entry.id.slice(0, 5)}...
+          UUID: { entryId.slice(0, 5)}...
         </Box>
         { /* 正答誤答*/ }
         <div>

@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useMemo } from 'react'
 import { List, ListItem, ListItemIcon, ListItemText, Checkbox, IconButton, Typography } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 
@@ -6,6 +6,7 @@ import type { KifEntry, KifEntryWithLearning } from '../../types/kifEntry';
 import { formatAccuracy } from "../../utils";
 import { Check, OndemandVideoTwoTone } from "@mui/icons-material";
 import { useNavigate} from 'react-router-dom'
+
 
 function LibraryList({
     sortedEntries,    
@@ -21,11 +22,12 @@ function LibraryList({
     isChecked: (id: string) => boolean,    
     toggleChecked: (id: string) => void;       
     editMode: boolean,
-    onEdit: (entry: KifEntry) => void,
+    onEdit: (entryId: string) => void,
 }) {
-    
-    /////////////////////////////////////////////////////
+
     const navigate = useNavigate()
+    /////////////////////////////////////////////////////
+    
     return (
         <List>
             {sortedEntries.map((entry, i) => (
@@ -39,7 +41,7 @@ function LibraryList({
                     }}
                     onClick={() => {
                         if (editMode){
-                            onEdit(entry)
+                            onEdit(entry.id)
                         } else {
                             setCurrentEntryId(entry.id)
                             navigate("/player")

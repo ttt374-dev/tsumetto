@@ -38,8 +38,8 @@ export default function LibraryScreen() {
         setEditMode(prev => !prev)
     }
     const [openEditDialog, setOpenEditDialog] = useState(false)
-    const [entryToEdit, setEntryToEdit ] = useState<KifEntry | null>(null)
-        const {
+    const [entryToEditId, setEntryToEditId ] = useState<string|null>(null)
+    const {
         updateTitle,
         deleteEntry,
     } = kifEntryController
@@ -84,25 +84,23 @@ export default function LibraryScreen() {
                 setCurrentEntryId={setCurrentEntryId}
                 isChecked={isChecked}
                 toggleChecked={toggleChecked}
-                onEdit={(entry: KifEntry) => {
-                    setEntryToEdit(entry)
+                onEdit={(entryId: string) => {
+                    setEntryToEditId(entryId)
                     setOpenEditDialog(true)
                 }}
                 editMode={editMode}
             />
             { /* ダイアログ　*/ }
-            {entryToEdit &&
+            {entryToEditId &&
                 <KifEntryEditDialog
                     open={openEditDialog}
-                    entry={entryToEdit}
-                    onUpdateTitle={(title: string) => updateTitle(entryToEdit.id, title)}
+                    entryId={entryToEditId}
+                    onUpdateTitle={(title: string) => updateTitle(entryToEditId, title)}
                     onConfirm={() => { }}
                     onClose={() => setOpenEditDialog(false)}
-                    onDelete={() => deleteEntry(entryToEdit.id)}
+                    onDelete={() => deleteEntry(entryToEditId)}
                 />
             }
-            
-            
         </AppLayout>
     )
 }

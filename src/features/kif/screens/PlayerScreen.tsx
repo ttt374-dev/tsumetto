@@ -107,14 +107,14 @@ export default function PlayerScreen() {
                 </Box>
 
                 { /* ダイアログ　*/ }
-                { currentEntry &&
+                { currentEntryId &&
                     <KifEntryEditDialog
                         open={openEditDialog}
-                        entry={currentEntry}
-                        onUpdateTitle={(title: string) => updateTitle(currentEntry.id, title)}
+                        entryId={currentEntryId}
+                        onUpdateTitle={(title: string) => updateTitle(currentEntryId, title)}
                         onConfirm={() => { }}
                         onClose={() => setOpenEditDialog(false)}
-                        onDelete={() => deleteEntry(currentEntry.id)}
+                        onDelete={() => deleteEntry(currentEntryId)}
                     />
                 }
 
