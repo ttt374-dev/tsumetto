@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Filesystem, Directory, Encoding } from "@capacitor/filesystem";
 
-import type { KifLearningRecord, KifLearningStore } from "../types/kifLearning";
+import type { KifLearningRecord, KifLearningStore } from "../../types/";
 
 const LEARNING_FILE = "kif-learning.json";
 

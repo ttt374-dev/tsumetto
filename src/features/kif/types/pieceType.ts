@@ -5,6 +5,11 @@ export const PieceTypes = {
     display: "歩",
     promoted: false,
   },
+  "歩成": {
+    name: "歩",
+    display: "と",
+    promoted: true,
+  },
   "と": {
     name: "成歩",
     display: "と",

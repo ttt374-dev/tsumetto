@@ -1,7 +1,8 @@
 //import type { Move } from '../types/kif'
 
-import type { Move, Position, KifEvent } from '../types/'
-import type { PieceTypeKey } from '../types/pieceType';
+import type { Move, HandNew, Position, KifEvent, HandPieceKey, OwnerType } from '../types/'
+import type { PieceTypeKey,  } from '../types/pieceType';
+import { createEmptyHand } from '../types';
 
 const kanToNumber: Record<string, number> = {
   "一": 1,
@@ -23,6 +24,60 @@ function zenkakuToNumber(ch: string): number {
   return parseInt(ch, 10);
 }
 
+// 持ち駒
+function parsePieceToken(token: string): {
+  piece: HandPieceKey;
+  count: number;
+} | null {
+  const match = token.match(/^(.)([一二三四五六七八九])?$/);
+  if (!match) return null;
+
+  const piece = match[1] as HandPieceKey;
+  const count = match[2] ? kanToNumber[match[2]] : 1;
+
+  return { piece, count };
+}
+function parseHandString(
+  text: string
+): Record<HandPieceKey, number> {
+  const hand = createEmptyHand(); // PieceTypes 由来の初期化
+
+  if (!text.trim()) return hand;
+
+  const tokens = text.trim().split(/\s+/);
+
+  for (const token of tokens) {
+    const parsed = parsePieceToken(token);
+    if (!parsed) continue;
+
+    hand[parsed.piece] += parsed.count;
+  }
+
+  return hand;
+}
+export function parseHandLine(
+  line: string,
+  hands: HandNew
+) {
+  // 全角コロン・半角コロン両対応
+  const [label, body] = line.split(/[：:]/);
+  if (!label || !body) return;
+
+  let owner: OwnerType | null = null;
+
+  if (label.includes("先手")) {
+    owner = "black";
+  } else if (label.includes("後手")) {
+    owner = "white";
+  }
+
+  if (!owner) return;
+
+  hands[owner] = parseHandString(body);
+}
+
+
+////////////////////////////
 // 同なら null　を返す
 function parsePosition(moveStr: string): Position | null {
     console.log("parse position", moveStr)

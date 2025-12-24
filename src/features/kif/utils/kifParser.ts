@@ -86,7 +86,7 @@ function parseBoard(lines: string[]): Board {
   }
   return board
 }
-function parseHands(lines: string[]): Hand{
+export function parseHands(lines: string[]): Hand{
   let hands: Hand = { black: "", white: "" };  
     for (const line of lines) {    
     // 先手の持駒

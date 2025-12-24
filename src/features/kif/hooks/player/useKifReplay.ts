@@ -1,13 +1,25 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import type { Board, Hand, Move, Position} from '../../types'
 
-export function useKifReplay(initialBoard: Board, hands: Hand, moves: Move[]) {
+export function useKifReplay(
+    initialBoard: Board, 
+    hands: Hand, 
+    moves: Move[],
+    currentEntryId: string | null,
+) {
     const [currentIndex, setCurrentIndex] = useState(0)
 
+    useEffect(()=>{}
+    , [])
     const board = useMemo(
         () => buildBoardUntil(currentIndex),
-        [currentIndex]
+        [currentIndex, initialBoard, moves]
     );
+    // ⭐ entry 切り替え時のリセット
+    useEffect(() => {
+        setCurrentIndex(0);
+    }, [currentEntryId]);
+
 
 
     function posToIndex(pos: Position) {

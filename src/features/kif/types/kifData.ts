@@ -1,4 +1,5 @@
 import type { PieceTypeKey } from "./pieceType";
+import { PieceTypes } from './pieceType'
 
 export type Piece = {
   //name: string;
@@ -8,10 +9,33 @@ export type Piece = {
 
 export type Board = (Piece | null)[][];
 
+export type OwnerType = "black" | "white"
+
 export type Hand = {
   black: string; // "金二 銀" のような文字列
   white: string;
 };
+
+
+export type HandNew = Record<OwnerType, Record<HandPieceKey, number>>;
+export type HandPieceKey = {
+  [K in PieceTypeKey]:
+    typeof PieceTypes[K] extends { promoted: false }
+      ? K
+      : never
+}[PieceTypeKey];
+
+export function createEmptyHand(): Record<HandPieceKey, number> {
+  const hand = {} as Record<HandPieceKey, number>;
+
+  for (const [key, def] of Object.entries(PieceTypes)) {
+    if (!def.promoted) {
+      hand[key as HandPieceKey] = 0;
+    }
+  }
+
+  return hand;
+}
 
 export type Move = {
   moveNumber: number;
@@ -59,6 +83,7 @@ export function createKifData(
   return {
     board: createBoard(),
     hands: { black: "", white: "" },
+    //hands: { black: createEmptyHand(), white: createEmptyHand()},
     moves: [],
     title: "",
     //createdAt: Date.now(),

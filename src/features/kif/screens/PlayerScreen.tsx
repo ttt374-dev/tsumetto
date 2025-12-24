@@ -22,6 +22,7 @@ import type { Move } from '../types/'
 import MarkLearning from '../components/player/MarkLearning';
 import { useKifPlayerUI } from '../hooks/player/useKifPlayerUI';
 import { useKifReplay } from '../hooks/player/useKifReplay';
+import { LocalMoviesOutlined, PersonRemoveRounded } from '@mui/icons-material';
 /////////////////////////////
 export default function PlayerScreen() {
     const {
@@ -43,7 +44,7 @@ export default function PlayerScreen() {
         hideMoves, showMoves,
         isMovesVisible, toggleMovesVisible,
         openEditDialog, setOpenEditDialog
-    } = useKifPlayerUI()
+    } = useKifPlayerUI(currentEntryId)
     const { getRecord, markSolved, markFailed } = kifLearning
     const navigate = useNavigate()
     const kifData = currentEntry?.kifData ?? createKifData()
@@ -57,10 +58,13 @@ export default function PlayerScreen() {
         onSwipedRight: () => {// 右スワイプ → 前の棋譜へ
             navigateTo("prev")
         },
-        onSwipedUp: () => { hideMoves() },
+        onSwipedUp: () => { 
+            currentIndex === 0 && hideMoves(); 
+            prevMove() 
+        },
         onSwipedDown: () => { 
-            showMoves()
-            currentIndex < kifData.moves.length - 1 && setCurrentIndex(currentIndex + 1) 
+            !isMovesVisible && showMoves()
+            nextMove()
 
          },
 
@@ -69,7 +73,14 @@ export default function PlayerScreen() {
     });
 
     const initialBoard = kifData.board
-    const { board, currentIndex, setCurrentIndex } = useKifReplay(initialBoard, kifData.hands, kifData.moves)
+    const { board, currentIndex, setCurrentIndex } = 
+        useKifReplay(initialBoard, kifData.hands, kifData.moves, currentEntryId)
+    const prevMove = () => { 
+        currentIndex > 0 && setCurrentIndex(prev => prev - 1)
+    }
+    const nextMove = () => {
+        currentIndex < kifData.moves.length && setCurrentIndex(prev => prev + 1) 
+    }
 
     //////////
     return (
@@ -116,10 +127,20 @@ export default function PlayerScreen() {
                 <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "center", margin: 1 }}>
                     <Box>
                         {/* 解答表示 */}
+                        { currentIndex } / { kifData.moves.length}
+                        <button onClick={prevMove}>
+                            前の手へ
+                        </button>
+                        <button onClick={() => { showMoves(); nextMove() } }>
+                            次の手へ
+                        </button>
+{ /* 
                         < button onClick={toggleMovesVisible}
                             disabled={kifData.moves.length === 0} >
                             {isMovesVisible ? "解答を隠す" : "解答を表示"}
                         </button >
+                        */ }
+                        
                         {isMovesVisible &&
                             <MovesView moves={kifData.moves} />}
                     </Box>
