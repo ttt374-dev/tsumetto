@@ -12,7 +12,7 @@ export default function MovesView({ moves  }: Props) {
                 
                 moves.map((m, i) => (
                     <div key={i} style={{ padding: "2px 0" }}>
-                        {i + 1}: { m.isBlack ? '▲' : '△'} {m.moveText} ({m.from})
+                        {i + 1}: { m.isBlack ? '▲' : '△'} {m.moveText} ({m.from?.file}, {m.from?.rank})
                     </div>
                 ))
             }

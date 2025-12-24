@@ -18,7 +18,7 @@ export type Move = {
   moveText: string;
   piece: Piece;
   isBlack: boolean;
-  from: string | null;
+  from: Position | null;
   position: Position;
   drop: boolean;
 }

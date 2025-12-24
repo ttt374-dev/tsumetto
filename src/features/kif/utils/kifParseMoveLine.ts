@@ -43,6 +43,25 @@ if (moveStr.startsWith("同"))
   return { file, rank };
 }
 
+function parseFromToPosition(from?: string | null): Position | null {
+  if (!from) return null;          // 空・undefined・null
+  if (from.length !== 2) return null;
+
+  const file = Number(from[0]);
+  const rank = Number(from[1]);
+
+  if (!Number.isInteger(file) || !Number.isInteger(rank)) {
+    return null;                   // 数字にできない
+  }
+
+  // 必要なら KIF の「打ち」
+  if (file === 0 && rank === 0) {
+    return null;
+  }
+
+  return { file, rank };
+}
+
 // 1行の KIF を解析して Move オブジェクトへ
 export function parseMoveLine(line: string, prevPosition?: Position): KifEvent | null {
   console.log("parse move line", line, prevPosition)
@@ -54,7 +73,8 @@ export function parseMoveLine(line: string, prevPosition?: Position): KifEvent |
   const moveNumber = parseInt(m[1], 10);
   const isBlack = moveNumber % 2 == 1
   const moveText = m[2].trim();  // "１六歩"
-  const from = m[3] || null;     // "43" 等、無ければ null
+  //const from = m[3] || null;     // "43" 等、無ければ null
+  const from = parseFromToPosition(m[3]) || null
 
   if (moveText.startsWith("投了")){
     console.log("投了！")
