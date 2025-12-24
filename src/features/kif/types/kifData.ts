@@ -14,8 +14,16 @@ export type Hand = {
 export type Move = {
   moveNumber: number;
   moveText: string;
+  piece: Piece;
   isBlack: boolean;
   from: string | null;
+  position: Position;
+  drop: boolean;
+}
+
+export type Position = {
+  file: number;
+  rank: number;
 }
 
 export type KifData = {
@@ -26,6 +34,14 @@ export type KifData = {
   title: string;
   source?: string;  
 }
+
+export type KifEvent = Move | GameEnd
+
+export type GameEnd = 
+  | { type: "resign" }     // 投了
+  | { type: "timeup" }     // 切れ負け
+  | { type: "illegal" }    // 反則
+  | { type: "draw" }  
 
 //////////////////
 // 初期化関数

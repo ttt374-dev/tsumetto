@@ -15,7 +15,7 @@ export function parseKif(text: string): KifData  {
 }
 
 ////////
-function parseMoves(lines: string[]): Move[] {
+export function parseMoves(lines: string[]): Move[] {
   const moves: Move[] = [];
   let inMoves = false;
 
