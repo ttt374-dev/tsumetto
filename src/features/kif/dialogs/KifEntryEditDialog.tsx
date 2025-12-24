@@ -24,7 +24,7 @@ type Props = {
   onDelete: () => void
 }
 
-export function KifEntryEditDialog({
+export default function KifEntryEditDialog({
   open,
   entryId,
   //entry,

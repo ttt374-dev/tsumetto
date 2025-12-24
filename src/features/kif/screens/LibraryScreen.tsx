@@ -1,5 +1,8 @@
 import { useState } from 'react'
 import { Stack, Box,  } from "@mui/material";
+import BackupIcon from '@mui/icons-material/Backup';
+import { useNavigate } from 'react-router-dom';
+import { IconButton } from '@mui/joy';
 
 import { AppLayout } from "../../../shared/components/AppLayout/AppLayout";
 import { useKif } from '../hooks/useKif'
@@ -10,11 +13,13 @@ import LibraryBulkSelectionControl from '../components/library/LibraryBulkSelect
 import LibrarySortControl from '../components/library/LibrarySortControl';
 import LibraryDeleteControl from '../components/library/LibraryDeleteControl';
 import LibraryList from '../components/library/LibraryList';
-import { KifEntryEditDialog } from '../dialogs/KifEntryEditDialog';
-import { useNavigate } from 'react-router-dom';
+import KifEntryEditDialog from '../dialogs/KifEntryEditDialog';
+import KifBackupDialog from '../dialogs/KifBackupDialog';
+
 
 //////////////
 export default function LibraryScreen() {    
+    const navigate = useNavigate()
     const { kifEntryController, kifNavigation,         
         kifLibrarySort, sortedEntries
     } = useKif()
@@ -34,53 +39,64 @@ export default function LibraryScreen() {
     } = useKifLibraryList(sortedEntries)
 
     // edit mode
-    const [ editMode, setEditMode ] = useState(false)
-    const toggleEditMode = () => {
-        setEditMode(prev => !prev)
-    }
-    const [openEditDialog, setOpenEditDialog] = useState(false)
     const [entryToEditId, setEntryToEditId ] = useState<string|null>(null)
     const {
         updateTitle,
         deleteEntry,
     } = kifEntryController
-    const navigate = useNavigate()
+    
+    const [ editMode, setEditMode ] = useState(false)
+    const toggleEditMode = () => {
+        setEditMode(prev => !prev)
+    }
+    const [openEditDialog, setOpenEditDialog] = useState(false)
+    const [backupOpen, setBackupOpen] = useState(false)
 
+    
+    ////////////////////////////////////////
     return (
         <AppLayout
             header={"Library"}
             footer={
                 <>
-                <button onClick={toggleEditMode}>
-                    { editMode ? "Edit" : "View"} Mode
-                </button>
-                <MultipleFilesButton 
-                    label="棋譜ファイルを登録" 
-                    onFileSelected={
-                        async (files: File[]) => {
-                            importFiles(files)
+                    <button onClick={toggleEditMode}>
+                        {editMode ? "Edit" : "View"} Mode
+                    </button>
+                    <MultipleFilesButton
+                        label="棋譜ファイルを登録"
+                        onFileSelected={
+                            async (files: File[]) => {
+                                importFiles(files)
+                            }
                         }
-                    }
-                />
+                    />
                 </>
             }
         >
             { /* コントロール */}   
+            
             <Stack direction="row">
-                <LibraryBulkSelectionControl
-                    entries={sortedEntries}
-                    checkedIds={checkedIds}
-                    selectAllCheckbox={selectAllChecked}
-                    clearAllCheckbox={clearChecked}
-                />
-                <LibraryDeleteControl 
-                    entries={sortedEntries}
-                    checkedIds={checkedIds}
-                    onDelete={(entries: KifEntry[]) => deleteEntries(entries)}
-                />
+                {editMode && <>
+                    <LibraryBulkSelectionControl
+                        entries={sortedEntries}
+                        checkedIds={checkedIds}
+                        selectAllCheckbox={selectAllChecked}
+                        clearAllCheckbox={clearChecked}
+                    />
+                    <LibraryDeleteControl
+                        entries={sortedEntries}
+                        checkedIds={checkedIds}
+                        onDelete={(entries: KifEntry[]) => deleteEntries(entries)}
+                    />
+                </>}
+                <IconButton >
+                    <BackupIcon></BackupIcon>
+                </IconButton>
+                
                 <Box sx={{ flexGrow: 1 }} />
                 <LibrarySortControl sort={sort} setSortKey={setSortKey} setSortOrder={setSortOrder} />
             </Stack>
+            
             { /*  エントリーリスト */}
             <LibraryList 
                 sortedEntries={sortedEntries}
@@ -110,6 +126,10 @@ export default function LibraryScreen() {
                     onDelete={() => deleteEntry(entryToEditId)}
                 />
             }
+            <KifBackupDialog
+                open={backupOpen}
+                onClose={() => setBackupOpen(false)}
+            />
         </AppLayout>
     )
 }

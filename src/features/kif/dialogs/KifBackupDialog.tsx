@@ -10,7 +10,7 @@ type Props = {
     onClose: () => void
 }
 
-export function KifBackupDialog({ open, onClose }: Props) {
+export default function KifBackupDialog({ open, onClose }: Props) {
     const { backup, restore } = useKifBackupRestore()
     const fileInputRef = useRef<HTMLInputElement>(null)
 
