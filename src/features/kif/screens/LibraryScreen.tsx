@@ -15,7 +15,7 @@ import LibraryDeleteControl from '../components/library/LibraryDeleteControl';
 import LibraryList from '../components/library/LibraryList';
 import KifEntryEditDialog from '../dialogs/KifEntryEditDialog';
 import KifBackupDialog from '../dialogs/KifBackupDialog';
-
+import { useKifLibraryUI } from '../hooks/library/useKifLibraryUI';
 
 //////////////
 export default function LibraryScreen() {    
@@ -39,20 +39,32 @@ export default function LibraryScreen() {
     } = useKifLibraryList(sortedEntries)
 
     // edit mode
-    const [entryToEditId, setEntryToEditId ] = useState<string|null>(null)
+    
     const {
         updateTitle,
         deleteEntry,
     } = kifEntryController
-    
+    const { 
+        entryToEditId,
+        setEntryToEditId,
+        editMode,
+        toggleEditMode,
+        openEditDialog,
+        setOpenEditDialog,
+        
+        backupOpen,
+        setBackupOpen,
+
+    } = useKifLibraryUI()
+    /*
+    const [entryToEditId, setEntryToEditId ] = useState<string|null>(null)
     const [ editMode, setEditMode ] = useState(false)
     const toggleEditMode = () => {
         setEditMode(prev => !prev)
     }
     const [openEditDialog, setOpenEditDialog] = useState(false)
     const [backupOpen, setBackupOpen] = useState(false)
-
-    
+    */
     ////////////////////////////////////////
     return (
         <AppLayout
@@ -73,8 +85,7 @@ export default function LibraryScreen() {
                 </>
             }
         >
-            { /* コントロール */}   
-            
+            { /* コントロール */}               
             <Stack direction="row">
                 {editMode && <>
                     <LibraryBulkSelectionControl
@@ -89,7 +100,7 @@ export default function LibraryScreen() {
                         onDelete={(entries: KifEntry[]) => deleteEntries(entries)}
                     />
                 </>}
-                <IconButton >
+                <IconButton onClick={()=>setBackupOpen(true)}>
                     <BackupIcon></BackupIcon>
                 </IconButton>
                 
@@ -112,7 +123,7 @@ export default function LibraryScreen() {
                     }
                 }}
                 editMode={editMode}
-                toggleEditMode={() => setEditMode(prev => !prev)}
+                toggleEditMode={toggleEditMode}
                 clearAllCheckbox={clearChecked}
             />
             { /* ダイアログ　*/ }

@@ -13,7 +13,7 @@ export type KifContextValue = {
   //kifPlayer: ReturnType<typeof useKifPlayer>;
   kifLearning: ReturnType<typeof useKifLearning>
   kifNavigation: ReturnType<typeof useKifNavigation>
-  kifPlayerUI: ReturnType<typeof useKifPlayerUI>
+  //kifPlayerUI: ReturnType<typeof useKifPlayerUI>
   kifEntryController: ReturnType<typeof useKifEntryController>
   kifLibrarySort: ReturnType<typeof useKifLibrarySort>
   sortedEntries: KifEntry[]

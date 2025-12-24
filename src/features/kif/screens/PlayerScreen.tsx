@@ -13,17 +13,18 @@ import MovesView from "../components/player/MovesView";
 import { AppLayout } from '../../../shared/components/AppLayout/AppLayout';
 import { useKif } from '../hooks/useKif'
 import { createKifData, type KifLearningRecord } from '../types'
-import { KifEntryEditDialog } from "../dialogs/KifEntryEditDialog";
+import KifEntryEditDialog from "../dialogs/KifEntryEditDialog";
 import { formatAccuracy } from '../utils';
 import type { KifEntry } from '../types/kifEntry';
 //import { createBoard, createPlayerState } from '../hooks/useKifPlayerOrig';
 import { useKifEntryController } from '../hooks/useKifEntryController';
 import type { Move } from '../types/'
 import MarkLearning from '../components/player/MarkLearning';
+import { useKifPlayerUI } from '../hooks/player/useKifPlayerUI';
 /////////////////////////////
 export default function PlayerScreen() {
     const {
-        kifEntryController, kifPlayerUI, kifNavigation,
+        kifEntryController, kifNavigation,
         kifLearning,
         sortedEntries
     } = useKif()
@@ -38,13 +39,29 @@ export default function PlayerScreen() {
         navigateTo,
     } = kifNavigation
     const {
+        hideMoves, showMoves,
         isMovesVisible, toggleMovesVisible,
         openEditDialog, setOpenEditDialog
-    } = kifPlayerUI
+    } = useKifPlayerUI()
     const { getRecord, markSolved, markFailed } = kifLearning
     const navigate = useNavigate()
     const kifData = currentEntry?.kifData ?? createKifData()
     const learningRecord = getRecord(currentEntryId)
+        
+      // スワイプハンドラ
+      const swipeHandlers = useSwipeable({
+          onSwipedLeft: () => {// 左スワイプ → 次の棋譜へ
+              navigateTo("next")
+          },
+          onSwipedRight: () => {// 右スワイプ → 前の棋譜へ
+              navigateTo("prev")
+          },
+          onSwipedUp: () => { hideMoves() },
+          onSwipedDown: () => { showMoves() },
+  
+          trackMouse: true, // PCでもマウスでスワイプ可能
+          preventScrollOnSwipe: true,
+      });
     //////////
     return (
         <AppLayout
@@ -72,7 +89,10 @@ export default function PlayerScreen() {
                     />
                 </Box>
                 { /* 盤面表示 */}
-                <Box>
+                <Box {...swipeHandlers} sx={{
+                    userSelect: "none", // 選択防止
+                    touchAction: "pan-y", // 縦スクロールは阻害しない
+                }}>
                     <BoardView
                         board={kifData.board}
                         hands={kifData.hands}

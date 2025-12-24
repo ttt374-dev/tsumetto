@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSwipeable } from "react-swipeable";
 
 export function useKifPlayerUI() {
   const [isMovesVisible, setIsMovesVisible] = useState(false);
@@ -15,6 +16,7 @@ export function useKifPlayerUI() {
     
     setIsMovesVisible(v => !v);
   }
+
 
   return {
     showMoves,
