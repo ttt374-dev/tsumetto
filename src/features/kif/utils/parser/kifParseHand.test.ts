@@ -1,6 +1,8 @@
 // utils/parser/handParser.test.ts
 import { describe, it, expect } from 'vitest'
 import { parseHandLine, parseHandString } from "./kifParseHand";
+import { createEmptyHand, type Hand } from '../../types';
+//import { formatHand } from './kifParseHand';
 
 describe("parseHandText", () => {
   it("単数と複数を正しく解析できる", () => {
@@ -38,4 +40,15 @@ describe("parseHandText", () => {
       玉: 0,
     });
   });
-});
+  it("format", () => {
+    const hand = createEmptyHand()
+    hand["歩"] = 6
+    hand["金"] = 2
+    hand["飛"] = 1
+
+    //expect(formatHand(hand)).toEqual(
+    //  "飛 金二 歩六"
+    //)
+  })
+})
+

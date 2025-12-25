@@ -141,8 +141,17 @@ export default function PlayerScreen() {
                         </button >
                         */ }
                         
-                        {isMovesVisible &&
-                            <MovesView moves={kifData.moves} />}
+                        <Box sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            height: "100vh",
+                            //width: "100%",
+                            gap: 2,
+                            overflowY: "auto",
+                        }}>
+                            {isMovesVisible &&
+                                <MovesView moves={kifData.moves} />}
+                        </Box>
                     </Box>
                     <Box>
                         {learningRecord && currentEntryId &&

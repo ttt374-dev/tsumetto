@@ -28,8 +28,10 @@ export function parseMoves(lines: string[]): Move[] {
     }
     if (!inMoves) continue;
     
-    const move = parseMoveLine(line, prevTo)        
-    if (!move) continue
+    const moveResult = parseMoveLine(line, prevTo)        
+    if (!moveResult.ok) continue
+    //if (!move) continue
+    const move = moveResult.value
     if ("type" in move) {
   
     break // 終局
