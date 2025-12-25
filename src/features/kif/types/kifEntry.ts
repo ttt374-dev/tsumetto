@@ -1,5 +1,5 @@
-import { createKifData, type KifData } from './kifData'
-import { v4 as uuidv4 } from "uuid";
+import type { KifData } from './kifData'
+
 
 export type KifEntry = {
   id: string;         // 一意の識別子  
@@ -16,10 +16,3 @@ export type KifEntryWithLearning =
   accuracy: number | null   // 未学習は null
 }
 
-export function createEntity(){
-  return {
-    id: uuidv4(),
-    kifData: createKifData(),
-    createdAt: Date.now(),
-  }
-}

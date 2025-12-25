@@ -28,17 +28,6 @@ export type Hand = Record<HandPieceKey, number>
 }[PieceTypeKey];*/
 export type HandPieceKey = "歩" | "香" | "桂" | "銀" | "金" | "角" | "飛"
 
-export function createEmptyHand(): Record<HandPieceKey, number> {
-  const hand = {} as Record<HandPieceKey, number>;
-
-  for (const [key, def] of Object.entries(PieceTypes)) {
-    if (!def.promoted) {
-      hand[key as HandPieceKey] = 0;
-    }
-  }
-
-  return hand;
-}
 
 export type Move = {
   moveNumber: number;
@@ -73,24 +62,3 @@ export type GameEnd =
   | { type: "illegal" }    // 反則
   | { type: "draw" }  
 
-//////////////////
-// 初期化関数
-export const createEmptyBoard = (): Board =>
-  Array.from({ length: 9 }, () =>
-    Array.from({ length: 9 }, () => null)
-  );
-
-
-export function createKifData(
-  partial?: Partial<KifData>
-): KifData {
-  return {
-    board: createEmptyBoard(),
-    hands: { black: createEmptyHand(), white: createEmptyHand() },
-    //hands: { black: createEmptyHand(), white: createEmptyHand()},
-    moves: [],
-    title: "",
-    //createdAt: Date.now(),
-    ...partial,
-  };
-}

@@ -1,6 +1,6 @@
-import type { HandPieceKey } from '../../types';
-import { createEmptyHand, type Hand, type Hands } from '../../types';
+import type { Hand, Hands, HandPieceKey } from '../../types';
 import { kanToNumber, NumberToKanji } from './kanToNumber'
+import { createEmptyHand } from '../../domain';
 
 // 持ち駒
 function parsePieceToken(token: string): {

@@ -1,8 +1,7 @@
 
 import { useState, useMemo } from 'react'
 import BoardView from '../components/player/BoardView/BoardView'
-import { createEmptyBoard, createEmptyHand } from '../types'
-import type { Move, Board, Hands, Position } from '../types'
+import { createEmptyBoard, createEmptyHand } from '../domain'
 import { parseHandString } from '../utils/parser/kifParseHand'
 import { parseMoves } from '../utils/parser/kifParseMove'
 import { PreviewSharp } from '@mui/icons-material'

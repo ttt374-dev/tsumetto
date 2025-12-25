@@ -1,15 +1,18 @@
 import { useEffect, useState, useMemo } from 'react'
 import { v4 as uuidv4 } from "uuid";
 
-import { createEmptyBoard,  } from '../types'
-import type { KifEntry, Move } from '../types'
-//import { createKifData } from './useKifPlayerOrig';
-//import { useKifLibraryStore } from "./useKifLibraryStore";
+import type { KifEntry } from '../types'
 import { useKifLibraryPersist } from "./library/useLibraryPersist";
-import { Store } from '@mui/icons-material';
-import { createEntity } from '../types';
 import { parseKif } from "../utils/parser/kifParser";
+import { createKifData } from '../domain';
 
+function createEntry(){
+    return {
+        id: uuidv4(),
+        kifData: createKifData(),
+        createdAt: Date.now(),
+    }
+}
 export function useKifEntryController() {
     //const [ currentEntryId, setCurrentEntryId ] = useState<string | null>(null)
     //const [ sortedEntries, setSortedEntries] = useState<KifEntry[]>([])
@@ -64,11 +67,7 @@ export function useKifEntryController() {
         }
         kifData.title = newTitle;
 
-        const entry: KifEntry = {
-            id: uuidv4(),
-            kifData,
-            createdAt: Date.now(),
-        };
+        const entry: KifEntry = createEntry();
 
         // 保存
         await persist([...entries, ...extraEntries, entry]);
