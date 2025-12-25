@@ -3,6 +3,9 @@ import { Stack, Box,  } from "@mui/material";
 import BackupIcon from '@mui/icons-material/Backup';
 import { useNavigate } from 'react-router-dom';
 import { IconButton } from '@mui/joy';
+import EditIcon from '@mui/icons-material/Edit';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import UploadFileIcon from '@mui/icons-material/UploadFile';
 
 import { AppLayout } from "../../../shared/components/AppLayout/AppLayout";
 import { useKif } from '../hooks/useKif'
@@ -73,11 +76,9 @@ export default function LibraryScreen() {
             header={"Library"}
             footer={
                 <>
-                    <button onClick={toggleEditMode}>
-                        {editMode ? "Edit" : "View"} Mode
-                    </button>
                     <MultipleFilesButton
                         label="棋譜ファイルを登録"
+                        useIconButton={true}
                         onFileSelected={
                             async (files: File[]) => {
                                 importFiles(files)
@@ -106,6 +107,9 @@ export default function LibraryScreen() {
                     checkedIds={checkedIds}
                     onDelete={(entries: KifEntry[]) => deleteEntries(entries)}
                 />
+                <IconButton onClick={toggleEditMode}>
+                    {editMode ? <EditIcon /> : <VisibilityIcon />}
+                </IconButton>
 
                 <IconButton onClick={()=>setBackupOpen(true)}>
                     <BackupIcon></BackupIcon>

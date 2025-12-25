@@ -6,6 +6,8 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CloseIcon from '@mui/icons-material/Close'
 import EditIcon from '@mui/icons-material/Edit'
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 import BoardView from '../components/player/BoardView/BoardView';
 import SelectEntry from '../components/player/SelectEntry';
@@ -123,6 +125,14 @@ export default function PlayerScreen() {
                     <Box>
                         {/* 解答表示 */}
                         { currentIndex } / { kifData.moves.length}
+
+                        <IconButton onClick={prevMove}>
+                            <KeyboardArrowUpIcon />
+                        </IconButton>
+
+                        <IconButton onClick={()=>{ showMoves(); nextMove()}}>
+                            <KeyboardArrowDownIcon />
+                        </IconButton>
                         <button onClick={prevMove}>
                             前の手へ
                         </button>

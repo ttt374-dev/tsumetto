@@ -38,7 +38,12 @@ export const PieceTypes: Record<string, PieceType> = {
     promoted: true,
     base: "香",
   },
-  "杏": {
+  "香成": {
+    name: "成香",
+    display: "杏",
+    promoted: true,
+    base: "香",
+  },  "杏": {
     name: "成香",
     display: "杏",
     promoted: true,
@@ -58,6 +63,13 @@ export const PieceTypes: Record<string, PieceType> = {
     promoted: true,
     base: "桂",
   },
+  "桂成": {
+    name: "成桂",
+    display: "圭",
+    promoted: true,
+    base: "桂",
+  },
+
   "圭": {
     name: "成桂",
     display: "圭",

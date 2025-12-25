@@ -1,6 +1,15 @@
 import React from "react"
+import UploadFileIcon from '@mui/icons-material/UploadFile';
+import { IconButton } from "@mui/material";
 
-export default function MultipleFilesButton({ label = "Choose File", onFileSelected }: { label?: String, onFileSelected: (files: File[]) => void }) {
+type Props = {
+  label?: String;
+  onFileSelected: (files: File[]) => void
+  useIconButton: boolean
+}
+export default function MultipleFilesButton({ 
+  label = "Choose File", onFileSelected, useIconButton = false }
+: Props) {
   const fileRef = React.useRef<HTMLInputElement | null>(null);
 
   const handleClick = () => {
@@ -19,7 +28,13 @@ export default function MultipleFilesButton({ label = "Choose File", onFileSelec
 
   return (
     <>
-      <button onClick={handleClick}>{ label } </button>
+      { useIconButton ?
+      <IconButton onClick={handleClick}>
+        <UploadFileIcon/>
+      </IconButton>
+      :
+        <button onClick={handleClick}>{ label } </button>
+      }
 
       <input
         type="file"

@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react'
-import type { Board, Hands, Move, Position, HandPieceKey} from '../../types'
+import type { Board, Hands, Move} from '../../types'
 import { buildBoardUntil } from '../../domain/replay/applyMove'
 
 export function useKifReplay(
@@ -23,11 +23,8 @@ export function useKifReplay(
     }, [currentEntryId]);
 
     
-    
     return {
         board, hands,
-        currentIndex, setCurrentIndex,
-        //applyMove,
-        //buildBoardUntil,
+        currentIndex, setCurrentIndex,        
     }
 }
