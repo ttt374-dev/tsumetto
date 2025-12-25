@@ -1,7 +1,7 @@
 import { applyMove } from "./applyMove";
 import { describe, it, expect } from 'vitest'
-import { createDefaultBoard } from "../factory/createBoard";
-import { createEmptyHand } from "../factory/createHand";
+import { createDefaultBoard } from "../factory/KifBoardFactroy";
+import { createEmptyHand } from "../factory/KifHandFactory";
 import type { Hands, Move } from '../../types'
 
 describe("apply move", () => {

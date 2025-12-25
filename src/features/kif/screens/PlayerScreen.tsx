@@ -12,7 +12,7 @@ import SelectEntry from '../components/player/SelectEntry';
 import MovesView from '../components/player/MovesView';
 import { AppLayout } from '../../../shared/components/AppLayout/AppLayout';
 import { useKif } from '../hooks/useKif'
-import { createKifData } from '../domain/factory/createKifData';
+import { createKifData } from '../domain/factory/KifDataFactory';
 import KifEntryEditDialog from "../dialogs/KifEntryEditDialog";
 import MarkLearning from '../components/player/MarkLearning';
 import { useKifPlayerUI } from '../hooks/player/useKifPlayerUI';

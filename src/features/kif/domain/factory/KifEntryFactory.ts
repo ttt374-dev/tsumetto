@@ -1,7 +1,8 @@
 import type { KifData, KifEntry } from '../../types'
 import { v4 } from 'uuid'
 import { parseKif } from '../parser'
-import { createKifData } from './createKifData';
+import { createKifData } from './KifDataFactory';
+import { Title } from '@mui/icons-material';
 
 // TODO: move to utils/
 export function splitFilename(filename: string): { basename: string, ext: string } {
@@ -19,31 +20,36 @@ export function isDuplicatedTitle(title: string, entries: KifEntry[]): boolean {
     const existingTitles = new Set(entries.map(e => e.title));
     return existingTitles.has(title)
 }
-export async function createKifEntryFromText(text: string, filename: string, entries: KifEntry[], extraEntries: KifEntry[]): Promise<KifEntry> {
-    const kifData = parseKif(text);
+
+export function resolveUniqTitle(filename: string, existingEntries: KifEntry[]): string {
     // ファイル名と拡張子を分離
     const { basename, ext } = splitFilename(filename)
     const title = basename + ext
 
-
-    // 重複チェック（既存＋追加分）
     let newTitle = basename + ext;
     let counter = 1;
-    const existingTitles = new Set([...entries, ...extraEntries].map(e => e.title));
+    const existingTitles = new Set([...existingEntries].map(e => e.title));
     while (existingTitles.has(title)) {
         newTitle = `${basename}(${counter})${ext}`;
         counter++;
-    }
-    
-
-    const entry: KifEntry = {
-        id: v4(),
-        title: newTitle,
+    }    
+    return newTitle
+}
+export function createKifEntryFromText(text: string, title?: string): KifEntry {
+    const kifData = parseKif(text);
+    return createKifEntry({
+        title: title,
         kifData: kifData,
-        createdAt: Date.now(),
-    };
-    return entry
+    }
+    )
 }
 
-//////////////////
-// 初期化関数
+export function createKifEntry( partial?: Partial<KifEntry>): KifEntry {
+  return {
+    id: v4(),
+    title: 'untitled',
+    kifData: createKifData(),
+    createdAt: Date.now(),
+    ...partial,
+  };
+}

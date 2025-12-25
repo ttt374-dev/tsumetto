@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import type { KifEntry } from '../types'
 import { useKifLibraryPersist } from "./library/useLibraryPersist";
 import { parseKif } from '../domain/parser';
-import { createKifEntryFromText, isDuplicatedTitle, splitFilename} from '../domain/factory/KifEntryFactory';
+import { createKifEntryFromText, isDuplicatedTitle, createKifEntry, splitFilename, resolveUniqTitle} from '../domain/factory/KifEntryFactory';
 
 export function useKifEntryController() {
     const [ entries, setEntries ] = useState<KifEntry[]>([])
@@ -30,7 +30,10 @@ export function useKifEntryController() {
     ): Promise<KifEntry> => {
         const buf = await file.arrayBuffer();
         const text = new TextDecoder("shift_jis").decode(buf);
-        const entry = await createKifEntryFromText(text, file.name, entries, extraEntries)
+        const entry = createKifEntryFromText(text, file.name)
+        entry.title = resolveUniqTitle(file.name, [...entries, ...extraEntries])
+        
+        //const entry = await createKifEntryFromText(text, file.name, entries, extraEntries)
         // 保存
         await persist([...entries, ...extraEntries, entry]);
         return entry;
