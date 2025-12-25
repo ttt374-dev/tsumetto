@@ -88,19 +88,19 @@ export default function LibraryScreen() {
         >
             { /* コントロール */}               
             <Stack direction="row">
-                {editMode && <>
-                    <LibraryBulkSelectionControl
-                        entries={sortedEntries}
-                        checkedIds={checkedIds}
-                        selectAllCheckbox={selectAllChecked}
-                        clearAllCheckbox={clearChecked}
-                    />
-                    <LibraryDeleteControl
-                        entries={sortedEntries}
-                        checkedIds={checkedIds}
-                        onDelete={(entries: KifEntry[]) => deleteEntries(entries)}
-                    />
-                </>}
+                
+                <LibraryBulkSelectionControl
+                    entries={sortedEntries}
+                    checkedIds={checkedIds}
+                    selectAllCheckbox={selectAllChecked}
+                    clearAllCheckbox={clearChecked}
+                />
+                <LibraryDeleteControl
+                    entries={sortedEntries}
+                    checkedIds={checkedIds}
+                    onDelete={(entries: KifEntry[]) => deleteEntries(entries)}
+                />
+
                 <IconButton onClick={()=>setBackupOpen(true)}>
                     <BackupIcon></BackupIcon>
                 </IconButton>

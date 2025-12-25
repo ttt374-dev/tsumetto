@@ -8,11 +8,10 @@ interface Props {
 export default function MovesView({ moves  }: Props) {    
     return (
         <div>
-            {
-                
+            {                
                 moves.map((m, i) => (
                     <div key={i} style={{ padding: "2px 0" }}>
-                        {i + 1}: { m.isBlack ? '▲' : '△'} {m.moveText} ({m.from?.file}, {m.from?.rank})
+                        {i + 1}: { m.player === 'black' ? '▲' : '△'} {m.moveText} ({m.from?.file}, {m.from?.rank})
                     </div>
                 ))
             }

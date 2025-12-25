@@ -4,7 +4,8 @@ import { PieceTypes } from './pieceType'
 export type Piece = {
   //name: string;
   key: PieceTypeKey;
-  isBlack: boolean;
+  //isBlack: boolean;
+  owner: PlayerType;
 };
 
 export type Board = (Piece | null)[][];
@@ -18,7 +19,7 @@ export type Hands = {
 
 export type Hand = Record<HandPieceKey, number>
 
-export type HandNew = Record<PlayerType, Record<HandPieceKey, number>>;
+//export type HandNew = Record<PlayerType, Record<HandPieceKey, number>>;
 /*export type HandPieceKeyAuto = {
   [K in PieceTypeKey]:
     typeof PieceTypes[K] extends { promoted: false }
@@ -43,7 +44,8 @@ export type Move = {
   moveNumber: number;
   moveText: string;
   piece: Piece;
-  isBlack: boolean;
+  //isBlack: boolean;
+  player: PlayerType;
   from: Position | null;
   position: Position;
   drop: boolean;
@@ -73,7 +75,7 @@ export type GameEnd =
 
 //////////////////
 // 初期化関数
-export const createBoard = (): Board =>
+export const createEmptyBoard = (): Board =>
   Array.from({ length: 9 }, () =>
     Array.from({ length: 9 }, () => null)
   );
@@ -83,7 +85,7 @@ export function createKifData(
   partial?: Partial<KifData>
 ): KifData {
   return {
-    board: createBoard(),
+    board: createEmptyBoard(),
     hands: { black: createEmptyHand(), white: createEmptyHand() },
     //hands: { black: createEmptyHand(), white: createEmptyHand()},
     moves: [],

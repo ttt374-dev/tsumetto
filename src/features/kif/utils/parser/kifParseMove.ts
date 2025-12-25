@@ -1,6 +1,6 @@
 //import type { Move } from '../types/kif'
 
-import type { Move, HandNew, Position, KifEvent, HandPieceKey, PlayerType } from '../../types'
+import type { Move, Position, KifEvent, HandPieceKey, PlayerType } from '../../types'
 import type { PieceTypeKey,  } from '../../types/pieceType';
 import { parsePosition, parseFromToPosition } from './kifParsePosition';
 import type { ParseResult } from './parseResult';
@@ -14,7 +14,8 @@ export function parseMoveLine(line: string, prevPosition?: Position): ParseResul
   if (!m) return { ok: false, error: { message: "no match"}};
 
   const moveNumber = parseInt(m[1], 10);
-  const isBlack = moveNumber % 2 == 1
+  //const isBlack = moveNumber % 2 == 1
+  const player: PlayerType = moveNumber % 2 == 1 ? 'black' : 'white'
   const moveText = m[2].trim();  // "１六歩"
   //const from = m[3] || null;     // "43" 等、無ければ null
   const fromResult = parseFromToPosition(m[3])
@@ -45,13 +46,14 @@ export function parseMoveLine(line: string, prevPosition?: Position): ParseResul
   const piece = {
     key: baseMoveText.slice(2) as PieceTypeKey, // TODO
     //name: moveText.charAt(2),
-    isBlack: isBlack,
+    //isBlack: isBlack,
+    owner: player
   }
   //const position = {file:1, rank: 1}
   
   
-  console.log("parse move", moveNumber, isBlack, moveText, from, position, piece)
-  return {ok: true, value: { moveNumber, isBlack, piece, moveText, from, position, drop }}
+  console.log("parse move", moveNumber, player, moveText, from, position, piece)
+  return {ok: true, value: { moveNumber, player, piece, moveText, from, position, drop }}
 }
 
 ////////

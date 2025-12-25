@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from 'react'
 import { v4 as uuidv4 } from "uuid";
 
-import { createBoard,  } from '../types'
+import { createEmptyBoard,  } from '../types'
 import type { KifEntry, Move } from '../types'
 //import { createKifData } from './useKifPlayerOrig';
 //import { useKifLibraryStore } from "./useKifLibraryStore";

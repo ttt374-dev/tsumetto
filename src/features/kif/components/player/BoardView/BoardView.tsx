@@ -23,7 +23,7 @@ function displayPiece(type: PieceTypeKey): string {
   return piece.display
 }
 function BoardView({ board, hands}: Props) { 
-
+  console.log("board", board)
   return (
     <div className={styles.container}>
       {/* 持駒表示 */}
@@ -58,9 +58,9 @@ function BoardView({ board, hands}: Props) {
               return (
                 <div
                   key={c}
-                  className={`${styles.cell} ${cell.isBlack ? "" : styles.white}`}
+                  className={`${styles.cell} ${cell.owner === 'white' && styles.white}  :`}
                 >
-                  { /* {cell.key} */ }
+                  
                   { displayPiece(cell.key)}
 
                 </div>

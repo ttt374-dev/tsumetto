@@ -1,7 +1,7 @@
 
 import { useState, useMemo } from 'react'
 import BoardView from '../components/player/BoardView/BoardView'
-import { createBoard, createEmptyHand } from '../types'
+import { createEmptyBoard, createEmptyHand } from '../types'
 import type { Move, Board, Hands, Position } from '../types'
 import { parseHandString } from '../utils/parser/kifParseHand'
 import { parseMoves } from '../utils/parser/kifParseMove'
@@ -9,7 +9,7 @@ import { PreviewSharp } from '@mui/icons-material'
 import { useKifReplay } from '../hooks/player/useKifReplay'
 
 export default function ReplayScreen() {
-    const initialBoard = createBoard()
+    const initialBoard = createEmptyBoard()
     const hands = { black: createEmptyHand(), white: createEmptyHand() }
 
     const moveLine = "   1 ２四角成(42)       ( 0:00/00:00:00)"

@@ -1,8 +1,8 @@
-import  { type Board, type PieceTypeKey, createBoard } from "../../types";
+import  { type Board, type PieceTypeKey, createEmptyBoard } from "../../types";
 
 
 export function parseBoard(lines: string[]): Board {
-  const board: Board = createBoard()
+  const board: Board = createEmptyBoard()
   // 盤面開始位置
   const startIndex = lines.findIndex((l) =>
     l.includes("+---------------------------+")
@@ -40,7 +40,8 @@ export function parseBoard(lines: string[]): Board {
       //console.log("parsed:", file, rank, name, isGote ? "gote" : "sente")
       board[rank][file] = {
         key: name as PieceTypeKey,
-        isBlack: !isGote,        
+        //isBlack: !isGote,        
+        owner: isGote ? 'black' : 'white'
       };
     }
   }

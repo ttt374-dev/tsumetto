@@ -3,7 +3,7 @@ import type { Board, Hands, Move, Position} from '../../types'
 
 export function useKifReplay(
     initialBoard: Board, 
-    hands: Hands, 
+    initialHands: Hands, 
     moves: Move[],
     currentEntryId: string | null,
 ) {
@@ -13,7 +13,7 @@ export function useKifReplay(
     , [])
     const board = useMemo(
         () => buildBoardUntil(currentIndex),
-        [currentIndex, initialBoard, moves]
+        [currentIndex, initialBoard, initialHands, moves]
     );
     // ⭐ entry 切り替え時のリセット
     useEffect(() => {
@@ -42,6 +42,7 @@ export function useKifReplay(
     }
     function buildBoardUntil(index: number): Board {
         const board = cloneBoard(initialBoard);
+        const hands = cloneHands(initialHands)
 
         for (let i = 0; i < index; i++) {
             applyMove(board, hands, moves[i]);
@@ -53,6 +54,12 @@ export function useKifReplay(
         return board.map(row =>
             row.map(cell => (cell ? { ...cell } : null))
         );
+    }
+    function cloneHands(hands: Hands): Hands {
+        return {
+            black: { ...hands.black },
+            white: { ...hands.white },
+        };
     }
 
     return {
