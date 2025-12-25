@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-import { parseKif } from "../../utils/kifParser";
+import { parseKif } from "../../utils/parser/kifParser";
 import { type KifEntry } from "../../types/";
 
 

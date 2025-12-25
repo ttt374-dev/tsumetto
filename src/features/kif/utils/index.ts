@@ -1,2 +1,2 @@
 export * from "./formatAccuracy"
-export * from './kifParser'
+export * from './parser/kifParser'

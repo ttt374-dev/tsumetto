@@ -8,7 +8,7 @@ import type { KifEntry, Move } from '../types'
 import { useKifLibraryPersist } from "./library/useLibraryPersist";
 import { Store } from '@mui/icons-material';
 import { createEntity } from '../types';
-import { parseKif } from "../utils/kifParser";
+import { parseKif } from "../utils/parser/kifParser";
 
 export function useKifEntryController() {
     //const [ currentEntryId, setCurrentEntryId ] = useState<string | null>(null)

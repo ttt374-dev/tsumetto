@@ -86,7 +86,7 @@ describe("parseMoveLineText", () => {
     })
     it("不正値", () => {
         const result = parseMoveLine("20 金３２(44)")
-        expect(result).toEqual({})
+        expect(result).toEqual(null)
     })
 })
 

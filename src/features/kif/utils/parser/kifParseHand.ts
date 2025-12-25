@@ -1,6 +1,6 @@
-import type { HandPieceKey, HandNew, PlayerType } from '../types';
-import { createEmptyHand } from '../types';
-import { kanToNumber } from './kifParseMoveLine';
+import type { HandPieceKey, HandNew, PlayerType } from '../../types';
+import { createEmptyHand } from '../../types';
+import { kanToNumber } from './kanToNumber'
 
 // 持ち駒
 function parsePieceToken(token: string): {

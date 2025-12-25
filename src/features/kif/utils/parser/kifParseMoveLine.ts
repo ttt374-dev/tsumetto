@@ -1,70 +1,9 @@
 //import type { Move } from '../types/kif'
 
-import type { Move, HandNew, Position, KifEvent, HandPieceKey, PlayerType } from '../types/'
-import type { PieceTypeKey,  } from '../types/pieceType';
+import type { Move, HandNew, Position, KifEvent, HandPieceKey, PlayerType } from '../../types'
+import type { PieceTypeKey,  } from '../../types/pieceType';
+import { parsePosition, parseFromToPosition } from './kifParsePosition';
 
-
-export const kanToNumber: Record<string, number> = {
-  "一": 1,
-  "二": 2,
-  "三": 3,
-  "四": 4,
-  "五": 5,
-  "六": 6,
-  "七": 7,
-  "八": 8,
-  "九": 9,
-};
-
-function zenkakuToNumber(ch: string): number {
-  const code = ch.charCodeAt(0);
-  if (code >= 0xFF10 && code <= 0xFF19) {
-    return code - 0xFF10 + 0;
-  }
-  return parseInt(ch, 10);
-}
-
-
-
-////////////////////////////
-// 同なら null　を返す
-function parsePosition(moveStr: string): Position | null {
-    console.log("parse position", moveStr)
-  if (moveStr.length < 2) throw new Error(`invalid move: ${moveStr}`);
-
-if (moveStr.startsWith("同"))
-    return null
-  const fileChar = moveStr[0];
-  const rankChar = moveStr[1];
-
-  const file = zenkakuToNumber(fileChar);
-  const rank = kanToNumber[rankChar];
-
-  
-  //if (!file || !rank) throw new Error(`invalid move: ${moveStr}: ${file} ${rank}`);
-  if (!file || !rank) console.error(`invalid move: ${moveStr}: ${file} ${rank}`);
-  console.log("parsed: ", file, rank)
-  return { file, rank };
-}
-
-function parseFromToPosition(from?: string | null): Position | null {
-  if (!from) return null;          // 空・undefined・null
-  if (from.length !== 2) return null;
-
-  const file = Number(from[0]);
-  const rank = Number(from[1]);
-
-  if (!Number.isInteger(file) || !Number.isInteger(rank)) {
-    return null;                   // 数字にできない
-  }
-
-  // 必要なら KIF の「打ち」
-  if (file === 0 && rank === 0) {
-    return null;
-  }
-
-  return { file, rank };
-}
 
 // 1行の KIF を解析して Move オブジェクトへ
 export function parseMoveLine(line: string, prevPosition?: Position): KifEvent | null {
@@ -78,17 +17,20 @@ export function parseMoveLine(line: string, prevPosition?: Position): KifEvent |
   const isBlack = moveNumber % 2 == 1
   const moveText = m[2].trim();  // "１六歩"
   //const from = m[3] || null;     // "43" 等、無ければ null
-  const from = parseFromToPosition(m[3]) || null
+  const fromResult = parseFromToPosition(m[3])
+  if (!fromResult.ok) return null
+  const from = fromResult.value
 
   if (moveText.startsWith("投了")){
     console.log("投了！")
     return { type: "resign"}
   }
-  const position = parsePosition(moveText) ?? prevPosition
-  if (!position){
+  const positionResult = parsePosition(moveText, prevPosition)
+  if (!positionResult.ok){
     //throw new Error("invalid position: 同だが prevTo がない")
     return null; // TODO: resulttype
   }
+  const position = positionResult.value
   let drop = false  
   let baseMoveText = moveText
   if (moveText.endsWith("不成")){

@@ -1,8 +1,8 @@
 // parseKif.ts
-import type { KifData, Board, Hands, Move } from "../types/";
-import { createBoard, createEmptyHand } from "../types";
+import type { KifData, Board, Hands, Move } from "../../types";
+import { createBoard, createEmptyHand } from "../../types";
 import { parseMoveLine } from "./kifParseMoveLine";
-import type { PieceTypeKey } from "../types/pieceType";
+import type { PieceTypeKey } from "../../types/pieceType";
 
 
 export function parseKif(text: string): KifData  {
