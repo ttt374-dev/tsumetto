@@ -17,6 +17,7 @@ export function useKifLibraryUI() {
         setOpenEditDialog,
 
         editMode,
+        setEditMode,
         toggleEditMode,
 
         backupOpen,

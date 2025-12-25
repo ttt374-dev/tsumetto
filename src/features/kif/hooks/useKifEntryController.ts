@@ -4,15 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import type { KifEntry } from '../types'
 import { useKifLibraryPersist } from "./library/useLibraryPersist";
 import { parseKif } from "../utils/parser/kifParser";
-import { createKifData } from '../domain';
 
-function createEntry(){
-    return {
-        id: uuidv4(),
-        kifData: createKifData(),
-        createdAt: Date.now(),
-    }
-}
 export function useKifEntryController() {
     //const [ currentEntryId, setCurrentEntryId ] = useState<string | null>(null)
     //const [ sortedEntries, setSortedEntries] = useState<KifEntry[]>([])
@@ -67,7 +59,11 @@ export function useKifEntryController() {
         }
         kifData.title = newTitle;
 
-        const entry: KifEntry = createEntry();
+        const entry: KifEntry = {
+            id: uuidv4(),
+            kifData,
+            createdAt: Date.now(),
+        };
 
         // 保存
         await persist([...entries, ...extraEntries, entry]);

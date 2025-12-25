@@ -49,6 +49,7 @@ export default function LibraryScreen() {
         entryToEditId,
         setEntryToEditId,
         editMode,
+        setEditMode,
         toggleEditMode,
         openEditDialog,
         setOpenEditDialog,
@@ -87,13 +88,18 @@ export default function LibraryScreen() {
             }
         >
             { /* コントロール */}               
-            <Stack direction="row">
-                
+            <Stack direction="row">                
                 <LibraryBulkSelectionControl
                     entries={sortedEntries}
                     checkedIds={checkedIds}
-                    selectAllCheckbox={selectAllChecked}
-                    clearAllCheckbox={clearChecked}
+                    selectAllCheckbox={ () => {
+                        selectAllChecked(); 
+                        setEditMode(true)
+                    }}
+                    clearAllCheckbox={ () => {
+                        clearChecked()
+                        setEditMode(true)
+                    }}
                 />
                 <LibraryDeleteControl
                     entries={sortedEntries}

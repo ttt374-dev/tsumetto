@@ -29,6 +29,12 @@ export const PieceTypes = {
     promoted: true,
     base: "香",
   },
+  "杏": {
+    name: "成香",
+    display: "杏",
+    promoted: true,
+    base: "香",
+  },
 
   // 桂
   "桂": {
@@ -42,7 +48,12 @@ export const PieceTypes = {
     promoted: true,
     base: "桂",
   },
-
+  "圭": {
+    name: "成桂",
+    display: "圭",
+    promoted: true,
+    base: "桂",
+  },
   // 銀
   "銀": {
     name: "銀",
@@ -50,6 +61,12 @@ export const PieceTypes = {
     promoted: false,
   },
   "成銀": {
+    name: "成銀",
+    display: "全",
+    promoted: true,
+    base: "銀",
+  },
+  "全": {
     name: "成銀",
     display: "全",
     promoted: true,

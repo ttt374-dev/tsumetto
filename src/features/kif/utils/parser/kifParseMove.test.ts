@@ -13,12 +13,13 @@ describe("parseMoveLineText", () => {
             moveNumber: 3,
             moveText: "２五歩",
             piece: {
-                key: "歩", isBlack: true,
+                key: "歩",
+                owner:'black',
             },
             position: { file: 2, rank: 5 },
             from: { file: 2, rank: 6 },
             drop: false,
-            isBlack: true,
+            player:'black',
         }
         }
         )
@@ -32,12 +33,13 @@ describe("parseMoveLineText", () => {
             moveNumber: 2,
             moveText: "同　玉",
             piece: {
-                key: "玉", isBlack: false,
+                key: "玉", 
+                owner: 'white',
             },
             position: { file: 3, rank: 2 },
             from: { file: 1, rank: 3 },
             drop: false,
-            isBlack: false,
+            player: 'white',
         }
         })
 
@@ -50,12 +52,13 @@ describe("parseMoveLineText", () => {
             moveNumber: 5,
             moveText: "２四銀不成",
             piece: {
-                key: "銀", isBlack: true,
+                key: "銀", 
+                owner: 'black',
             },
             position: { file: 2, rank: 4 },
             from: { file: 2, rank: 5 },
             drop: false,
-            isBlack: true,
+            player: 'black',
         }
         })
     })
@@ -67,12 +70,13 @@ describe("parseMoveLineText", () => {
             moveNumber: 5,
             moveText: "２四金打",
             piece: {
-                key: "金", isBlack: true,
+                key: "金", 
+                owner: 'black',
             },
             position: { file: 2, rank: 4 },
             from: null,
             drop: true,
-            isBlack: true,
+            player: 'black',
         }
         })
     })
@@ -84,12 +88,12 @@ describe("parseMoveLineText", () => {
             moveNumber: 5,
             moveText: "２四金右",
             piece: {
-                key: "金", isBlack: true,
+                key: "金", owner: 'black',
             },
             position: { file: 2, rank: 4 },
             from: { file: 2, rank: 3 },
             drop: false,
-            isBlack: true,
+            player: 'black',
         }
         })
     })
