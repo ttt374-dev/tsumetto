@@ -24,6 +24,7 @@ function displayPiece(type: PieceTypeKey): string {
 }
 function BoardView({ board, hands}: Props) { 
   console.log("board", board)
+  console.log("hands on BoardView", hands)
   return (
     <div className={styles.container}>
       {/* 持駒表示 */}

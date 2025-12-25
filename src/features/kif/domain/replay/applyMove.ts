@@ -21,14 +21,14 @@ export function getBasePieceKey(
 export function applyMove(board: Board, hands: Hands, move: Move) {
     const { x, y } = posToIndex(move.position)
     
-    console.error("apply move")
+    console.log("apply move")
     const cell = board[y][x]
     console.log("apply move", move, cell)
     // 相手の駒を取る
     if (cell !== null){
         const key = getBasePieceKey(cell.key) as HandPieceKey
         console.log("相手の駒を取る", move, key)
-        hands.black[key]++
+        hands[move.player][key]++
     }
 
     // 移動
@@ -45,8 +45,9 @@ export function applyMove(board: Board, hands: Hands, move: Move) {
         if (ownerHands[key] <= 0) {
             throw new Error(`持ち駒がありません: ${key}`);
         }
-
+        
         ownerHands[key] -= 1;
+        console.log("駒を打った", key, ownerHands[key])
     }
     
     

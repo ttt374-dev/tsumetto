@@ -68,7 +68,7 @@ export default function PlayerScreen() {
     });
 
     const initialBoard = kifData.board
-    const { board, currentIndex, setCurrentIndex } = 
+    const { board, hands, currentIndex, setCurrentIndex } = 
         useKifReplay(initialBoard, kifData.hands, kifData.moves, currentEntryId)
     const prevMove = () => { 
         currentIndex > 0 && setCurrentIndex(prev => prev - 1)
@@ -110,7 +110,7 @@ export default function PlayerScreen() {
                 }}>
                     <BoardView
                         board={board}
-                        hands={kifData.hands}
+                        hands={hands}
                     />
                 </Box>
                 <Box>

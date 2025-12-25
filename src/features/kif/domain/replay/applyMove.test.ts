@@ -39,7 +39,7 @@ describe("apply move", () => {
     it("打つ", () => {
         const board = createDefaultBoard()
         const blackHand = createEmptyHand()
-        blackHand['歩'] = 1
+        blackHand['歩'] = 3
         const hands: Hands = {
             black: blackHand,
             white: createEmptyHand(),
@@ -62,6 +62,7 @@ describe("apply move", () => {
         expect(dropTo).toEqual({
             key: '歩', owner: 'black'
         })
+        expect(blackHand['歩']).toEqual(2)
     })
     it("相手の駒を取る", () => {
         const board = createDefaultBoard()
