@@ -87,7 +87,7 @@ export default function PlayerScreenOrig() {
         <AppLayout            
                 header={<>
                     <Typography variant='h6'>
-                        {curEntryId ? `${kifPlayerState.kifData.title}` : "unselected"}
+                        {curEntryId ? `${kifPlayerState..title}` : "unselected"}
                     </Typography>
                 </>}
             footer={

@@ -1,7 +1,7 @@
 
 import { useState, useMemo } from 'react'
 import BoardView from '../components/player/BoardView/BoardView'
-import { createEmptyBoard, createEmptyHand } from '../domain'
+import { createEmptyBoard, createEmptyHand } from '../domain/factory/'
 import { parseHandString } from '../domain/parser/kifParseHand'
 import { parseMoves } from '../domain/parser/kifParseMove'
 import { useKifReplay } from '../hooks/player/useKifReplay'

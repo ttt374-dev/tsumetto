@@ -91,7 +91,7 @@ function LibraryList({
 
                         primary={
                             <Typography variant="body1" component="div" sx={{ lineHeight: 1.3 }}>
-                                {i + 1}: {entry.kifData.title}
+                                {i + 1}: {entry.title}
                             </Typography>
                         }
                         secondary={

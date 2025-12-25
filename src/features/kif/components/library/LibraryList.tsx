@@ -91,7 +91,7 @@ function LibraryList({
                         
                     </ListItemIcon>
                     <ListItemText>
-                        {entry.kifData.title} -
+                        {entry.title} -
                         {entry.id.slice(0, 3)}
                     </ListItemText>
                 </ListItem>

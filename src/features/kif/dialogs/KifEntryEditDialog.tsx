@@ -50,7 +50,7 @@ export default function KifEntryEditDialog({
   // initialize
   // entry 切り替え時に title を同期
   useEffect(() => {
-    setTitle(entry?.kifData.title ?? "")
+    setTitle(entry?.title ?? "untitled")
   }, [entry])
   
   const inputRef = useRef<HTMLInputElement | null>(null)

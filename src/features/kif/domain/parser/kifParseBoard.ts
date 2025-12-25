@@ -1,5 +1,5 @@
 import type { Board, PieceTypeKey } from "../../types";
-import { createEmptyBoard, createDefaultBoard } from '../replay/createBoard'
+import { createEmptyBoard, createDefaultBoard } from "../factory/KifBoardFactroy";
 
 export function parseBoard(lines: string[]): Board {
   const boardLines = extractBoardBodyLines(lines);

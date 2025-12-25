@@ -11,6 +11,6 @@ export function parseKif(text: string): KifData  {
   const board = parseBoard(lines) 
   const moves = parseMoves(lines) 
 
-  return { board, hands, moves, title: "" } ;
+  return { board, hands, moves } ;
 }
 

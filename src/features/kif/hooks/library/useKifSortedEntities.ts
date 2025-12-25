@@ -37,8 +37,8 @@ export function useKifSortedEntries(
 
       switch (sort.key) {
         case "title":
-          vA = a.kifData.title ?? ""
-          vB = b.kifData.title ?? ""
+          vA = a.title ?? ""
+          vB = b.title ?? ""
           break
 
         case "createdAt":

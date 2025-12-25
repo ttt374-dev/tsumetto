@@ -22,7 +22,7 @@ const SelectEntry: React.FC<Props> = ({ currentEntryId, entities, onSelect }) =>
                {
 
                 entities.map((entry, i) => (
-                    <option key={entry.id} value={entry.id}>{i+1}:  {entry.kifData.title}</option>
+                    <option key={entry.id} value={entry.id}>{i+1}:  {entry.title}</option>
                 ))
             }
         </select >

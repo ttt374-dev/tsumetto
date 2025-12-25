@@ -1,6 +1,6 @@
 import type { Hand, Hands, HandPieceKey } from '../../types';
 import { kanToNumber, NumberToKanji } from './kanToNumber'
-import { createEmptyHand } from '../../domain';
+import { createEmptyHand } from '../factory/KifHandFactory';
 
 // 持ち駒
 function parsePieceToken(token: string): {
@@ -41,7 +41,6 @@ export function parseHands(lines: string[]): Hands{
       
       const value = line.replace("先手の持駒：", "").trim();
       hands.black = parseHandString(value)
-      //hands.black = value;        // ← ここに入れる // TODO
       continue;
     }
 
@@ -49,7 +48,6 @@ export function parseHands(lines: string[]): Hands{
     if (line.startsWith("後手の持駒：")) {
       const value = line.replace("後手の持駒：", "").trim();
       hands.white = parseHandString(value)
-      //hands.white = value;        // ← 必要ならこちらも // TODO
       continue;
     }
   }

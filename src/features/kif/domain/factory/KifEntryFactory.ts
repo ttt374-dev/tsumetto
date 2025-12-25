@@ -4,7 +4,6 @@ import { parseKif } from '../parser'
 import { createKifData } from './KifDataFactory';
 import { Title } from '@mui/icons-material';
 
-// TODO: move to utils/
 export function splitFilename(filename: string): { basename: string, ext: string } {
     let basename = filename;
     let ext = "";
@@ -16,7 +15,7 @@ export function splitFilename(filename: string): { basename: string, ext: string
     return { basename, ext }
 }
 
-export function isDuplicatedTitle(title: string, entries: KifEntry[]): boolean {
+export function validateTitle(title: string, entries: KifEntry[]): boolean {
     const existingTitles = new Set(entries.map(e => e.title));
     return existingTitles.has(title)
 }

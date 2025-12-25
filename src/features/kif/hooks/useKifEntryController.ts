@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import type { KifEntry } from '../types'
 import { useKifLibraryPersist } from "./library/useLibraryPersist";
 import { parseKif } from '../domain/parser';
-import { createKifEntryFromText, isDuplicatedTitle, createKifEntry, splitFilename, resolveUniqTitle} from '../domain/factory/KifEntryFactory';
+import { createKifEntryFromText, validateTitle, createKifEntry, splitFilename, resolveUniqTitle} from '../domain/factory/KifEntryFactory';
 
 export function useKifEntryController() {
     const [ entries, setEntries ] = useState<KifEntry[]>([])
@@ -26,16 +26,17 @@ export function useKifEntryController() {
     // 単体ファイルをインポートして保存
     const importFile = async (
         file: File,
-        extraEntries: KifEntry[] = [] // importFiles から呼ぶ場合に追加分を渡す
+        extraEntries: KifEntry[] = [], // importFiles から呼ぶ場合に追加分を渡す
+        doPersist: boolean = true,
     ): Promise<KifEntry> => {
         const buf = await file.arrayBuffer();
         const text = new TextDecoder("shift_jis").decode(buf);
-        const entry = createKifEntryFromText(text, file.name)
-        entry.title = resolveUniqTitle(file.name, [...entries, ...extraEntries])
+        const allEntries = [...entries, ...extraEntries];
+        const title = resolveUniqTitle(file.name, allEntries)
+        const entry = createKifEntryFromText(text, title)        
         
-        //const entry = await createKifEntryFromText(text, file.name, entries, extraEntries)
         // 保存
-        await persist([...entries, ...extraEntries, entry]);
+        doPersist && await persist([...allEntries, entry]);
         return entry;
     };
     // 複数ファイルをまとめてインポート
@@ -43,18 +44,21 @@ export function useKifEntryController() {
         const results: KifEntry[] = [];
         for (const file of files) {
             try {
-                const entry = await importFile(file, results);
+                const entry = await importFile(file, results, false);
                 results.push(entry);
             } catch (err) {
                 console.error("Failed to import file:", file.name, err);
             }
+        }
+        if (results.length > 0) {
+            await persist([...entries, ...results]);
         }
         return results;
     };
     // エントリ更新
     const updateTitle = async (entryId: string, newTitle: string) => {
         // 重複チェック（任意）
-        if (isDuplicatedTitle(newTitle, entries)) throw new Error("タイトルが重複しています");
+        if (validateTitle(newTitle, entries)) throw new Error("タイトルが重複しています");
 
         const nextEntries = entries.map(e =>
             e.id === entryId
