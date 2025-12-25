@@ -1,6 +1,6 @@
 // utils/parser/handParser.test.ts
 import { describe, it, expect } from 'vitest'
-import { parseHandLine, parseHandString } from "./kifParseHand";
+import { parseHandString } from "./kifParseHand";
 import { createEmptyHand, type Hand } from '../../types';
 //import { formatHand } from './kifParseHand';
 

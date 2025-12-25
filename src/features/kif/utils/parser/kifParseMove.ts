@@ -54,6 +54,34 @@ export function parseMoveLine(line: string, prevPosition?: Position): ParseResul
   return {ok: true, value: { moveNumber, isBlack, piece, moveText, from, position, drop }}
 }
 
+////////
+export function parseMoves(lines: string[]): Move[] {
+  const moves: Move[] = [];
+  let prevTo = undefined
+  let inMoves = false;
+
+  for (const line of lines) {
+    if (line.startsWith("手数")) {
+      inMoves = true;
+      continue;
+    }
+    if (!inMoves) continue;
+    
+    const moveResult = parseMoveLine(line, prevTo)        
+    if (!moveResult.ok) continue
+    //if (!move) continue
+    const move = moveResult.value
+    if ("type" in move) {
+  
+    break // 終局
+  }
+    prevTo = move?.position    
+    moves.push(move);
+
+  }
+  console.log("parsed moves: ", moves)
+  return moves
+}
 /*
 // 1行の KIF を解析して Move オブジェクトへ
 export function parseMoveLineOld(line: string): Move | null {

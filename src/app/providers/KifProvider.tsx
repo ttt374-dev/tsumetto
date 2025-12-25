@@ -18,8 +18,7 @@ export const KifProvider = ({ children }: { children: ReactNode }) => {
   
   
   const kifLearning = useKifLearning()
-  const kifPlayerUI = useKifPlayerUI()
-  const kifEntryController = useKifEntryController()
+    const kifEntryController = useKifEntryController()
 
   const entries = kifEntryController.entries
   const kifLibrarySort = useKifLibrarySort()  

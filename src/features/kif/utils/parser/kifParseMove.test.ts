@@ -1,6 +1,6 @@
 // utils/parser/handParser.test.ts
 import { describe, it, expect } from 'vitest'
-import { parseMoveLine, } from "./kifParseMoveLine";
+import { parseMoveLine, } from "./kifParseMove";
 import { positions } from '@mui/system';
 
 describe("parseMoveLineText", () => {

@@ -3,8 +3,8 @@ import { useState, useMemo } from 'react'
 import BoardView from '../components/player/BoardView/BoardView'
 import { createBoard, createEmptyHand } from '../types'
 import type { Move, Board, Hands, Position } from '../types'
-import { parseHandLine } from '../utils/parser/kifParseHand'
-import { parseMoves } from '../utils/parser/kifParser'
+import { parseHandString } from '../utils/parser/kifParseHand'
+import { parseMoves } from '../utils/parser/kifParseMove'
 import { PreviewSharp } from '@mui/icons-material'
 import { useKifReplay } from '../hooks/player/useKifReplay'
 
@@ -61,8 +61,8 @@ export default function ReplayScreen() {
     const { board, currentIndex, setCurrentIndex } = useKifReplay(initialBoard, hands, moves, null)
     
     const handsNew = { black: createEmptyHand(), white: createEmptyHand()}
-    parseHandLine("先手の持駒：金二 歩六 ", handsNew)
-    console.log("parse hands", handsNew)
+    const hand = parseHandString("先手の持駒：金二 歩六 ")
+    console.log("parse hands", hand)
     return (<>
         <h3>Test</h3>
         <BoardView board={board} hands={hands} />

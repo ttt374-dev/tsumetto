@@ -1,6 +1,6 @@
-import type { HandPieceKey, HandNew, PlayerType } from '../../types';
-import { createEmptyHand } from '../../types';
-import { kanToNumber } from './kanToNumber'
+import type { HandPieceKey } from '../../types';
+import { createEmptyHand, type Hand, type Hands } from '../../types';
+import { kanToNumber, NumberToKanji } from './kanToNumber'
 
 // 持ち駒
 function parsePieceToken(token: string): {
@@ -30,9 +30,32 @@ export function parseHandString(
 
     hand[parsed.piece] += parsed.count;
   }
-
+  console.log("parsehand str", text, hand)
   return hand;
 }
+export function parseHands(lines: string[]): Hands{
+  let hands: Hands = { black: createEmptyHand(), white: createEmptyHand() };  
+    for (const line of lines) {    
+    // 先手の持駒
+    if (line.startsWith("先手の持駒：")) {
+      
+      const value = line.replace("先手の持駒：", "").trim();
+      hands.black = parseHandString(value)
+      //hands.black = value;        // ← ここに入れる // TODO
+      continue;
+    }
+
+    // 後手の持駒
+    if (line.startsWith("後手の持駒：")) {
+      const value = line.replace("後手の持駒：", "").trim();
+      hands.white = parseHandString(value)
+      //hands.white = value;        // ← 必要ならこちらも // TODO
+      continue;
+    }
+  }
+  return hands
+}
+/*
 export function parseHandLine(
   line: string,
   hands: HandNew
@@ -52,4 +75,20 @@ export function parseHandLine(
   if (!owner) return;
 
   hands[owner] = parseHandString(body);
+}
+*/
+// 
+export function formatHand(hand: Hand): string {
+  console.log("format hand", hand)
+  const parts: string[] = [];
+
+  (Object.keys(hand) as HandPieceKey[]).forEach((piece) => {
+    const count = hand[piece];
+    if (count > 0) {
+      const suffix = NumberToKanji[count] ?? count.toString();
+      parts.push(`${piece}${suffix}`);
+    }
+  });
+  
+  return parts.length === 0 ? "なし" : parts.join(" ");
 }
