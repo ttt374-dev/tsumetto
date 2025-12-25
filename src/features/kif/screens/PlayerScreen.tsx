@@ -12,7 +12,7 @@ import SelectEntry from '../components/player/SelectEntry';
 import MovesView from '../components/player/MovesView';
 import { AppLayout } from '../../../shared/components/AppLayout/AppLayout';
 import { useKif } from '../hooks/useKif'
-import { createKifData } from '../domain'
+import { createKifData } from '../domain/factory/createKifData';
 import KifEntryEditDialog from "../dialogs/KifEntryEditDialog";
 import MarkLearning from '../components/player/MarkLearning';
 import { useKifPlayerUI } from '../hooks/player/useKifPlayerUI';
@@ -67,9 +67,9 @@ export default function PlayerScreen() {
         preventScrollOnSwipe: true,
     });
 
-    const initialBoard = kifData.board
+    //const initialBoard = kifData.board
     const { board, hands, currentIndex, setCurrentIndex } = 
-        useKifReplay(initialBoard, kifData.hands, kifData.moves, currentEntryId)
+        useKifReplay(kifData.board, kifData.hands, kifData.moves, currentEntryId)
     const prevMove = () => { 
         currentIndex > 0 && setCurrentIndex(prev => prev - 1)
     }
@@ -80,7 +80,7 @@ export default function PlayerScreen() {
     //////////
     return (
         <AppLayout
-            header={`${kifData.title}`}
+            header={currentEntry?.title ?? 'untitled'}
             footer={
                 <>
                     <IconButton onClick={() => setOpenEditDialog(true)} disabled={!currentEntryId}>

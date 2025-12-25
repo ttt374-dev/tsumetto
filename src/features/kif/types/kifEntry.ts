@@ -3,6 +3,7 @@ import type { KifData } from './kifData'
 
 export type KifEntry = {
   id: string;         // 一意の識別子  
+  title: string;
   kifData: KifData;   // parse済みの棋譜データ
   createdAt: number;  
 };

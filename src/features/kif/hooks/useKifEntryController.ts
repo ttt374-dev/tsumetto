@@ -4,21 +4,13 @@ import { v4 as uuidv4 } from "uuid";
 import type { KifEntry } from '../types'
 import { useKifLibraryPersist } from "./library/useLibraryPersist";
 import { parseKif } from '../domain/parser';
+import { createKifEntryFromText, isDuplicatedTitle, splitFilename} from '../domain/factory/KifEntryFactory';
 
 export function useKifEntryController() {
-    //const [ currentEntryId, setCurrentEntryId ] = useState<string | null>(null)
-    //const [ sortedEntries, setSortedEntries] = useState<KifEntry[]>([])
-    //const navigate = useNavigate()
     const [ entries, setEntries ] = useState<KifEntry[]>([])
-
-    // カスタムフック
-    //const store = useKifLibraryStore()
     const persistApi = useKifLibraryPersist()
 
-    // entitry
-    //const entries = store.state.library
-    //const sortedEntries = entries
-
+    
     // 初期ロード
     useEffect(() => {
         // ライブラリからエントリーリストの読み込み
@@ -38,33 +30,7 @@ export function useKifEntryController() {
     ): Promise<KifEntry> => {
         const buf = await file.arrayBuffer();
         const text = new TextDecoder("shift_jis").decode(buf);
-        const kifData = parseKif(text);
-
-        // ファイル名と拡張子を分離
-        let baseName = file.name;
-        let ext = "";
-        const dotIndex = file.name.lastIndexOf(".");
-        if (dotIndex >= 0) {
-            baseName = file.name.slice(0, dotIndex);
-            ext = file.name.slice(dotIndex);
-        }
-
-        // 重複チェック（既存＋追加分）
-        let newTitle = baseName + ext;
-        let counter = 1;
-        const existingTitles = new Set([...entries, ...extraEntries].map(e => e.kifData.title));
-        while (existingTitles.has(newTitle)) {
-            newTitle = `${baseName}(${counter})${ext}`;
-            counter++;
-        }
-        kifData.title = newTitle;
-
-        const entry: KifEntry = {
-            id: uuidv4(),
-            kifData,
-            createdAt: Date.now(),
-        };
-
+        const entry = await createKifEntryFromText(text, file.name, entries, extraEntries)
         // 保存
         await persist([...entries, ...extraEntries, entry]);
         return entry;
@@ -85,10 +51,7 @@ export function useKifEntryController() {
     // エントリ更新
     const updateTitle = async (entryId: string, newTitle: string) => {
         // 重複チェック（任意）
-        const existingTitles = new Set(entries.map(e => e.kifData.title));
-        if (existingTitles.has(newTitle)) {
-            throw new Error("タイトルが重複しています");
-        }
+        if (isDuplicatedTitle(newTitle, entries)) throw new Error("タイトルが重複しています");
 
         const nextEntries = entries.map(e =>
             e.id === entryId
@@ -108,23 +71,21 @@ export function useKifEntryController() {
         }
     }
     const deleteEntries = async (entriesToDelete: KifEntry[]) => {
-            try {
-                if (entriesToDelete.length === 0) return;
-    
-                const deleteIds = new Set(entriesToDelete.map(e => e.id));
-    
-                console.log("delete IDs", deleteIds)
-                const nextEntries = entries.filter(
-                    (e) => !deleteIds.has(e.id)
-                );
-                console.log("next entries", nextEntries)
-                //console.log("delete entries", entries, deleteIds, nextLibrary)
-                await persist(nextEntries);
-                // setLibrary(nextLibrary)
-            } catch (err) {
-                console.error("Failed to delete entries:", err);
-            }
-        };
+        try {
+            if (entriesToDelete.length === 0) return;
+
+            const deleteIds = new Set(entriesToDelete.map(e => e.id));
+
+            console.log("delete IDs", deleteIds)
+            const nextEntries = entries.filter(
+                (e) => !deleteIds.has(e.id)
+            );
+            console.log("next entries", nextEntries)
+            await persist(nextEntries);
+        } catch (err) {
+            console.error("Failed to delete entries:", err);
+        }
+    };
     const persist = async (next: KifEntry[]) => {
         await persistApi.save(next)
         //store.setLibrary(next)
@@ -141,12 +102,10 @@ export function useKifEntryController() {
 
     return {
         entries,
-
         updateTitle,
         deleteEntry,
         deleteEntries,
         importFiles,
-        replaceAll,
-        
+        replaceAll,        
     }
 }

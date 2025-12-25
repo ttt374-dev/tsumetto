@@ -50,7 +50,7 @@ export type KifData = {
   hands: Hands;
   moves: Move[];
 
-  title: string;
+  //title: string;
   source?: string;  
 }
 
