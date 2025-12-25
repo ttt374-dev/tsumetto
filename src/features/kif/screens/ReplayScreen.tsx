@@ -2,9 +2,8 @@
 import { useState, useMemo } from 'react'
 import BoardView from '../components/player/BoardView/BoardView'
 import { createEmptyBoard, createEmptyHand } from '../domain'
-import { parseHandString } from '../utils/parser/kifParseHand'
-import { parseMoves } from '../utils/parser/kifParseMove'
-import { PreviewSharp } from '@mui/icons-material'
+import { parseHandString } from '../domain/parser/kifParseHand'
+import { parseMoves } from '../domain/parser/kifParseMove'
 import { useKifReplay } from '../hooks/player/useKifReplay'
 
 export default function ReplayScreen() {

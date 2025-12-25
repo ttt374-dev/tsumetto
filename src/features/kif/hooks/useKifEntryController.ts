@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import type { KifEntry } from '../types'
 import { useKifLibraryPersist } from "./library/useLibraryPersist";
-import { parseKif } from "../utils/parser/kifParser";
+import { parseKif } from '../domain/parser';
 
 export function useKifEntryController() {
     //const [ currentEntryId, setCurrentEntryId ] = useState<string | null>(null)

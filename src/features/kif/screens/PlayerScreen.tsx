@@ -14,15 +14,10 @@ import { AppLayout } from '../../../shared/components/AppLayout/AppLayout';
 import { useKif } from '../hooks/useKif'
 import { createKifData } from '../domain'
 import KifEntryEditDialog from "../dialogs/KifEntryEditDialog";
-import { formatAccuracy } from '../utils';
-import type { KifEntry } from '../types/kifEntry';
-//import { createBoard, createPlayerState } from '../hooks/useKifPlayerOrig';
-import { useKifEntryController } from '../hooks/useKifEntryController';
-import type { Move } from '../types/'
 import MarkLearning from '../components/player/MarkLearning';
 import { useKifPlayerUI } from '../hooks/player/useKifPlayerUI';
 import { useKifReplay } from '../hooks/player/useKifReplay';
-import { LocalMoviesOutlined, PersonRemoveRounded } from '@mui/icons-material';
+
 /////////////////////////////
 export default function PlayerScreen() {
     const {

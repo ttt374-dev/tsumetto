@@ -1,4 +1,4 @@
-import type { KifData } from '../types'
+import type { KifData } from '../../types'
 import { createEmptyBoard } from './createBoard';
 import { createEmptyHand } from './createHand';
 

@@ -1,5 +1,5 @@
-import type { Board, Hands, Move, HandPieceKey, Position, PieceTypeKey } from '../types'
-import { PieceTypes } from '../types'
+import type { Board, Hands, Move, HandPieceKey, Position, PieceTypeKey } from '../../types'
+import { PieceTypes } from '../../types'
 
 function posToIndex(pos: Position) {
     return {
@@ -21,10 +21,13 @@ export function getBasePieceKey(
 export function applyMove(board: Board, hands: Hands, move: Move) {
     const { x, y } = posToIndex(move.position)
     
+    console.error("apply move")
     const cell = board[y][x]
+    console.log("apply move", move, cell)
     // 相手の駒を取る
     if (cell !== null){
         const key = getBasePieceKey(cell.key) as HandPieceKey
+        console.log("相手の駒を取る", move, key)
         hands.black[key]++
     }
 
@@ -51,3 +54,33 @@ export function applyMove(board: Board, hands: Hands, move: Move) {
 
 }
 
+export type ReplayState = {
+  board: Board;
+  hands: Hands;
+};
+export function buildBoardUntil(
+         initialBoard: Board, 
+        initialHands: Hands, 
+        moves: Move[],
+        index: number): ReplayState {
+        const board = cloneBoard(initialBoard);
+        const hands = cloneHands(initialHands)
+        
+        console.log("build board ")
+        for (let i = 0; i < index; i++) {
+            applyMove(board, hands, moves[i]);
+        }
+
+        return { board, hands }
+    }
+    function cloneBoard(board: Board): Board {
+        return board.map(row =>
+            row.map(cell => (cell ? { ...cell } : null))
+        );
+    }
+    function cloneHands(hands: Hands): Hands {
+        return {
+            black: { ...hands.black },
+            white: { ...hands.white },
+        };
+    }

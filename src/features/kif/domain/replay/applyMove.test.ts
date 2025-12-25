@@ -1,10 +1,8 @@
-import { applyMove } from "../domain/applyMove";
+import { applyMove } from "./applyMove";
 import { describe, it, expect } from 'vitest'
 import { createDefaultBoard } from "./createBoard";
 import { createEmptyHand } from "./createHand";
-import type { Hands, Move } from '../types'
-import { createHashRouter } from "react-router-dom";
-import { Handshake } from "@mui/icons-material";
+import type { Hands, Move } from '../../types'
 
 describe("apply move", () => {
     const defualtBoard = createDefaultBoard()

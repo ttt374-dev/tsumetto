@@ -1,4 +1,4 @@
-import type { Board, PlayerType, PieceTypeKey, Piece } from '../types'
+import type { Board, PlayerType, PieceTypeKey, Piece } from '../../types'
 
 export function createEmptyBoard(): Board {
   return Array.from({ length: 9 }, () =>

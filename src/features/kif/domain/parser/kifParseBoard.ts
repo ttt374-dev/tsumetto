@@ -1,5 +1,5 @@
 import type { Board, PieceTypeKey } from "../../types";
-import { createEmptyBoard, createDefaultBoard } from '../../domain/createBoard'
+import { createEmptyBoard, createDefaultBoard } from '../replay/createBoard'
 
 export function parseBoard(lines: string[]): Board {
   const boardLines = extractBoardBodyLines(lines);

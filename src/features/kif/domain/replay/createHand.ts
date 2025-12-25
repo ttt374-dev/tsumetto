@@ -1,4 +1,4 @@
-import { type HandPieceKey, PieceTypes  } from "../types";
+import { type HandPieceKey, PieceTypes  } from "../../types";
 
 export function createEmptyHand(): Record<HandPieceKey, number> {
   const hand = {} as Record<HandPieceKey, number>;
