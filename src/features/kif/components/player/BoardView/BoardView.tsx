@@ -1,10 +1,10 @@
 import styles from "./BoardView.module.css";
-import type { PieceTypeKey, Board, Hand } from '../../../types/'
+import type { PieceTypeKey, Board, Hands } from '../../../types/'
 import { PieceTypes } from "../../../types/";
 
 interface Props {
   board: Board;
-  hands: Hand;
+  hands: Hands;
   
 }
 
@@ -27,7 +27,7 @@ function BoardView({ board, hands}: Props) {
     <div className={styles.container}>
       {/* 持駒表示 */}
       <div style={{ marginTop: 12 }}>
-        <div>△後手：{hands.white || "なし"}</div>
+        { /* <div>△後手：{hands.white || "なし"}</div> */} 
       </div>
 
 
@@ -74,7 +74,7 @@ function BoardView({ board, hands}: Props) {
 
       {/* 持駒表示 */}
       <div style={{ marginTop: 12 }}>
-        <div>▲先手：{hands.black || "なし"}</div>
+        <div>▲先手：{ /* hands.black || "なし" */}</div>
       </div>
 
       

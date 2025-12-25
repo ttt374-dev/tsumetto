@@ -1,6 +1,6 @@
 // parseKif.ts
-import type { KifData, Board, Hand, Move } from "../types/";
-import { createBoard } from "../types";
+import type { KifData, Board, Hands, Move } from "../types/";
+import { createBoard, createEmptyHand } from "../types";
 import { parseMoveLine } from "./kifParseMoveLine";
 import type { PieceTypeKey } from "../types/pieceType";
 
@@ -86,21 +86,21 @@ function parseBoard(lines: string[]): Board {
   }
   return board
 }
-export function parseHands(lines: string[]): Hand{
-  let hands: Hand = { black: "", white: "" };  
+export function parseHands(lines: string[]): Hands{
+  let hands: Hands = { black: createEmptyHand(), white: createEmptyHand() };  
     for (const line of lines) {    
     // 先手の持駒
     if (line.startsWith("先手の持駒：")) {
       
       const value = line.replace("先手の持駒：", "").trim();
-      hands.black = value;        // ← ここに入れる
+      //hands.black = value;        // ← ここに入れる // TODO
       continue;
     }
 
     // 後手の持駒
     if (line.startsWith("後手の持駒：")) {
       const value = line.replace("後手の持駒：", "").trim();
-      hands.white = value;        // ← 必要ならこちらも
+      //hands.white = value;        // ← 必要ならこちらも // TODO
       continue;
     }
   }

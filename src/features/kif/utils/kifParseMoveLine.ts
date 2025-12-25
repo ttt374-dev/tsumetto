@@ -1,6 +1,6 @@
 //import type { Move } from '../types/kif'
 
-import type { Move, HandNew, Position, KifEvent, HandPieceKey, OwnerType } from '../types/'
+import type { Move, HandNew, Position, KifEvent, HandPieceKey, PlayerType } from '../types/'
 import type { PieceTypeKey,  } from '../types/pieceType';
 
 
@@ -86,16 +86,22 @@ export function parseMoveLine(line: string, prevPosition?: Position): KifEvent |
   }
   const position = parsePosition(moveText) ?? prevPosition
   if (!position){
-    throw new Error("invalid position: 同だが prevTo がない")
+    //throw new Error("invalid position: 同だが prevTo がない")
+    return null; // TODO: resulttype
   }
-  let drop = false
-  let moveTextWithoutDrop = moveText
-  if (moveText.endsWith("打")){
+  let drop = false  
+  let baseMoveText = moveText
+  if (moveText.endsWith("不成")){
+    baseMoveText = moveText.slice(0, -2)
+  }
+  if (baseMoveText.endsWith("打")){
     drop = true
-    moveTextWithoutDrop = moveText.slice(0, -1)
+    baseMoveText = baseMoveText.slice(0, -1)
+  } else if (["右", "左", "引", "直", "寄", "上"].some(s => baseMoveText.endsWith(s))){
+    baseMoveText = baseMoveText.slice(0, -1)
   }
   const piece = {
-    key: moveTextWithoutDrop.slice(2) as PieceTypeKey, // TODO
+    key: baseMoveText.slice(2) as PieceTypeKey, // TODO
     //name: moveText.charAt(2),
     isBlack: isBlack,
   }

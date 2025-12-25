@@ -1,4 +1,4 @@
-import type { HandPieceKey, HandNew, OwnerType } from '../types';
+import type { HandPieceKey, HandNew, PlayerType } from '../types';
 import { createEmptyHand } from '../types';
 import { kanToNumber } from './kifParseMoveLine';
 
@@ -41,7 +41,7 @@ export function parseHandLine(
   const [label, body] = line.split(/[：:]/);
   if (!label || !body) return;
 
-  let owner: OwnerType | null = null;
+  let owner: PlayerType | null = null;
 
   if (label.includes("先手")) {
     owner = "black";

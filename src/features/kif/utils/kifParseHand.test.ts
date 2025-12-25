@@ -14,6 +14,7 @@ describe("parseHandText", () => {
       金: 1,
       角: 0,
       飛: 0,
+      玉: 0,
     });
   });
 
@@ -34,6 +35,7 @@ describe("parseHandText", () => {
       金: 0,
       角: 0,
       飛: 0,
+      玉: 0,
     });
   });
 });

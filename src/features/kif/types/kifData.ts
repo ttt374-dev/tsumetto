@@ -9,21 +9,22 @@ export type Piece = {
 
 export type Board = (Piece | null)[][];
 
-export type OwnerType = "black" | "white"
+export type PlayerType = "black" | "white"
 
-export type Hand = {
-  black: string; // "金二 銀" のような文字列
-  white: string;
+export type Hands = {
+  black: Hand; // "金二 銀" のような文字列
+  white: Hand;
 };
 
+export type Hand = Record<HandPieceKey, number>
 
-export type HandNew = Record<OwnerType, Record<HandPieceKey, number>>;
-export type HandPieceKeyAuto = {
+export type HandNew = Record<PlayerType, Record<HandPieceKey, number>>;
+/*export type HandPieceKeyAuto = {
   [K in PieceTypeKey]:
     typeof PieceTypes[K] extends { promoted: false }
       ? K
       : never
-}[PieceTypeKey];
+}[PieceTypeKey];*/
 export type HandPieceKey = "歩" | "香" | "桂" | "銀" | "金" | "角" | "飛"
 
 export function createEmptyHand(): Record<HandPieceKey, number> {
@@ -55,7 +56,7 @@ export type Position = {
 
 export type KifData = {
   board: Board;
-  hands: Hand;
+  hands: Hands;
   moves: Move[];
 
   title: string;
@@ -83,7 +84,7 @@ export function createKifData(
 ): KifData {
   return {
     board: createBoard(),
-    hands: { black: "", white: "" },
+    hands: { black: createEmptyHand(), white: createEmptyHand() },
     //hands: { black: createEmptyHand(), white: createEmptyHand()},
     moves: [],
     title: "",

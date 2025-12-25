@@ -1,9 +1,9 @@
 import { useState, useMemo, useEffect } from 'react'
-import type { Board, Hand, Move, Position} from '../../types'
+import type { Board, Hands, Move, Position} from '../../types'
 
 export function useKifReplay(
     initialBoard: Board, 
-    hands: Hand, 
+    hands: Hands, 
     moves: Move[],
     currentEntryId: string | null,
 ) {
@@ -29,7 +29,7 @@ export function useKifReplay(
         }
     }
 
-    function applyMove(board: Board, hands: Hand, move: Move) {
+    function applyMove(board: Board, hands: Hands, move: Move) {
         const { x, y } = posToIndex(move.position)
         board[y][x] = move.piece
         

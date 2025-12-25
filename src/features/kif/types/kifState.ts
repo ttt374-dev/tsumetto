@@ -1,4 +1,4 @@
-import type { Board, Hand, KifData } from './kifData'
+import type { Board, Hands, KifData } from './kifData'
 import type { KifEntry } from './kifEntry';
 import { createBoard, createKifData } from './kifData';
 
@@ -18,7 +18,7 @@ export type KifPlayerStateOrig = {
 
 export type KifPlayerState = {
   board: Board,
-  hands: Hand,
+  hands: Hands,
   moves: [],
   moveIndex: number | null,
   currentEntryId: string | null;
