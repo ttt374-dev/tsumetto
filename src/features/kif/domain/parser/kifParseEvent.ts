@@ -1,9 +1,10 @@
-import { type KifEvent, type Position, type Piece, type PlayerType, type PieceTypeKey, PieceTypes } from "../../types";
+import type { KifEvent, Position, Piece, PlayerType, PieceTypeKey, GameStart } from "../../types";
 import type { ParseResult } from "./parseResult";
 import { parsePosition, parseFromToPosition } from './kifParsePosition';
 
 export function parseEvents(lines: string[]): KifEvent[]{ // ParseResult<KifEvent[]>{
-    const events: KifEvent[] = [];
+    const gameStart: GameStart = { type: "start"}
+    const events: KifEvent[] = [gameStart];
     let inEvents = false
     let prevTo = undefined
 

@@ -67,7 +67,7 @@ export function buildBoardUntil(
         const board = cloneBoard(initialBoard);
         const hands = cloneHands(initialHands)
         
-        console.log("build board ")
+        console.log("build board ", index)
         for (let i = 0; i < index; i++) {
             applyMove(board, hands, moves[i]);
         }

@@ -5,13 +5,13 @@ import EditIcon from '@mui/icons-material/Edit';
 import type { KifEntry, KifEntryWithLearning } from '../../types/kifEntry';
 import { formatAccuracy } from "../../utils";
 import { Check, OndemandVideoTwoTone } from "@mui/icons-material";
-import { useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 
 function LibraryList({
-    sortedEntries,    
+    sortedEntries,
     isChecked,
-    toggleChecked,    
+    toggleChecked,
     onEntryClick,
 
     editMode,
@@ -19,8 +19,8 @@ function LibraryList({
     clearAllCheckbox,
 }: {
     sortedEntries: KifEntry[];
-    isChecked: (id: string) => boolean    
-    toggleChecked: (id: string) => void;           
+    isChecked: (id: string) => boolean
+    toggleChecked: (id: string) => void;
     onEntryClick: (entryId: string) => void
     editMode: boolean
     toggleEditMode: () => void;
@@ -36,7 +36,7 @@ function LibraryList({
 
         timerRef.current = window.setTimeout(() => {
             longPressedRef.current = true;
-            if (!editMode){                           
+            if (!editMode) {
                 clearAllCheckbox()
             }
             toggleChecked(entryId)
@@ -52,7 +52,7 @@ function LibraryList({
     };
     const navigate = useNavigate()
     /////////////////////////////////////////////////////
-    
+
     return (
         <List>
             {sortedEntries.map((entry, i) => (
@@ -65,32 +65,33 @@ function LibraryList({
                     onTouchEnd={onPressEnd}
                     onClick={() => {
                         if (longPressedRef.current) return;
-                        onEntryClick(entry.id)}
+                        onEntryClick(entry.id)
+                    }
                     }
                 >
                     <ListItemButton>
-                    <ListItemIcon sx={{ minWidth: 16 }} onClick={(e) => e.stopPropagation()}>
-                        
-                        {editMode &&
-                            <Checkbox
-                                size="small"
-                                edge="start"
+                        <ListItemIcon sx={{ minWidth: 16 }} onClick={(e) => e.stopPropagation()}>
 
-                                checked={isChecked(entry.id)}
-                                onChange={(e) => {
-                                    e.stopPropagation();
-                                    toggleChecked(entry.id)
-                                }}
-                            />
-                        }
-                        
-                        
-                    </ListItemIcon>
-                    
-                    <ListItemText>
-                        {entry.title} -
-                        {entry.id.slice(0, 3)}
-                    </ListItemText>
+                            {editMode &&
+                                <Checkbox
+                                    size="small"
+                                    edge="start"
+
+                                    checked={isChecked(entry.id)}
+                                    onChange={(e) => {
+                                        e.stopPropagation();
+                                        toggleChecked(entry.id)
+                                    }}
+                                />
+                            }
+
+
+                        </ListItemIcon>
+
+                        <ListItemText>
+                            {entry.title} -
+                            {entry.id.slice(0, 3)}
+                        </ListItemText>
                     </ListItemButton>
                 </ListItem>
             ))}

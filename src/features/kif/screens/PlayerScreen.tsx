@@ -130,13 +130,7 @@ export default function PlayerScreen() {
                     {/* 解答表示 */}
                     {currentIndex} / {moves.length}
 
-                    <IconButton onClick={prevMove}>
-                        <KeyboardArrowUpIcon />
-                    </IconButton>
 
-                    <IconButton onClick={() => { showMoves(); nextMove() }}>
-                        <KeyboardArrowDownIcon />
-                    </IconButton>
                     <button onClick={prevMove}>
                         前の手へ
                     </button>
@@ -160,7 +154,11 @@ export default function PlayerScreen() {
                     overflowY: "auto",
                 }}>
                     {isMovesVisible &&
-                        <MovesView moves={moves} />}
+                        <MovesView 
+                            moves={moves}
+                            currentIndex={currentIndex}
+                            onMoveClick={(i) => setCurrentIndex(i)} 
+                        />}
 
 
 
