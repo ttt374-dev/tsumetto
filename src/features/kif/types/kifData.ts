@@ -1,16 +1,20 @@
 import type { PieceTypeKey } from "./pieceType";
-import { PieceTypes } from './pieceType'
+
+export type PlayerType = "black" | "white"
 
 export type Piece = {
-  //name: string;
   key: PieceTypeKey;
-  //isBlack: boolean;
   owner: PlayerType;
 };
 
-export type Board = (Piece | null)[][];
+export type HandPieceKey = "歩" | "香" | "桂" | "銀" | "金" | "角" | "飛"
 
-export type PlayerType = "black" | "white"
+export type Position = {
+  file: number;
+  rank: number;
+}
+
+export type Board = (Piece | null)[][];
 
 export type Hands = {
   black: Hand; // "金二 銀" のような文字列
@@ -19,31 +23,22 @@ export type Hands = {
 
 export type Hand = Record<HandPieceKey, number>
 
-//export type HandNew = Record<PlayerType, Record<HandPieceKey, number>>;
-/*export type HandPieceKeyAuto = {
-  [K in PieceTypeKey]:
-    typeof PieceTypes[K] extends { promoted: false }
-      ? K
-      : never
-}[PieceTypeKey];*/
-export type HandPieceKey = "歩" | "香" | "桂" | "銀" | "金" | "角" | "飛"
-
 
 export type Move = {
+  type: "move";
   moveNumber: number;
   moveText: string;
   piece: Piece;
-  //isBlack: boolean;
   player: PlayerType;
   from: Position | null;
   position: Position;
   drop: boolean;
 }
 
-export type Position = {
-  file: number;
-  rank: number;
-}
+export type GameEndReason = "resign" | "timeup" | "illegal" | "draw"
+export type GameStart = { type: "start" }
+export type GameEnd = { type: "end", reason: GameEndReason }  
+export type KifEvent = Move | GameStart | GameEnd
 
 export type KifData = {
   board: Board;
@@ -51,14 +46,5 @@ export type KifData = {
   moves: Move[];
 
   //title: string;
-  source?: string;  
+  //source?: string;  
 }
-
-export type KifEvent = Move | GameEnd
-
-export type GameEnd = 
-  | { type: "resign" }     // 投了
-  | { type: "timeup" }     // 切れ負け
-  | { type: "illegal" }    // 反則
-  | { type: "draw" }  
-
