@@ -142,10 +142,12 @@ export default function LibraryScreen() {
                 isChecked={isChecked}
                 toggleChecked={toggleChecked}
                 onEntryClick={(entryId: string) => {
-                    setEntryToEditId(entryId)
-                    if (editMode) {                 
-                                                setOpenEditDialog(true)
-                    } else {                        
+                    if (editMode) {
+                        setEntryToEditId(entryId)
+                        setOpenEditDialog(true)
+                    } else {
+                        toggleChecked(entryId)
+                        setCurrentEntryId(entryId)
                         navigate("/player")
                     }
                 }}

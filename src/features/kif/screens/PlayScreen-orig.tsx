@@ -1,0 +1,189 @@
+import { useEffect, useState } from 'react'
+import { Box, IconButton, Typography } from "@mui/material";
+import { useSwipeable } from "react-swipeable";
+import { useNavigate, } from "react-router-dom";
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CloseIcon from '@mui/icons-material/Close'
+import EditIcon from '@mui/icons-material/Edit'
+import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+
+import BoardView from '../components/player/BoardView/BoardView';
+import SelectEntry from '../components/player/SelectEntry';
+import MovesView from '../components/player/MovesView';
+import { AppLayout } from '../../../shared/components/AppLayout/AppLayout';
+import { useKif } from '../hooks/useKif'
+import { createKifData } from '../domain/factory/KifDataFactory';
+import KifEntryEditDialog from "../dialogs/KifEntryEditDialog";
+import MarkLearning from '../components/player/MarkLearning';
+import { useKifPlayerUI } from '../hooks/player/useKifPlayerUI';
+import { useKifReplay } from '../hooks/player/useKifReplay';
+
+/////////////////////////////
+export default function PlayerScreen() {
+    const {
+        kifEntryController, kifNavigation,
+        kifLearning,
+        sortedEntries
+    } = useKif()
+    const {
+        updateTitle,
+        deleteEntry,
+    } = kifEntryController
+    const {
+        currentEntry,
+        currentEntryId,
+        setCurrentEntryId,
+        navigateTo,
+    } = kifNavigation
+    const {
+        hideMoves, showMoves,
+        isMovesVisible, toggleMovesVisible,
+        openEditDialog, setOpenEditDialog
+    } = useKifPlayerUI(currentEntryId)
+    const { getRecord, markSolved, markFailed } = kifLearning
+    const navigate = useNavigate()
+    const kifData = currentEntry?.kifData ?? createKifData()
+    const learningRecord = getRecord(currentEntryId)
+
+    // スワイプハンドラ
+    const swipeHandlers = useSwipeable({
+        onSwipedLeft: () => {// 左スワイプ → 次の棋譜へ
+            navigateTo("next")
+        },
+        onSwipedRight: () => {// 右スワイプ → 前の棋譜へ
+            navigateTo("prev")
+        },
+        onSwipedUp: () => { 
+            currentIndex === 0 && hideMoves(); 
+            prevMove() 
+        },
+        onSwipedDown: () => { 
+            !isMovesVisible && showMoves()
+            nextMove()
+
+         },
+
+        trackMouse: true, // PCでもマウスでスワイプ可能
+        preventScrollOnSwipe: true,
+    });
+
+    //const initialBoard = kifData.board
+    const { board, hands, currentIndex, setCurrentIndex } = 
+        useKifReplay(kifData.board, kifData.hands, kifData.moves, currentEntryId)
+    const prevMove = () => { 
+        currentIndex > 0 && setCurrentIndex(prev => prev - 1)
+    }
+    const nextMove = () => {
+        currentIndex < kifData.moves.length && setCurrentIndex(prev => prev + 1) 
+    }
+    
+    
+    //////////
+    return (
+        <AppLayout
+            header={currentEntry?.title ?? 'untitled'}
+            footer={
+                <>
+                    <IconButton onClick={() => setOpenEditDialog(true)} disabled={!currentEntryId}>
+                        <EditIcon />
+                    </IconButton>
+                    <IconButton onClick={() => navigate("/library")}>
+                        <LibraryBooksIcon />
+                    </IconButton>
+                </>
+            }
+        >
+            <>
+                { /* エントリーリスト */}
+                <Box>
+                    <SelectEntry
+                        currentEntryId={currentEntryId}
+                        entities={sortedEntries}
+                        onSelect={(id) => {
+                            setCurrentEntryId(id)
+                        }}
+                    />
+                </Box>
+                { /* 盤面表示 */}
+                <Box {...swipeHandlers} sx={{
+                    userSelect: "none", // 選択防止
+                    touchAction: "pan-y", // 縦スクロールは阻害しない
+                }}>
+                    <BoardView
+                        board={board}
+                        hands={hands}
+                    />
+                </Box>
+                <Box>
+                    <button onClick={() => navigateTo("first")} disabled={sortedEntries.length == 0}>&lt;&lt;</button>
+                    <button onClick={() => navigateTo("prev")} disabled={sortedEntries.length == 0}>&lt;</button>
+                    <button onClick={() => navigateTo("next")} disabled={sortedEntries.length == 0}>&gt;</button>
+                    <button onClick={() => navigateTo("last")} disabled={sortedEntries.length == 0}>&gt;&gt;</button>
+                </Box>
+                <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "center", margin: 1 }}>
+                    <Box>
+                        {/* 解答表示 */}
+                        { currentIndex } / { kifData.moves.length}
+
+                        <IconButton onClick={prevMove}>
+                            <KeyboardArrowUpIcon />
+                        </IconButton>
+
+                        <IconButton onClick={()=>{ showMoves(); nextMove()}}>
+                            <KeyboardArrowDownIcon />
+                        </IconButton>
+                        <button onClick={prevMove}>
+                            前の手へ
+                        </button>
+                        <button onClick={() => { showMoves(); nextMove() } }>
+                            次の手へ
+                        </button>
+{ /* 
+                        < button onClick={toggleMovesVisible}
+                            disabled={kifData.moves.length === 0} >
+                            {isMovesVisible ? "解答を隠す" : "解答を表示"}
+                        </button >
+                        */ }
+                        
+                        <Box sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            height: "100vh",
+                            //width: "100%",
+                            gap: 2,
+                            overflowY: "auto",
+                        }}>
+                            {isMovesVisible &&
+                                <MovesView moves={kifData.moves} />}
+                        </Box>
+                    </Box>
+                    <Box>
+                        {learningRecord && currentEntryId &&
+                            <MarkLearning
+                                record={learningRecord}
+                                currentEntryId={currentEntryId}
+                                markSolved={markSolved}
+                                markFailed={markFailed}
+                            />
+                        }
+                    </Box>
+                </Box>
+
+                { /* ダイアログ　*/}
+                {currentEntryId &&
+                    <KifEntryEditDialog
+                        open={openEditDialog}
+                        entryId={currentEntryId}
+                        onUpdateTitle={(title: string) => updateTitle(currentEntryId, title)}
+                        onConfirm={() => { }}
+                        onClose={() => setOpenEditDialog(false)}
+                        onDelete={() => deleteEntry(currentEntryId)}
+                    />
+                }
+
+            </>
+        </AppLayout>
+    )
+}
