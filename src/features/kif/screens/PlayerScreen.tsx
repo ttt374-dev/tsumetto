@@ -55,28 +55,28 @@ export default function PlayerScreen() {
         onSwipedRight: () => {// 右スワイプ → 前の棋譜へ
             navigateTo("prev")
         },
-        onSwipedUp: () => { 
-            currentIndex === 0 && hideMoves(); 
-            prevMove() 
+        onSwipedUp: () => {
+            currentIndex === 0 && hideMoves();
+            prevMove()
         },
-        onSwipedDown: () => { 
+        onSwipedDown: () => {
             !isMovesVisible && showMoves()
             nextMove()
 
-         },
+        },
 
         trackMouse: true, // PCでもマウスでスワイプ可能
         preventScrollOnSwipe: true,
     });
 
     //const initialBoard = kifData.board
-    const { board, hands, currentIndex, setCurrentIndex } = 
+    const { board, hands, currentIndex, setCurrentIndex } =
         useKifReplay(kifData.board, kifData.hands, kifData.moves, currentEntryId)
-    const prevMove = () => { 
+    const prevMove = () => {
         currentIndex > 0 && setCurrentIndex(prev => prev - 1)
     }
     const nextMove = () => {
-        currentIndex < kifData.moves.length && setCurrentIndex(prev => prev + 1) 
+        currentIndex < kifData.moves.length && setCurrentIndex(prev => prev + 1)
     }
 
     //////////
@@ -122,52 +122,45 @@ export default function PlayerScreen() {
                     <button onClick={() => navigateTo("last")} disabled={sortedEntries.length == 0}>&gt;&gt;</button>
                 </Box>
                 <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "center", margin: 1 }}>
-                    <Box>
-                        {/* 解答表示 */}
-                        { currentIndex } / { kifData.moves.length}
 
-                        <IconButton onClick={prevMove}>
-                            <KeyboardArrowUpIcon />
-                        </IconButton>
+                    
+                    {/* 解答表示 */}
+                    {currentIndex} / {kifData.moves.length}
 
-                        <IconButton onClick={()=>{ showMoves(); nextMove()}}>
-                            <KeyboardArrowDownIcon />
-                        </IconButton>
-                        <button onClick={prevMove}>
-                            前の手へ
-                        </button>
-                        <button onClick={() => { showMoves(); nextMove() } }>
-                            次の手へ
-                        </button>
-{ /* 
+                    <IconButton onClick={prevMove}>
+                        <KeyboardArrowUpIcon />
+                    </IconButton>
+
+                    <IconButton onClick={() => { showMoves(); nextMove() }}>
+                        <KeyboardArrowDownIcon />
+                    </IconButton>
+                    <button onClick={prevMove}>
+                        前の手へ
+                    </button>
+                    <button onClick={() => { showMoves(); nextMove() }}>
+                        次の手へ
+                    </button>
+                    { /* 
                         < button onClick={toggleMovesVisible}
                             disabled={kifData.moves.length === 0} >
                             {isMovesVisible ? "解答を隠す" : "解答を表示"}
                         </button >
                         */ }
-                        
-                        <Box sx={{
-                            display: "flex",
-                            justifyContent: "center",
-                            height: "100vh",
-                            //width: "100%",
-                            gap: 2,
-                            overflowY: "auto",
-                        }}>
-                            {isMovesVisible &&
-                                <MovesView moves={kifData.moves} />}
-                        </Box>
-                    </Box>
-                    <Box>
-                        {learningRecord && currentEntryId &&
-                            <MarkLearning
-                                record={learningRecord}
-                                currentEntryId={currentEntryId}
-                                markSolved={markSolved}
-                                markFailed={markFailed}
-                            />
-                        }
-                    </Box>
+                </Box>
+                <Box sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    //height: "100%",
+                    //width: "100%",
+                    gap: 2,
+                    flex: 1,
+                    overflowY: "auto",
+                }}>
+                    {isMovesVisible &&
+                        <MovesView moves={kifData.moves} />}
+
+
+
                 </Box>
 
                 { /* ダイアログ　*/}

@@ -2,8 +2,8 @@
   display: flex;
   justify-content: center;
   flex-direction: column;
-  height: 100dvh;
-  overflow: hidden; /* 画面全体はスクロールさせない */
+  height: 100vh;
+  overflow: hidden; /* 画面 全体はスクロールさせない */
 }
 
 .header {
