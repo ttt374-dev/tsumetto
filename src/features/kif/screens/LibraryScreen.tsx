@@ -71,21 +71,38 @@ export default function LibraryScreen() {
     const [backupOpen, setBackupOpen] = useState(false)
     */
     ////////////////////////////////////////
+    const firstSelectedId = checkedIds.values().next().value
     return (
         <AppLayout
             header={"Library"}
             footer={
-                <>
+                <Stack direction="row">
                     <MultipleFilesButton
-                        label="棋譜ファイルを登録"
-                        useIconButton={true}
+                        label="登録"
+                        useIconButton={false}
                         onFileSelected={
                             async (files: File[]) => {
                                 importFiles(files)
                             }
                         }
                     />
-                </>
+                    <button onClick={() => setBackupOpen(true)}>
+                        バックアップ
+                    </button>
+                        
+                    <button onClick={toggleEditMode}>
+                        切り替え
+                    </button>
+                    <button onClick={selectAllChecked}>
+                        全選択
+                    </button>
+                    <button onClick={clearChecked}>
+                        全クリア
+                    </button>
+                    <button onClick={() => navigate("/player")}>
+                        戻る
+                    </button>
+                </Stack>
             }
         >
             { /* コントロール */}               
@@ -125,11 +142,10 @@ export default function LibraryScreen() {
                 isChecked={isChecked}
                 toggleChecked={toggleChecked}
                 onEntryClick={(entryId: string) => {
-                    if (editMode) {
-                        setEntryToEditId(entryId)
-                        setOpenEditDialog(true)
-                    } else {
-                        setCurrentEntryId(entryId)
+                    setEntryToEditId(entryId)
+                    if (editMode) {                 
+                                                setOpenEditDialog(true)
+                    } else {                        
                         navigate("/player")
                     }
                 }}

@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import { List, ListItem, ListItemIcon, ListItemText, Checkbox, IconButton, Typography } from "@mui/material";
+import { List, ListItem, ListItemIcon, ListItemText, Checkbox, IconButton, Typography, ListItemButton } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 
 import type { KifEntry, KifEntryWithLearning } from '../../types/kifEntry';
@@ -36,11 +36,10 @@ function LibraryList({
 
         timerRef.current = window.setTimeout(() => {
             longPressedRef.current = true;
-            if (editMode){
-                toggleChecked(entryId)
-            } else {
+            if (!editMode){                           
                 clearAllCheckbox()
             }
+            toggleChecked(entryId)
             toggleEditMode()
         }, LONG_PRESS_MS);
     }
@@ -57,14 +56,8 @@ function LibraryList({
     return (
         <List>
             {sortedEntries.map((entry, i) => (
-                <ListItem
+                <ListItem disablePadding
                     key={entry.id}
-                    sx={{
-                        cursor: "pointer",
-                        transition: "background-color 0.2s",
-                        "&:hover": { backgroundColor: "#e0e0e0" },
-                        border: 1
-                    }}
                     onMouseDown={() => onPressStart(entry.id)}
                     onMouseUp={onPressEnd}
                     onMouseLeave={onPressEnd}
@@ -72,10 +65,12 @@ function LibraryList({
                     onTouchEnd={onPressEnd}
                     onClick={() => {
                         if (longPressedRef.current) return;
-                         onEntryClick(entry.id)}
+                        onEntryClick(entry.id)}
                     }
                 >
+                    <ListItemButton>
                     <ListItemIcon sx={{ minWidth: 16 }} onClick={(e) => e.stopPropagation()}>
+                        
                         {editMode &&
                             <Checkbox
                                 size="small"
@@ -89,11 +84,14 @@ function LibraryList({
                             />
                         }
                         
+                        
                     </ListItemIcon>
+                    
                     <ListItemText>
                         {entry.title} -
                         {entry.id.slice(0, 3)}
                     </ListItemText>
+                    </ListItemButton>
                 </ListItem>
             ))}
         </List>
