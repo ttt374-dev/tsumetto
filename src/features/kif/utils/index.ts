@@ -1,1 +1,1 @@
-export * from "./formatAccuracy"
+export * from "./accuracy"

@@ -56,5 +56,5 @@ export type KifData = {
   //source?: string;  
 }
 export function getMoves(kifData: KifData): Move[] {
-  return kifData.events.filter((e): e is Move => e.type === "move");
+  return (kifData.events ?? []).filter((e): e is Move => e.type === "move");
 }

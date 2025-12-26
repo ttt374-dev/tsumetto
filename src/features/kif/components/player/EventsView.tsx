@@ -40,6 +40,8 @@ const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
             case "move":
                 return formatMove(event, index)
                 break;
+            case "end":
+                return `=== 終了 (${event.reason}) ===`
             default:
                 return ""
         }

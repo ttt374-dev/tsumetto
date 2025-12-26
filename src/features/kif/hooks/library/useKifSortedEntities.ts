@@ -1,7 +1,7 @@
 // features/kif/hooks/useSortedEntries.ts
 import { useMemo } from "react"
 import type { KifEntry, KifLearningRecord, SortState } from "../../types/"
-
+import { calcAccuracy, formatAccuracy } from "../../utils"
 
 
 export function useKifSortedEntries(
@@ -13,16 +13,6 @@ export function useKifSortedEntries(
   //console.log("sorted entries:", entities, sort)
   
 
-    const calcAccuracy = (
-        record: KifLearningRecord | undefined
-    ): number | null => {
-        if (!record) return null;
-
-        const total = record.solvedCount + record.failedCount;
-        if (total === 0) return null;
-
-        return record.solvedCount / total;
-    };
 
 
   return useMemo(() => {

@@ -21,6 +21,7 @@ import { useKifPlayerUI } from '../hooks/player/useKifPlayerUI';
 import { useKifReplay } from '../hooks/player/useKifReplay';
 import { getMoves } from '../types';
 import EventsView from '../components/player/EventsView';
+import { calcAccuracy, formatAccuracy } from '../utils';
 
 /////////////////////////////
 export default function PlayerScreen() {
@@ -64,7 +65,6 @@ export default function PlayerScreen() {
         onSwipedDown: () => {
             !isMovesVisible && showMoves()
             nextMove()
-
         },
 
         trackMouse: true, // PCでもマウスでスワイプ可能
@@ -72,18 +72,26 @@ export default function PlayerScreen() {
     });
 
     
-    const moves = getMoves(kifData)
+    //const moves = getMoves(kifData)
     const events = kifData.events
     const { board: initialBoard, hands: initialHands} = kifData
     const { board, hands, currentIndex, setCurrentIndex } =
-        useKifReplay(initialBoard, initialHands, moves, currentEntryId)
+        useKifReplay(initialBoard, initialHands, events, currentEntryId)
     const prevMove = () => {
         currentIndex > 0 && setCurrentIndex(prev => prev - 1)
     }
     const nextMove = () => {
-        currentIndex < moves.length && setCurrentIndex(prev => prev + 1)
+        currentIndex < events.length && setCurrentIndex(prev => prev + 1)
     }
 
+    const handleSolved = () => {
+        currentEntryId && markSolved(currentEntryId);
+        navigateTo("next")
+     }
+    const handleFailed = () => {
+        currentEntryId && markFailed(currentEntryId)
+        navigateTo("next")
+    }
     //////////
     return (
         <AppLayout
@@ -96,6 +104,22 @@ export default function PlayerScreen() {
                     <IconButton onClick={() => navigate("/library")}>
                         <LibraryBooksIcon />
                     </IconButton>
+                    
+                    { !isMovesVisible &&
+                    <button onClick={showMoves}>
+                        解答を表示
+                    </button>}
+                    { isMovesVisible &&
+                    <>
+                        <button onClick={handleSolved}>
+                            正答
+                        </button>
+                        <button onClick={handleFailed}>
+                            誤答
+                        </button>
+
+                    </>
+                    }
                 </>
             }
         >
@@ -130,15 +154,17 @@ export default function PlayerScreen() {
 
                     
                     {/* 解答表示 */}
-                    {currentIndex} / {moves.length}
 
-
-                    <button onClick={prevMove}>
-                        前の手へ
-                    </button>
-                    <button onClick={() => { showMoves(); nextMove() }}>
-                        次の手へ
-                    </button>
+                    { formatAccuracy(calcAccuracy(learningRecord ?? undefined))}
+                    {isMovesVisible && <>
+                        {currentIndex} / {events.length}
+                        <button onClick={prevMove}>
+                            前の手へ
+                        </button>
+                        <button onClick={() => { showMoves(); nextMove() }}>
+                            次の手へ
+                        </button></>
+                    }
                     { /* 
                         < button onClick={toggleMovesVisible}
                             disabled={kifData.moves.length === 0} >

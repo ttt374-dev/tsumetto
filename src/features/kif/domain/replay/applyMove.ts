@@ -1,5 +1,5 @@
 import type { Board, Hands, Move, HandPieceKey, Position, PieceTypeKey } from '../../types'
-import { PieceTypes } from '../../types'
+import { PieceTypes, type KifEvent } from '../../types'
 
 function posToIndex(pos: Position) {
     return {
@@ -27,7 +27,7 @@ export function applyMove(board: Board, hands: Hands, move: Move) {
     // 相手の駒を取る
     if (cell !== null){
         const key = getBasePieceKey(cell.key) as HandPieceKey
-        console.log("相手の駒を取る", move, key)
+        //console.log("相手の駒を取る", move, key)
         hands[move.player][key]++
     }
 
@@ -43,11 +43,12 @@ export function applyMove(board: Board, hands: Hands, move: Move) {
         const key = move.piece.key as HandPieceKey;
 
         if (ownerHands[key] <= 0) {
-            throw new Error(`持ち駒がありません: ${key}`);
+            //throw new Error(`持ち駒がありません: ${key}`);
+            console.error(`持ち駒がありません: ${key}`)
         }
         
         ownerHands[key] -= 1;
-        console.log("駒を打った", key, ownerHands[key])
+        //console.log("駒を打った", key, ownerHands[key])
     }
     
     
@@ -62,14 +63,17 @@ export type ReplayState = {
 export function buildBoardUntil(
          initialBoard: Board, 
         initialHands: Hands, 
-        moves: Move[],
+        events: KifEvent[],
         index: number): ReplayState {
         const board = cloneBoard(initialBoard);
         const hands = cloneHands(initialHands)
         
         console.log("build board ", index)
         for (let i = 0; i < index; i++) {
-            applyMove(board, hands, moves[i]);
+            const event = events[i]
+            if (!event) continue   // 防護
+            if (event.type === "move")
+                applyMove(board, hands, event);
         }
 
         return { board, hands }
