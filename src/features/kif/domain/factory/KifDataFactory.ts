@@ -11,7 +11,7 @@ export function createKifData(
   return {
     board: createEmptyBoard(),
     hands: { black: createEmptyHand(), white: createEmptyHand() },
-    moves: [],
+    events: [],
     ...partial,
   };
 }

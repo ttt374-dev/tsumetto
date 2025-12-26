@@ -15,6 +15,7 @@ describe("apply move", () => {
         }
         const move: Move =
         {
+            type: "move",
             moveNumber: 1,
             player: 'black',
             piece: {
@@ -46,6 +47,7 @@ describe("apply move", () => {
         }
         const move: Move =
         {
+            type: "move",
             moveNumber: 1,
             player: 'black',
             piece: {
@@ -73,6 +75,7 @@ describe("apply move", () => {
         board[4][4] = { key: '歩', owner: 'white'}
         const move: Move =
         {
+            type: "move",
             moveNumber: 1,
             player: 'black',
             piece: {

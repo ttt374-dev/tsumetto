@@ -6,7 +6,7 @@ import { parsePosition, parseFromToPosition } from './kifParsePosition';
 import type { ParseResult } from './parseResult';
 
 // 1行の KIF を解析して Move オブジェクトへ
-export function parseMoveLine(line: string, prevPosition?: Position): ParseResult<KifEvent> {
+export function parseMoveLine(line: string, prevPosition?: Position): ParseResult<Move> {
   //console.log("parse move line", line, prevPosition)
   //  例: "  5 １六歩(43)    ( 0:00/00:00:00)"
   const moveRegex = /^\s*(\d+)\s+([^\(]+?)(?:\((\d\d)\))?\s*\(/;
@@ -22,10 +22,6 @@ export function parseMoveLine(line: string, prevPosition?: Position): ParseResul
   if (!fromResult.ok) return fromResult
   const from = fromResult.value
 
-  if (moveText.startsWith("投了")){
-    console.log("投了！")
-    return { ok: true, value: { type: "resign"}}
-  }
   const positionResult = parsePosition(moveText, prevPosition)
   if (!positionResult.ok){
     //throw new Error("invalid position: 同だが prevTo がない")
@@ -53,7 +49,7 @@ export function parseMoveLine(line: string, prevPosition?: Position): ParseResul
   
   
   console.log("parse move", moveNumber, player, moveText, from, position, piece)
-  return {ok: true, value: { moveNumber, player, piece, moveText, from, position, drop }}
+  return {ok: true, value: { type: "move", moveNumber, player, piece, moveText, from, position, drop }}
 }
 
 ////////
@@ -68,16 +64,16 @@ export function parseMoves(lines: string[]): Move[] {
       continue;
     }
     if (!inMoves) continue;
-    
-    const moveResult = parseMoveLine(line, prevTo)        
+
+    const moveResult = parseMoveLine(line, prevTo)
     if (!moveResult.ok) continue
     //if (!move) continue
     const move = moveResult.value
-    if ("type" in move) {
-  
-    break // 終局
-  }
-    prevTo = move?.position    
+    //if ("type" in move) {
+    //if (move.type == "end"){}
+    //  break // 終局
+    //}
+    prevTo = move?.position
     moves.push(move);
 
   }

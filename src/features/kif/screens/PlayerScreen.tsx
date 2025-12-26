@@ -19,6 +19,7 @@ import KifEntryEditDialog from "../dialogs/KifEntryEditDialog";
 import MarkLearning from '../components/player/MarkLearning';
 import { useKifPlayerUI } from '../hooks/player/useKifPlayerUI';
 import { useKifReplay } from '../hooks/player/useKifReplay';
+import { getMoves } from '../types';
 
 /////////////////////////////
 export default function PlayerScreen() {
@@ -69,14 +70,16 @@ export default function PlayerScreen() {
         preventScrollOnSwipe: true,
     });
 
-    //const initialBoard = kifData.board
+    
+    const moves = getMoves(kifData)
+    const { board: initialBoard, hands: initialHands} = kifData
     const { board, hands, currentIndex, setCurrentIndex } =
-        useKifReplay(kifData.board, kifData.hands, kifData.moves, currentEntryId)
+        useKifReplay(initialBoard, initialHands, moves, currentEntryId)
     const prevMove = () => {
         currentIndex > 0 && setCurrentIndex(prev => prev - 1)
     }
     const nextMove = () => {
-        currentIndex < kifData.moves.length && setCurrentIndex(prev => prev + 1)
+        currentIndex < moves.length && setCurrentIndex(prev => prev + 1)
     }
 
     //////////
@@ -125,7 +128,7 @@ export default function PlayerScreen() {
 
                     
                     {/* 解答表示 */}
-                    {currentIndex} / {kifData.moves.length}
+                    {currentIndex} / {moves.length}
 
                     <IconButton onClick={prevMove}>
                         <KeyboardArrowUpIcon />
@@ -157,7 +160,7 @@ export default function PlayerScreen() {
                     overflowY: "auto",
                 }}>
                     {isMovesVisible &&
-                        <MovesView moves={kifData.moves} />}
+                        <MovesView moves={moves} />}
 
 
 
