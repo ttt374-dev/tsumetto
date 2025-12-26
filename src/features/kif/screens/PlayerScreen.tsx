@@ -20,6 +20,7 @@ import MarkLearning from '../components/player/MarkLearning';
 import { useKifPlayerUI } from '../hooks/player/useKifPlayerUI';
 import { useKifReplay } from '../hooks/player/useKifReplay';
 import { getMoves } from '../types';
+import EventsView from '../components/player/EventsView';
 
 /////////////////////////////
 export default function PlayerScreen() {
@@ -72,6 +73,7 @@ export default function PlayerScreen() {
 
     
     const moves = getMoves(kifData)
+    const events = kifData.events
     const { board: initialBoard, hands: initialHands} = kifData
     const { board, hands, currentIndex, setCurrentIndex } =
         useKifReplay(initialBoard, initialHands, moves, currentEntryId)
@@ -154,8 +156,8 @@ export default function PlayerScreen() {
                     overflowY: "auto",
                 }}>
                     {isMovesVisible &&
-                        <MovesView 
-                            moves={moves}
+                        <EventsView 
+                            events={events}
                             currentIndex={currentIndex}
                             onMoveClick={(i) => setCurrentIndex(i)} 
                         />}

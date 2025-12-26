@@ -19,7 +19,7 @@ export default function MovesView({ moves, currentIndex, onMoveClick  }: Props) 
                         key={i} 
                         onClick={() => onMoveClick(i) } 
                         style={{ padding: "2px 0",
-                            backgroundColor: i === currentIndex-1 ? "#ffd" : undefined, // ハイライト色
+                            backgroundColor: i === currentIndex ? "#ffd" : undefined, // ハイライト色
                             cursor: "pointer"
                         
                          }}>
