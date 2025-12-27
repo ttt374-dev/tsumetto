@@ -8,6 +8,13 @@ import EditIcon from '@mui/icons-material/Edit'
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import { Stack, Divider } from '@mui/material';
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import FirstPageIcon from "@mui/icons-material/FirstPage";
+import LastPageIcon from "@mui/icons-material/LastPage";
 
 import BoardView from '../components/player/BoardView/BoardView';
 import SelectEntry from '../components/player/SelectEntry';
@@ -22,6 +29,13 @@ import { useKifReplay } from '../hooks/player/useKifReplay';
 import { getMoves } from '../types';
 import EventsView from '../components/player/EventsView';
 import { calcAccuracy, formatAccuracy } from '../utils';
+import type { SxProps, Theme } from "@mui/material/styles";
+
+export const noFocusVisible: SxProps<Theme> = {
+  '&:focus': {
+    outline: 'none',
+  },
+};
 
 /////////////////////////////
 export default function PlayerScreen() {
@@ -92,6 +106,8 @@ export default function PlayerScreen() {
         currentEntryId && markFailed(currentEntryId)
         navigateTo("next")
     }
+    ///
+    
     //////////
     return (
         <AppLayout
@@ -107,25 +123,15 @@ export default function PlayerScreen() {
             }
             footer={
                 <>
-                    <IconButton onClick={() => setOpenEditDialog(true)} disabled={!currentEntryId}>
+                    <IconButton 
+
+                    onClick={() => setOpenEditDialog(true)} disabled={!currentEntryId}>
                         <EditIcon />
                     </IconButton>
-                    <IconButton onClick={() => navigate("/library")}>
+                    <IconButton                        
+                        onClick={() => navigate("/library")}>
                         <LibraryBooksIcon />
                     </IconButton>
-                    
-                    
-                    { isMovesVisible &&
-                    <>
-                        <button onClick={handleSolved}>
-                            正答
-                        </button>
-                        <button onClick={handleFailed}>
-                            誤答
-                        </button>
-
-                    </>
-                    }
                 </>
             }
         >
@@ -153,20 +159,38 @@ export default function PlayerScreen() {
                     />
                 </Box>
                 <Box>
-                    <button onClick={() => navigateTo("first")} disabled={sortedEntries.length == 0}>&lt;&lt;</button>
-                    <button onClick={() => navigateTo("prev")} disabled={sortedEntries.length == 0}>&lt;</button>
-                    <button onClick={() => navigateTo("next")} disabled={sortedEntries.length == 0}>&gt;</button>
-                    <button onClick={() => navigateTo("last")} disabled={sortedEntries.length == 0}>&gt;&gt;</button>
+                    { /* 
+                    <Button sx={noFocusVisible} onClick={() => navigateTo("first")} disabled={sortedEntries.length == 0}>&lt;&lt;</Button>
+                    <Button sx={noFocusVisible} onClick={() => navigateTo("prev")} disabled={sortedEntries.length == 0}>&lt;</Button>
+                    <Button sx={noFocusVisible} onClick={() => navigateTo("next")} disabled={sortedEntries.length == 0}>&gt;</Button>
+                    <Button sx={noFocusVisible} onClick={() => navigateTo("last")} disabled={sortedEntries.length == 0}>&gt;&gt;</Button>
+*/ }
+                    <IconButton sx={{...noFocusVisible, px: 2}} onClick={() => navigateTo("first")}>
+                        <FirstPageIcon/>
+                    </IconButton>
+                    
+                    <IconButton sx={{...noFocusVisible, px: 2}} onClick={() => navigateTo("prev")}>
+                        <ChevronLeftIcon/>
+                    </IconButton>
+                    <IconButton sx={{...noFocusVisible, px: 2}}  onClick={() => navigateTo("next")}>
+                        <ChevronRightIcon/>
+                    </IconButton>
+                    <IconButton sx={{...noFocusVisible, px: 2}} onClick={() => navigateTo("last")}>
+                        <LastPageIcon/>
+                    </IconButton>
+                    
                 </Box>
 
-
-                    <Box sx={{
+                <Box sx={{ minHeight: 0, display: "flex", flexDirection: "row" }}>
+                    <Box
+                        border={1} 
+                        sx={{
                         display: "flex",
                         justifyContent: "center",
                         //height: "100%",
                         //width: "100%",
                         gap: 2,
-                        flex: 1,
+                        flex: 7,
                         overflowY: "auto",
                     }}>
                         {isMovesVisible ?
@@ -174,18 +198,51 @@ export default function PlayerScreen() {
                                 events={events}
                                 currentIndex={currentIndex}
                                 onMoveClick={(i) => setCurrentIndex(i)} /> :
-
-                            <Button onClick={() => {                                
+                            <Button onClick={() => {
                                 showMoves()
                                 nextMove()
-                                }}>
+                            }}>
                                 解答を表示
                             </Button>}
-
-
-
-
                     </Box>
+
+                    <Box border={1} sx={{ flex: 3}}>
+                        <Stack direction="column" divider={<Divider/>}>
+                            <Stack direction="column" gap={2} margin={2}>
+                                { isMovesVisible && <>
+                                <IconButton sx={noFocusVisible} onClick={prevMove}>                                    
+                                    <ExpandLessIcon />
+                                </IconButton>
+                                <IconButton sx={noFocusVisible}
+                                    onClick={() => { showMoves(); nextMove() }}>
+                                    <ExpandMoreIcon />
+                                </IconButton>
+                                </>}
+
+                            </Stack>
+                            <Stack gap={2} margin={2}>
+                                { learningRecord && 
+                                    <Stack direction="column">
+                                        {formatAccuracy(calcAccuracy(learningRecord))}
+                                        [{learningRecord.solvedCount} | {learningRecord.failedCount}]
+
+                                        {isMovesVisible &&
+                                            <Stack direction="row" gap={2}>
+                                                <button onClick={handleSolved}>
+                                                    正答
+                                                </button>
+                                                <button onClick={handleFailed}>
+                                                    誤答
+                                                </button>
+                                            </Stack>
+                                        }
+                                    </Stack>
+
+                                }
+                            </Stack>
+                        </Stack>
+                    </Box>
+                </Box>
 
 { /* 
                     <Box sx={{

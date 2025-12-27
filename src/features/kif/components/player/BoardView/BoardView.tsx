@@ -23,12 +23,12 @@ function displayPiece(type: PieceTypeKey): string {
   return piece.display
 }
 function BoardView({ board, hands}: Props) { 
-  console.log("board", board)
-  console.log("hands on BoardView", hands)
+  //console.log("board", board)
+  //console.log("hands on BoardView", hands)
   return (
     <div className={styles.container}>
       {/* 持駒表示 */}
-      <div style={{ marginTop: 12 }}>
+      <div>
         { <div>△後手：{formatHand(hands.white)}</div>} 
       </div>
 
@@ -75,7 +75,7 @@ function BoardView({ board, hands}: Props) {
       ))}
 
       {/* 持駒表示 */}
-      <div style={{ marginTop: 12 }}>
+      <div>
         <div>▲先手：{ formatHand(hands.black) }</div>
       </div>
 
