@@ -12,6 +12,7 @@ export function createKifData(
     board: createEmptyBoard(),
     hands: { black: createEmptyHand(), white: createEmptyHand() },
     events: [],
+    headers: {},
     ...partial,
   };
 }

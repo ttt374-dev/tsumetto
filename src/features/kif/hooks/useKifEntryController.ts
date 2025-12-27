@@ -28,13 +28,16 @@ export function useKifEntryController() {
         file: File,
         extraEntries: KifEntry[] = [], // importFiles から呼ぶ場合に追加分を渡す
         doPersist: boolean = true,
-    ): Promise<KifEntry> => {
+    ): Promise<KifEntry|null> => {
         const buf = await file.arrayBuffer();
         const text = new TextDecoder("shift_jis").decode(buf);
         const allEntries = [...entries, ...extraEntries];
         const title = resolveUniqTitle(file.name, allEntries)
         const entry = createKifEntryFromText(text, title)        
         
+        if (entry === null){   // TODO: invalid kif file
+            return null
+        }
         // 保存
         doPersist && await persist([...allEntries, entry]);
         return entry;
@@ -45,6 +48,7 @@ export function useKifEntryController() {
         for (const file of files) {
             try {
                 const entry = await importFile(file, results, false);
+                if (entry === null) continue
                 results.push(entry);
             } catch (err) {
                 console.error("Failed to import file:", file.name, err);

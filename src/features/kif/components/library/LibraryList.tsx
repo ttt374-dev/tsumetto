@@ -3,9 +3,10 @@ import { List, ListItem, ListItemIcon, ListItemText, Checkbox, Box, IconButton, 
 import EditIcon from '@mui/icons-material/Edit';
 
 import type { KifEntry, KifEntryWithLearning } from '../../types/kifEntry';
-import { formatAccuracy } from "../../utils";
+import { calcAccuracy, formatAccuracy } from "../../utils";
 import { Check, OndemandVideoTwoTone } from "@mui/icons-material";
 import { useNavigate } from 'react-router-dom'
+import { formatDate } from '../../../../shared/utils';
 
 
 function LibraryList({
@@ -17,6 +18,7 @@ function LibraryList({
     editMode,
     toggleEditMode,
     clearAllCheckbox,
+    getLearningRecord
 }: {
     sortedEntries: KifEntry[];
     isChecked: (id: string) => boolean
@@ -25,6 +27,7 @@ function LibraryList({
     editMode: boolean
     toggleEditMode: () => void;
     clearAllCheckbox: () => void;
+    getLearningRecord: (entryId: string) => void
 }) {
     // 長押しで edit mode / view mode 切り替え
     const LONG_PRESS_MS = 500;
@@ -90,8 +93,9 @@ function LibraryList({
                         </ListItemIcon>
 
                         <ListItemText>
-                            {entry.title} -
-                            {entry.id.slice(0, 3)}
+                            {entry.title} 
+                            [{formatAccuracy(calcAccuracy(getLearningRecord(entry.id) ?? undefined))}]
+                            ({formatDate(entry.createdAt)})
                         </ListItemText>
                     </ListItemButton>
                 </ListItem>

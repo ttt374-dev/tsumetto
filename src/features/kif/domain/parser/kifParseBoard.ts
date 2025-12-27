@@ -1,12 +1,13 @@
 import type { Board, PieceTypeKey } from "../../types";
 import { createEmptyBoard, createDefaultBoard } from "../factory/KifBoardFactroy";
 
-export function parseBoard(lines: string[]): Board {
+export function parseBoard(lines: string[]): Board | null{
   const boardLines = extractBoardBodyLines(lines);
-  console.log("parse board", boardLines)
+  //console.log("parse board", boardLines)
 
   if (!boardLines) {
-    return createDefaultBoard();
+    //return createDefaultBoard();
+    return null
   }
 
   return createBoardFromKif(boardLines);

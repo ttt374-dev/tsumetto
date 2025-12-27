@@ -34,11 +34,12 @@ export function resolveUniqTitle(filename: string, existingEntries: KifEntry[]):
     }    
     return newTitle
 }
-export function createKifEntryFromText(text: string, title?: string): KifEntry {
-    const kifData = parseKif(text);
+export function createKifEntryFromText(text: string, title?: string): KifEntry | null {
+    const kifDataResult = parseKif(text);
+    if (kifDataResult.ok === false) return null
     return createKifEntry({
         title: title,
-        kifData: kifData,
+        kifData: kifDataResult.value,
     }
     )
 }

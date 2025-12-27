@@ -1,7 +1,8 @@
 import styles from "./BoardView.module.css";
-import type { PieceTypeKey, Board, Hands } from '../../../types/'
-import { PieceTypes } from "../../../types/";
+import type { PieceTypeKey, Board, Hands } from '../../../types'
+import { PieceTypes } from "../../../types";
 import { formatHand } from "../../../domain/parser/formatHand";
+
 
 interface Props {
   board: Board;

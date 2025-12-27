@@ -25,7 +25,7 @@ import { useKifLibrarySort } from '../hooks/library/useKifLibrarySort';
 export default function LibraryScreen() {    
     const navigate = useNavigate()
     const { kifEntryController, kifNavigation,         
-        kifLibrarySort, sortedEntries
+        kifLibrarySort, sortedEntries, kifLearning,
     } = useKif()
     const {
         importFiles,
@@ -37,6 +37,7 @@ export default function LibraryScreen() {
     } = kifNavigation
     
     const { sort, setSortOrder, setSortKey } = kifLibrarySort
+    const { getLearningRecord, markSolved, markFailed } = kifLearning
     
     const {
         checkedIds, isChecked, toggleChecked, 
@@ -155,6 +156,7 @@ export default function LibraryScreen() {
                 editMode={editMode}
                 toggleEditMode={toggleEditMode}
                 clearAllCheckbox={clearChecked}
+                getLearningRecord={getLearningRecord}
             />
             { /* ダイアログ　*/ }
             {entryToEditId &&

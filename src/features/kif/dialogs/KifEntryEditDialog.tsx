@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from "react"
-import { TextField, IconButton, Typography } from '@mui/material';
+import { TextField, IconButton, Typography, keyframes } from '@mui/material';
 import { Dialog, DialogTitle, DialogContent, DialogActions,
   Box, Button} from "@mui/material"
 import CheckIcon from '@mui/icons-material/Check'
@@ -12,6 +12,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { useNavigate } from "react-router-dom"
 import type { KifEntry } from "../types/kifEntry";
 import { useKif } from '../hooks/useKif'
+import { kanToNumber } from "../domain/parser/kanToNumber";
 
 type Props = {
   open: boolean
@@ -47,6 +48,7 @@ export default function KifEntryEditDialog({
     () => entries.find(e => e.id === entryId),
     [entries, entryId]
   );
+  
   // initialize
   // entry 切り替え時に title を同期
   useEffect(() => {
@@ -96,6 +98,7 @@ export default function KifEntryEditDialog({
   const handleEditFinish = () => {
     setEditing(false)
   }
+
   return (
     <Dialog open={open} onClose={onClose} maxWidth="xl">
       <DialogTitle>
@@ -138,6 +141,7 @@ export default function KifEntryEditDialog({
         <Box>
           UUID: { entryId.slice(0, 5)}...
         </Box>
+        
         { /* 正答誤答*/ }
         <div>
          {/*  { record && `正答：${record.solvedCount}, 誤答：${record.failedCount}` }*/}

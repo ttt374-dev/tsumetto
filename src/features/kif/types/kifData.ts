@@ -22,7 +22,7 @@ export type Hands = {
 };
 
 export type Hand = Record<HandPieceKey, number>
-
+export type KifHeader = Record<string, string>
 
 export type Move = {
   type: "move";
@@ -51,10 +51,20 @@ export type KifData = {
   hands: Hands;
   //moves: Move[];
   events: KifEvent[]
+  headers: KifHeader
 
   //title: string;
   //source?: string;  
 }
+
+export function isValidKifData(data: KifData): boolean {
+  // ヘッダも空、eventsも空なら無効
+  const hasHeader = Object.keys(data.headers).length > 0;
+  const hasEvents = data.events.length > 0;
+
+  return hasHeader || hasEvents;
+}
+
 export function getMoves(kifData: KifData): Move[] {
   return (kifData.events ?? []).filter((e): e is Move => e.type === "move");
 }
