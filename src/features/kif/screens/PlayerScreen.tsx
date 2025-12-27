@@ -13,11 +13,13 @@ import { useKifPlayerUI } from '../hooks/player/useKifPlayerUI';
 import { useKifReplay } from '../hooks/player/useKifReplay';
 import EventsView from '../components/player/EventsView';
 import { useProblemProgress } from '../hooks/player/useProblemProgress';
-import { ProblemControl } from '../components/player/ProblemControl';
 import BoardPanel from '../components/player/BoardPanel';
 import MoveControl from '../components/player/MoveControl';
 import SolutionControl from '../components/player/SolutionControl';
 import type { KifEvent } from "../types";
+import type { KifLearningRecord } from "../types";
+import type { ProblemPhase, ProblemResult } from "../hooks/player/useProblemProgress";
+import ControlPanel from "../components/player/ControlPanel";
 
 /////////////////////////////
 export default function PlayerScreen() {
@@ -33,9 +35,9 @@ export default function PlayerScreen() {
     const {
         currentEntry,
         currentEntryId,
-        navigateTo,
-        nextEntryAvailable,
+        navigateTo,        
         isFirstEntry,
+        isLastEntry,
     } = kifNavigation
     const {
         openEditDialog, setOpenEditDialog
@@ -74,7 +76,7 @@ export default function PlayerScreen() {
                 </Box>)
             }
             footer={
-                <Stack gap={2}>
+                <Stack gap={2} direction="row" justifyContent="center">
                     <IconButton
                         onClick={() => setOpenEditDialog(true)} disabled={!currentEntryId}>
                         <EditIcon />
@@ -87,16 +89,16 @@ export default function PlayerScreen() {
             }
         >
             <>
-            { currentEntryId &&
+            
                 <BoardPanel
                     board={board}
                     hands={hands}
                     currentEntryId={currentEntryId}
                     isFirstEntry={isFirstEntry}
-                    nextEntryAvailable={nextEntryAvailable}
+                    isLastEntity={isLastEntry}
                     navigateTo={navigateTo}
                 />
-            }
+                
                 { /* 左：手順リスト、右：操作コントロール */}
                 <Box sx={{ minHeight: 0, display: "flex", flexDirection: "row" }}>
                     <Box
@@ -117,33 +119,23 @@ export default function PlayerScreen() {
                     </Box>
 
                     <Box border={1} sx={{ width: 200 }}>
-                        <Stack direction="column" divider={<Divider />}>
-                            <SolutionControl
-                                prevMove={prevMove}
-                                nextMove={nextMove}
-                                setPhase={setPhase}
-                                currentPhase={currentPhase}
-                                setCurrentIndex={setCurrentIndex}
-                            />
-                            <MoveControl 
-                                prevMove={prevMove}
-                                nextMove={nextMove}
-                                setPhase={setPhase}
-                            />
+                        <ControlPanel
+                            setCurrentIndex={setCurrentIndex}
+                            currentEntryId={currentEntryId}
+                            isFirstEntry={isFirstEntry}
+                            isLastEntity={isLastEntry}
+                            navigateTo={navigateTo}
+
+                            prevMove={prevMove}
+                            nextMove={nextMove}
+                            setPhase={setPhase}
+                            currentPhase={currentPhase}                            
+                            learningRecord={learningRecord}
+                            markSolved={markSolved}
+                            markFailed={markFailed}
+                            chooseResult={chooseResult}
                             
-                            {learningRecord && currentEntryId &&
-                                <ProblemControl
-                                    currentEntryId={currentEntryId}
-                                    learningRecord={learningRecord}
-                                    currentPhase={currentPhase}
-                                    markSolved={markSolved}
-                                    markFailed={markFailed}
-                                    chooseResult={chooseResult}
-                                    nextEntryAvailable={nextEntryAvailable}
-                                    navigateTo={navigateTo}
-                                />
-                            }                            
-                        </Stack>
+                        />
                     </Box>
                 </Box>
 

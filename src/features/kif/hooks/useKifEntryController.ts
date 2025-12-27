@@ -29,6 +29,12 @@ export function useKifEntryController() {
         extraEntries: KifEntry[] = [], // importFiles から呼ぶ場合に追加分を渡す
         doPersist: boolean = true,
     ): Promise<KifEntry|null> => {
+        // 拡張子チェック
+        if (!file.name.toLowerCase().endsWith(".kif")){
+            console.error(`invalid filename: ${file.name}`)
+            return null
+        }
+
         const buf = await file.arrayBuffer();
         const text = new TextDecoder("shift_jis").decode(buf);
         const allEntries = [...entries, ...extraEntries];

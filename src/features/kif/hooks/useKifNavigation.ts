@@ -53,14 +53,13 @@ export function useKifNavigation(sortedEntries: KifEntry[]) {
                   break;
           }
       }
-      function nextEntryAvailable(entryId: string): boolean {
-        const index = getIndex(entryId)
-        if (index === -1) return false
-        return index < sortedEntries.length - 1
-      }
-      function isFirstEntry(entryId: string): boolean {
+      function isLastEntry(): boolean {
           if (sortedEntries.length === 0) return false;
-          return sortedEntries[0].id === entryId;
+          return sortedEntries.at(-1)?.id === currentEntryId;
+      }
+      function isFirstEntry(): boolean {
+          if (sortedEntries.length === 0) return false;
+          return sortedEntries[0].id === currentEntryId;
       }
 
       return {
@@ -68,7 +67,7 @@ export function useKifNavigation(sortedEntries: KifEntry[]) {
         currentEntry,
         setCurrentEntryId,
         navigateTo,
-        nextEntryAvailable,
+        isLastEntry,
         isFirstEntry,
       }
 

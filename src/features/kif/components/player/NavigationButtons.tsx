@@ -9,13 +9,14 @@ import { noFocusVisible } from "../../utils";
 type NavigationButtonsProps = {
     navigateTo: (dest: string) => void
     isFirstEntry: (entryId: string) => boolean
-    nextEntryAvailable: (entryId: string) => boolean
+    isLastEntity: (entryId: string) => boolean
     currentEntryId: string | null
-    
+
 }
 
-export default function NavigationButtons({navigateTo, isFirstEntry, nextEntryAvailable, currentEntryId }: NavigationButtonsProps){
-    return (<Stack direction="row" gap={2}>
+export default function NavigationButtons({ navigateTo, isFirstEntry, isLastEntity, currentEntryId }: NavigationButtonsProps) {
+    return (
+    <Stack direction="row" gap={2} sx={{justifyContent: "center"}}>
         { /* 
                     <Button sx={noFocusVisible} onClick={() => navigateTo("first")} disabled={sortedEntries.length == 0}>&lt;&lt;</Button>
                     <Button sx={noFocusVisible} onClick={() => navigateTo("prev")} disabled={sortedEntries.length == 0}>&lt;</Button>
@@ -29,7 +30,7 @@ export default function NavigationButtons({navigateTo, isFirstEntry, nextEntryAv
         <IconButton sx={{ ...noFocusVisible }} disabled={isFirstEntry(currentEntryId ?? "")} onClick={() => navigateTo("prev")}>
             <ChevronLeftIcon />
         </IconButton>
-        <IconButton sx={{ ...noFocusVisible }} disabled={!nextEntryAvailable(currentEntryId ?? "")} onClick={() => navigateTo("next")}>
+        <IconButton sx={{ ...noFocusVisible }} disabled={isLastEntity(currentEntryId ?? "")} onClick={() => navigateTo("next")}>
             <ChevronRightIcon />
         </IconButton>
         <IconButton sx={{ ...noFocusVisible }} onClick={() => navigateTo("last")}>

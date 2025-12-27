@@ -20,6 +20,7 @@ export default function FileButton({ label = "Choose File", onFileSelected }: { 
         type="file"
         ref={fileRef}
         accept="*/*"
+        //accept="*.kif"
         style={{ display: "none" }}
         onChange={handleChange}
       />

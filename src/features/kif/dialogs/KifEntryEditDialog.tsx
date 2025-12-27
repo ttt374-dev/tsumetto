@@ -18,7 +18,7 @@ type Props = {
   open: boolean
   //entryId: string | null
   //entry: KifEntry,
-  entryId: string,
+  entryId: string | null,
   onUpdateTitle: (title: string) => void;
   onConfirm: (entry: KifEntry) => void;
   onClose: () => void
@@ -139,7 +139,7 @@ export default function KifEntryEditDialog({
           登録日：{ (entry != null) ? new Date(entry.createdAt).toLocaleString("ja-JP") : "-" }
         </Box>
         <Box>
-          UUID: { entryId.slice(0, 5)}...
+          UUID: { entryId?.slice(0, 5)}...
         </Box>
         
         { /* 正答誤答*/ }

@@ -40,7 +40,8 @@ export default function MultipleFilesButton({
         type="file"
         ref={fileRef}
         multiple={true}
-        accept="*/*"
+        //accept="*/*"
+        accept="*.kif"
         style={{ display: "none" }}
         onChange={handleChange}
       />

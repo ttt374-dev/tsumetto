@@ -1,19 +1,21 @@
 import { useState } from "react";
-import { Box } from "@mui/material";
-import { Stack } from '@mui/material';
+import { Box, Stack, IconButton } from "@mui/material";
 import { calcAccuracy, formatAccuracy } from '../../utils';
 import type { KifLearningRecord } from '../../types'
 import type { ProblemPhase, ProblemResult } from "../../hooks/player/useProblemProgress";
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CloseIcon from '@mui/icons-material/Close'
+
 
 type ProblemStatsProps = {
     learningRecord: KifLearningRecord
 }
 function ProblemStats({ learningRecord }: ProblemStatsProps) {
     return (
-        <Box>
+        <Stack gap={1}>
             {formatAccuracy(calcAccuracy(learningRecord))}
             [{learningRecord.solvedCount} | {learningRecord.failedCount}]
-        </Box>
+        </Stack>
     )
 }
 
@@ -26,14 +28,14 @@ type Props = {
     markFailed: (entryId: string) => void
     chooseResult: (result: ProblemResult) => void
 
-    nextEntryAvailable: (entryId: string) => boolean
+    isLastEntity: () => boolean
     navigateTo: (dest: string) => void
 }
 
-export function ProblemControl({
+export default function ProblemControl({
     learningRecord, currentPhase, currentEntryId,
     markSolved, markFailed, chooseResult,
-    nextEntryAvailable, navigateTo
+    isLastEntity, navigateTo
 }: Props) {
     const [result, setResult] = useState<ProblemResult|null>(null)
     const handleSolved = () => {
@@ -51,18 +53,31 @@ export function ProblemControl({
         //navigateTo("next")
     }
 
+    const disabled = currentPhase != "solution"
     return (
-        <Stack gap={2} margin={2} direction="column">
+        <Stack gap={2} margin={2}>
             <ProblemStats learningRecord={learningRecord}/>
             
             <Stack gap={2}>
-                <Stack direction="row" gap={2}>
-                    <button onClick={handleSolved} disabled={currentPhase != "solution"}>
+                <Stack direction="row" gap={2}  justifyContent="center">
+                    <IconButton
+                        disabled={disabled}
+                        onClick={handleSolved}>
+                        <CheckCircleIcon />
+                    </IconButton>
+                    <IconButton
+                        disabled={disabled}
+                        onClick={handleFailed}>
+                        <CloseIcon />
+                    </IconButton>
+            { /* 
+                    <button onClick={handleSolved} disabled={disabled}>
                         正答
                     </button>
-                    <button onClick={handleFailed} disabled={currentPhase != "solution"}>
+                    <button onClick={handleFailed} disabled={disabled}>
                         誤答
                     </button>
+                    */ }
                 </Stack>
 
             </Stack>
@@ -72,7 +87,7 @@ export function ProblemControl({
                     {result === 'solved' ? '正解!' : '残念'}
                     <button onClick={() => navigateTo("next")}
                         disabled={
-                            !nextEntryAvailable(currentEntryId ?? "") ||
+                            isLastEntity() ||
                             currentPhase != "result"
                         }>
                         次の問題へ
