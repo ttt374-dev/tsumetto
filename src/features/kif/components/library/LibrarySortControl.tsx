@@ -20,6 +20,7 @@ export default function LibrarySortControl({ sort, setSortKey, setSortOrder }: {
     setSortOrder: (order: SortOrder) => void,
 }) {
     const handleChangeKey = (e: any) => {
+        console.log("set sort key", e.target.value)
         setSortKey(e.target.value)
     }
     return (
@@ -31,8 +32,9 @@ export default function LibrarySortControl({ sort, setSortKey, setSortOrder }: {
             </select>
 
             <IconButton onClick={() => {
-                console.log("toggle sort order")
+                
                 setSortOrder(sort.order == "asc" ? "desc" : "asc")
+                console.log("toggle sort order", sort.order)                
             }
             }>
                 {sort.order === 'asc'

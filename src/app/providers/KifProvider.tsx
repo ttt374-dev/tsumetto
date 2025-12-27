@@ -1,4 +1,4 @@
-import React, { createContext, useContext, type ReactNode } from "react";
+import React, { createContext, useContext, type ReactNode, useEffect } from "react";
 //import { useKifLibrary } from '../../features/kif/hooks/useKifLibrary'
 //import { useKifPlayer } from "../../features/kif/hooks/player/useKifPlayer";
 import { useKifLearning } from "../../features/kif/hooks/learning/useKifLearning";
@@ -18,7 +18,7 @@ export const KifProvider = ({ children }: { children: ReactNode }) => {
   
   
   const kifLearning = useKifLearning()
-    const kifEntryController = useKifEntryController()
+  const kifEntryController = useKifEntryController()
 
   const entries = kifEntryController.entries
   const kifLibrarySort = useKifLibrarySort()  
@@ -31,7 +31,9 @@ export const KifProvider = ({ children }: { children: ReactNode }) => {
   
   //const kifPlayer = useKifPlayer(entries);
   //const kifNavigation = useKifNavigation(entries)
-  
+  useEffect(() => {
+  console.log("provider sort", kifLibrarySort.sort)
+}, [kifLibrarySort.sort])
 
   return (    
     <KifContext.Provider value={{ 

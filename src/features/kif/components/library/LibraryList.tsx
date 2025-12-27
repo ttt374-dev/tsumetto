@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import { List, ListItem, ListItemIcon, ListItemText, Checkbox, IconButton, Typography, ListItemButton } from "@mui/material";
+import { List, ListItem, ListItemIcon, ListItemText, Checkbox, Box, IconButton, Typography, ListItemButton } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 
 import type { KifEntry, KifEntryWithLearning } from '../../types/kifEntry';
@@ -54,6 +54,7 @@ function LibraryList({
     /////////////////////////////////////////////////////
 
     return (
+        <Box sx={{maxHeight: "100%", overflowY: "auto"}}>
         <List>
             {sortedEntries.map((entry, i) => (
                 <ListItem disablePadding
@@ -96,6 +97,7 @@ function LibraryList({
                 </ListItem>
             ))}
         </List>
+        </Box>
     );
 }
 

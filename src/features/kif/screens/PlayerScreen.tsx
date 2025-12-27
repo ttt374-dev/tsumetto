@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Box, IconButton, Typography } from "@mui/material";
+import { Box, IconButton, Button, Typography } from "@mui/material";
 import { useSwipeable } from "react-swipeable";
 import { useNavigate, } from "react-router-dom";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -95,7 +95,16 @@ export default function PlayerScreen() {
     //////////
     return (
         <AppLayout
-            header={currentEntry?.title ?? 'untitled'}
+            header={
+                (<Box
+                    sx={{
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                    }}>
+                { currentEntry?.title ?? 'untitled' }
+                </Box>)
+            }
             footer={
                 <>
                     <IconButton onClick={() => setOpenEditDialog(true)} disabled={!currentEntryId}>
@@ -105,10 +114,7 @@ export default function PlayerScreen() {
                         <LibraryBooksIcon />
                     </IconButton>
                     
-                    { !isMovesVisible &&
-                    <button onClick={showMoves}>
-                        解答を表示
-                    </button>}
+                    
                     { isMovesVisible &&
                     <>
                         <button onClick={handleSolved}>
@@ -123,8 +129,9 @@ export default function PlayerScreen() {
                 </>
             }
         >
-            <>
+            <>  
                 { /* エントリーリスト */}
+                { /* 
                 <Box>
                     <SelectEntry
                         currentEntryId={currentEntryId}
@@ -134,6 +141,7 @@ export default function PlayerScreen() {
                         }}
                     />
                 </Box>
+                */ }
                 { /* 盤面表示 */}
                 <Box {...swipeHandlers} sx={{
                     userSelect: "none", // 選択防止
@@ -150,47 +158,56 @@ export default function PlayerScreen() {
                     <button onClick={() => navigateTo("next")} disabled={sortedEntries.length == 0}>&gt;</button>
                     <button onClick={() => navigateTo("last")} disabled={sortedEntries.length == 0}>&gt;&gt;</button>
                 </Box>
-                <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "center", margin: 1 }}>
 
-                    
-                    {/* 解答表示 */}
 
-                    { formatAccuracy(calcAccuracy(learningRecord ?? undefined))}
-                    {isMovesVisible && <>
-                        {currentIndex} / {events.length}
-                        <button onClick={prevMove}>
-                            前の手へ
-                        </button>
-                        <button onClick={() => { showMoves(); nextMove() }}>
-                            次の手へ
-                        </button></>
-                    }
-                    { /* 
-                        < button onClick={toggleMovesVisible}
-                            disabled={kifData.moves.length === 0} >
-                            {isMovesVisible ? "解答を隠す" : "解答を表示"}
-                        </button >
-                        */ }
-                </Box>
-                <Box sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    //height: "100%",
-                    //width: "100%",
-                    gap: 2,
-                    flex: 1,
-                    overflowY: "auto",
-                }}>
-                    {isMovesVisible &&
-                        <EventsView 
-                            events={events}
-                            currentIndex={currentIndex}
-                            onMoveClick={(i) => setCurrentIndex(i)} 
-                        />}
+                    <Box sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        //height: "100%",
+                        //width: "100%",
+                        gap: 2,
+                        flex: 1,
+                        overflowY: "auto",
+                    }}>
+                        {isMovesVisible ?
+                            <EventsView
+                                events={events}
+                                currentIndex={currentIndex}
+                                onMoveClick={(i) => setCurrentIndex(i)} /> :
+
+                            <Button onClick={() => {                                
+                                showMoves()
+                                nextMove()
+                                }}>
+                                解答を表示
+                            </Button>}
 
 
 
-                </Box>
+
+                    </Box>
+
+{ /* 
+                    <Box sx={{
+                        width: 200,        // 固定幅
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 1,
+                    }}>
+                        <Box>
+                        {formatAccuracy(calcAccuracy(learningRecord ?? undefined))}
+                        </Box>
+                        {isMovesVisible && <>
+                            {currentIndex} / {events.length}
+                            <button onClick={prevMove}>
+                                前の手へ
+                            </button>
+                            <button onClick={() => { showMoves(); nextMove() }}>
+                                次の手へ
+                            </button></>
+                        }
+                    </Box>
+* /}
 
                 { /* ダイアログ　*/}
                 {currentEntryId &&

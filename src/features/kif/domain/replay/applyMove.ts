@@ -69,7 +69,7 @@ export function buildBoardUntil(
         const hands = cloneHands(initialHands)
         
         console.log("build board ", index)
-        for (let i = 0; i < index; i++) {
+        for (let i = 0; i <= index; i++) {
             const event = events[i]
             if (!event) continue   // 防護
             if (event.type === "move")

@@ -11,6 +11,7 @@ export function useKifLibrarySort() {
   const [sort, setSort] = useState<SortState>(DEFAULT_SORT)
 
   const setSortKey = useCallback((key: SortKey) => {
+    //alert("setsortkey")
     setSort(prev => {
       // 同じキーを押したら order を反転
       if (prev.key === key) {

@@ -11,15 +11,12 @@ export function useKifSortedEntries(
 ): KifEntry[] {
 
   //console.log("sorted entries:", entities, sort)
-  
-
 
 
   return useMemo(() => {
     if (!entities || entities.length === 0) return []
 
     const sorted = [...entities]
-
 
     sorted.sort((a, b) => {
       let vA: any
@@ -49,9 +46,11 @@ export function useKifSortedEntries(
       if (vA > vB) return sort.order === "asc" ? 1 : -1
       return 0
     })
+    //alert("sorted")
 
-    console.log("sorted:", sorted)
-
+    //console.log("sorted:", sorted)
+    console.log("useKifSortedEntries called", sort)
+    console.log("sorted", sorted)
     return sorted
-  }, [entities, sort.key, sort.order])
+  }, [entities, sort, learningRecords])
 }
