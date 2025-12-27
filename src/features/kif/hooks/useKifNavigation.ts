@@ -1,75 +1,89 @@
-import { useState,  useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import type { KifEntry } from "../types";
 
 export function useKifNavigation(sortedEntries: KifEntry[]) {
-  const [currentEntryId, setCurrentEntryId] = useState<string | null>(null);
+    //const [currentEntryId, setCurrentEntryId] = useState<string | null>(null);
+    const [currentIndex, setCurrentIndex] = useState(0)
 
-  // 起動時に先頭のを用いる
-  useEffect(() => {
-        if (sortedEntries.length > 0 && !currentEntryId) {
-            setCurrentEntryId(sortedEntries[0].id);
+    useEffect(() => {
+        if (queue.length === 0) {
+            setCurrentIndex(0);
+        } else if (currentIndex >= queue.length) {
+            setCurrentIndex(0);
         }
-    }, [sortedEntries, currentEntryId]);
-        const currentEntry = useMemo(() => {
-        if (currentEntryId === null) return null
-        else return sortedEntries.find(e => e.id === currentEntryId) ?? null
-    }, [currentEntryId, sortedEntries ])
+    }, [])
 
-    function getIndex(entryId: string): number {
-        return sortedEntries.findIndex(e => e.id === currentEntryId)        
+    const queue = useMemo(
+        () => sortedEntries.map(e => e.id),
+        [sortedEntries]
+    )
+
+    // id → entry のマップ（library から生成される想定）
+    const entryMap: Record<string, KifEntry> = useMemo(() => {
+        const map: Record<string, KifEntry> = {};
+        sortedEntries.forEach(e => {
+            map[e.id] = e;
+        });
+        return map;
+    }, [sortedEntries]);
+    
+    const currentEntryId =
+        currentIndex >= 0 && currentIndex < queue.length
+            ? queue[currentIndex]
+            : null;
+
+    const currentEntry = useMemo(() => {
+        if (!currentEntryId) return null;
+        return entryMap[currentEntryId] ?? null;
+    }, [currentEntryId, entryMap]);
+
+    // ナビゲーター
+    const navigateTo = (dest: string) => {
+        //if (!currentEntryId) return;       
+
+        switch (dest) {
+            case 'first':
+                if (queue.length === 0) return;
+                setCurrentIndex(0);
+                break;
+            case 'prev':
+                if (queue.length === 0) return;
+                setCurrentIndex((i) => Math.max(i - 1, 0));
+                break;
+            case 'next':
+                if (queue.length === 0) return;
+                setCurrentIndex((i) => Math.min(i + 1, queue.length - 1)); break;
+            case 'last':
+                if (queue.length === 0) return;
+                setCurrentIndex(queue.length - 1);
+                break;
+            default:
+                break;
+        }
     }
+    function isLastEntry(): boolean {
+        return (
+            queue.length > 0 &&
+            currentIndex === queue.length - 1
+        );
+    }
+    function isFirstEntry(): boolean {
+        return queue.length > 0 && currentIndex === 0;
+    }
+    function setCurrentEntryId(entryId: string) {
+        const index = queue.indexOf(entryId)
+        if (index === -1) return
+        setCurrentIndex(index);
 
-  // ナビゲーター
-      const navigateTo = (dest: string) => {
-          if (!currentEntryId) return;
-          //const currentIndex = sortedEntries.findIndex(e => e.id === currentEntryId)        
-          const currentIndex = getIndex(currentEntryId)
-          console.log("current index", currentIndex)
-  
-          switch(dest){
-              case 'first':
-                  const first = sortedEntries[0]
-                  setCurrentEntryId(first.id)
-                  break;
-              case 'prev':
-                  if (currentIndex <= 0) return
-                  const prev = sortedEntries[currentIndex - 1]        
-                  if (!prev) return
-                  console.log("navigate to prev", prev.id)
-                  setCurrentEntryId(prev.id)
-                  break;
-              case 'next':
-                  if (currentIndex < 0) return
-                  const next = sortedEntries[currentIndex + 1]        
-                  if (!next) return
-                  setCurrentEntryId(next.id)
-                  console.log("navigate to next", next.id)
-                  break;
-              case 'last':
-                  const last = sortedEntries[sortedEntries.length-1]
-                  setCurrentEntryId(last.id)
-                  break;
-              default:
-                  break;
-          }
-      }
-      function isLastEntry(): boolean {
-          if (sortedEntries.length === 0) return false;
-          return sortedEntries.at(-1)?.id === currentEntryId;
-      }
-      function isFirstEntry(): boolean {
-          if (sortedEntries.length === 0) return false;
-          return sortedEntries[0].id === currentEntryId;
-      }
-
-      return {
+    }
+    return {
         currentEntryId,
         currentEntry,
         setCurrentEntryId,
         navigateTo,
         isLastEntry,
         isFirstEntry,
-      }
+    }
 
 
 }
