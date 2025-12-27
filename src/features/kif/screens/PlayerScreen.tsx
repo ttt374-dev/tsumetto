@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { Box, IconButton, Button, Typography } from "@mui/material";
 import { useSwipeable } from "react-swipeable";
 import { useNavigate, } from "react-router-dom";
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CloseIcon from '@mui/icons-material/Close'
 import EditIcon from '@mui/icons-material/Edit'
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
@@ -17,19 +16,16 @@ import FirstPageIcon from "@mui/icons-material/FirstPage";
 import LastPageIcon from "@mui/icons-material/LastPage";
 
 import BoardView from '../components/player/BoardView/BoardView';
-import SelectEntry from '../components/player/SelectEntry';
-import MovesView from '../components/player/MovesView';
 import { AppLayout } from '../../../shared/components/AppLayout/AppLayout';
 import { useKif } from '../hooks/useKif'
 import { createKifData } from '../domain/factory/KifDataFactory';
 import KifEntryEditDialog from "../dialogs/KifEntryEditDialog";
-import MarkLearning from '../components/player/MarkLearning';
 import { useKifPlayerUI } from '../hooks/player/useKifPlayerUI';
 import { useKifReplay } from '../hooks/player/useKifReplay';
-import { getMoves } from '../types';
 import EventsView from '../components/player/EventsView';
 import { calcAccuracy, formatAccuracy } from '../utils';
 import type { SxProps, Theme } from "@mui/material/styles";
+import { useProblemProgress } from '../hooks/player/useProblemProgress';
 
 export const noFocusVisible: SxProps<Theme> = {
   '&:focus': {
@@ -37,12 +33,12 @@ export const noFocusVisible: SxProps<Theme> = {
   },
 };
 
+
 /////////////////////////////
 export default function PlayerScreen() {
     const {
         kifEntryController, kifNavigation,
-        kifLearning,
-        sortedEntries
+        kifLearning
     } = useKif()
     const {
         updateTitle,
@@ -51,18 +47,21 @@ export default function PlayerScreen() {
     const {
         currentEntry,
         currentEntryId,
-        setCurrentEntryId,
         navigateTo,
+        nextEntryAvailable,
+        isFirstEntry,
     } = kifNavigation
     const {
-        hideMoves, showMoves,
-        isMovesVisible, toggleMovesVisible,
+        //hideMoves, showMoves,
         openEditDialog, setOpenEditDialog
     } = useKifPlayerUI(currentEntryId)
+    //const { currentPhase, showSolution, chooseResult } = useSolveSession(currentEntryId)
+    const { currentPhase, chooseResult, setPhase } = useProblemProgress(currentEntryId)
     const { getRecord, markSolved, markFailed } = kifLearning
     const navigate = useNavigate()
     const kifData = currentEntry?.kifData ?? createKifData()
     const learningRecord = getRecord(currentEntryId)
+    
 
     // スワイプハンドラ
     const swipeHandlers = useSwipeable({
@@ -72,12 +71,11 @@ export default function PlayerScreen() {
         onSwipedRight: () => {// 右スワイプ → 前の棋譜へ
             navigateTo("prev")
         },
-        onSwipedUp: () => {
-            currentIndex === 0 && hideMoves();
+        onSwipedUp: () => {            
             prevMove()
         },
         onSwipedDown: () => {
-            !isMovesVisible && showMoves()
+            currentPhase === "problem" && setPhase("solution")
             nextMove()
         },
 
@@ -100,11 +98,15 @@ export default function PlayerScreen() {
 
     const handleSolved = () => {
         currentEntryId && markSolved(currentEntryId);
-        navigateTo("next")
+        chooseResult("solved")
+        //setSolveState(prev => ({...prev, phase: "result", selectedResult: "solved"}))
+        //navigateTo("next")
      }
     const handleFailed = () => {
         currentEntryId && markFailed(currentEntryId)
-        navigateTo("next")
+        chooseResult("failed")
+        //setSolveState(prev => ({...prev, phase: "result", selectedResult: "failed"}))
+        //navigateTo("next")
     }
     ///
     
@@ -169,10 +171,10 @@ export default function PlayerScreen() {
                         <FirstPageIcon/>
                     </IconButton>
                     
-                    <IconButton sx={{...noFocusVisible, px: 2}} onClick={() => navigateTo("prev")}>
+                    <IconButton sx={{...noFocusVisible, px: 2}} disabled={isFirstEntry(currentEntryId ?? "")} onClick={() => navigateTo("prev")}>
                         <ChevronLeftIcon/>
                     </IconButton>
-                    <IconButton sx={{...noFocusVisible, px: 2}}  onClick={() => navigateTo("next")}>
+                    <IconButton sx={{...noFocusVisible, px: 2}} disabled={!nextEntryAvailable(currentEntryId ?? "")} onClick={() => navigateTo("next")}>
                         <ChevronRightIcon/>
                     </IconButton>
                     <IconButton sx={{...noFocusVisible, px: 2}} onClick={() => navigateTo("last")}>
@@ -193,28 +195,32 @@ export default function PlayerScreen() {
                         flex: 7,
                         overflowY: "auto",
                     }}>
-                        {isMovesVisible ?
+                        {currentPhase !== "problem" ?
                             <EventsView
                                 events={events}
                                 currentIndex={currentIndex}
                                 onMoveClick={(i) => setCurrentIndex(i)} /> :
-                            <Button onClick={() => {
-                                showMoves()
+                            <button onClick={() => {
+                                //showMoves()
+                                //setSolvedState(prev => ({...prev, phase: "solution"}))
+                                //showSolution()
+                                setPhase("solution")
                                 nextMove()
                             }}>
                                 解答を表示
-                            </Button>}
+                            </button>}
                     </Box>
 
                     <Box border={1} sx={{ flex: 3}}>
                         <Stack direction="column" divider={<Divider/>}>
+                            <Box>{ currentPhase }</Box>
                             <Stack direction="column" gap={2} margin={2}>
-                                { isMovesVisible && <>
+                                { currentPhase !== "problem" && <>
                                 <IconButton sx={noFocusVisible} onClick={prevMove}>                                    
                                     <ExpandLessIcon />
                                 </IconButton>
                                 <IconButton sx={noFocusVisible}
-                                    onClick={() => { showMoves(); nextMove() }}>
+                                    onClick={() => { setPhase("solution"); nextMove() }}>
                                     <ExpandMoreIcon />
                                 </IconButton>
                                 </>}
@@ -223,10 +229,14 @@ export default function PlayerScreen() {
                             <Stack gap={2} margin={2}>
                                 { learningRecord && 
                                     <Stack direction="column">
-                                        {formatAccuracy(calcAccuracy(learningRecord))}
-                                        [{learningRecord.solvedCount} | {learningRecord.failedCount}]
+                                        <Box>
+                                            {formatAccuracy(calcAccuracy(learningRecord))}
+                                        </Box>
+                                        <Box>
+                                            [{learningRecord.solvedCount} | {learningRecord.failedCount}]
+                                        </Box>
 
-                                        {isMovesVisible &&
+                                        {currentPhase === "solution" &&
                                             <Stack direction="row" gap={2}>
                                                 <button onClick={handleSolved}>
                                                     正答
@@ -235,6 +245,10 @@ export default function PlayerScreen() {
                                                     誤答
                                                 </button>
                                             </Stack>
+                                        }
+                                        {
+                                            currentPhase === "result" &&
+                                            <button onClick={() => navigateTo("next")}>次の問題へ</button>
                                         }
                                     </Stack>
 

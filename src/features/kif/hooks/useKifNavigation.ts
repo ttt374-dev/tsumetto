@@ -15,12 +15,15 @@ export function useKifNavigation(sortedEntries: KifEntry[]) {
         else return sortedEntries.find(e => e.id === currentEntryId) ?? null
     }, [currentEntryId, sortedEntries ])
 
-    
+    function getIndex(entryId: string): number {
+        return sortedEntries.findIndex(e => e.id === currentEntryId)        
+    }
 
   // ナビゲーター
       const navigateTo = (dest: string) => {
           if (!currentEntryId) return;
-          const currentIndex = sortedEntries.findIndex(e => e.id === currentEntryId)        
+          //const currentIndex = sortedEntries.findIndex(e => e.id === currentEntryId)        
+          const currentIndex = getIndex(currentEntryId)
           console.log("current index", currentIndex)
   
           switch(dest){
@@ -50,12 +53,23 @@ export function useKifNavigation(sortedEntries: KifEntry[]) {
                   break;
           }
       }
+      function nextEntryAvailable(entryId: string): boolean {
+        const index = getIndex(entryId)
+        if (index === -1) return false
+        return index < sortedEntries.length - 1
+      }
+      function isFirstEntry(entryId: string): boolean {
+          if (sortedEntries.length === 0) return false;
+          return sortedEntries[0].id === entryId;
+      }
 
       return {
         currentEntryId,
         currentEntry,
         setCurrentEntryId,
         navigateTo,
+        nextEntryAvailable,
+        isFirstEntry,
       }
 
 
