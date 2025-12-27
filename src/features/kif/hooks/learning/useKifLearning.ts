@@ -6,7 +6,7 @@ import { useKifLearningPersist } from './useKifLearningPersist';
 interface UseKifLearning {
     records: Record<string, KifLearningRecord>;
 
-    getRecord(entryId: string | null): KifLearningRecord | null;
+    getLearningRecord(entryId: string | null): KifLearningRecord | null;
     markSolved(entryId: string): void;
     markFailed(entryId: string): void;
     reset(entryId: string): void;
@@ -18,15 +18,7 @@ export function useKifLearning(): UseKifLearning {
     const [records, setRecords] =
         useState<Record<string, KifLearningRecord>>({});
     const persistApi = useKifLearningPersist()
-
-    const getRecord = (entryId: string | null) => {
-        if (!entryId) return null
-        return records[entryId] ?? {
-            entryId,
-            solvedCount: 0,
-            failedCount: 0,
-        }
-    }
+   
 
     useEffect(() => {
         (async () => {
@@ -38,6 +30,14 @@ export function useKifLearning(): UseKifLearning {
     }, []);
 
 
+    const getLearningRecord = (entryId: string | null) => {
+        if (!entryId) return null
+        return records[entryId] ?? {
+            entryId,
+            solvedCount: 0,
+            failedCount: 0,
+        }
+    }
     const update = (entryId: string, updater: (r: KifLearningRecord) => KifLearningRecord) => {
         setRecords(prev => {
             const current = prev[entryId] ?? {
@@ -89,5 +89,5 @@ export function useKifLearning(): UseKifLearning {
         persist()
     }
 
-    return { records, getRecord, markSolved, markFailed, reset, replaceAll };
+    return { records, getLearningRecord, markSolved, markFailed, reset, replaceAll };
 }
