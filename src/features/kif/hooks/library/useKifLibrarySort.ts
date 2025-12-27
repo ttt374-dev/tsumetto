@@ -12,6 +12,7 @@ export function useKifLibrarySort() {
 
   const setSortKey = useCallback((key: SortKey) => {
     //alert("setsortkey")
+    console.log("sort key", key)
     setSort(prev => {
       // 同じキーを押したら order を反転
       if (prev.key === key) {
@@ -29,6 +30,7 @@ export function useKifLibrarySort() {
   }, [])
 
   const setSortOrder = useCallback((order: SortOrder) => {
+    console.log("sort order", order)
     setSort(prev => ({ ...prev, order }))
   }, [])
 

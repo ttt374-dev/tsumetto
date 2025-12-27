@@ -1,6 +1,6 @@
 // features/kif/hooks/useSortedEntries.ts
 import { useMemo } from "react"
-import type { KifEntry, KifLearningRecord, SortState } from "../../types/"
+import type { KifEntry, KifLearningRecord, SortState } from "../../types"
 import { calcAccuracy, formatAccuracy } from "../../utils"
 
 
@@ -11,7 +11,7 @@ export function useKifSortedEntries(
 ): KifEntry[] {
 
   //console.log("sorted entries:", entities, sort)
-
+  console.warn("HOOK sort arg", sort);
 
   return useMemo(() => {
     if (!entities || entities.length === 0) return []
@@ -34,8 +34,10 @@ export function useKifSortedEntries(
           break
 
         case "accuracy":
-          vA = calcAccuracy(learningRecords[a.id])
-          vB = calcAccuracy(learningRecords[b.id])
+                const aAcc = calcAccuracy(learningRecords[a.id]) ?? 0
+      const bAcc = calcAccuracy(learningRecords[b.id]) ?? 0
+      return sort.order === "asc" ? aAcc - bAcc : bAcc - aAcc
+
           break
 
         default:
@@ -52,5 +54,5 @@ export function useKifSortedEntries(
     console.log("useKifSortedEntries called", sort)
     console.log("sorted", sorted)
     return sorted
-  }, [entities, sort, learningRecords])
+  }, [entities, sort])
 }

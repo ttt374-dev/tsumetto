@@ -19,13 +19,13 @@ import LibraryList from '../components/library/LibraryList';
 import KifEntryEditDialog from '../dialogs/KifEntryEditDialog';
 import KifBackupDialog from '../dialogs/KifBackupDialog';
 import { useKifLibraryUI } from '../hooks/library/useKifLibraryUI';
-import { useKifLibrarySort } from '../hooks/library/useKifLilbrarySort';
+import { useKifLibrarySort } from '../hooks/library/useKifLibrarySort';
 
 //////////////
 export default function LibraryScreen() {    
     const navigate = useNavigate()
     const { kifEntryController, kifNavigation,         
-        sortedEntries
+        kifLibrarySort, sortedEntries
     } = useKif()
     const {
         importFiles,
@@ -36,7 +36,8 @@ export default function LibraryScreen() {
         setCurrentEntryId,
     } = kifNavigation
     
-    const { sort, setSortOrder, setSortKey } = useKifLibrarySort()
+    const { sort, setSortOrder, setSortKey } = kifLibrarySort
+    
     const {
         checkedIds, isChecked, toggleChecked, 
         clearChecked, selectAllChecked

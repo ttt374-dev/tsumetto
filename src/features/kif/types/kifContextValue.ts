@@ -4,7 +4,7 @@ import type { useKifLearning} from '../hooks/learning/useKifLearning'
 import type { useKifNavigation } from '../hooks/useKifNavigation';
 import type { useKifPlayerUI} from '../hooks/player/useKifPlayerUI'
 import type { useKifEntryController} from '../hooks/useKifEntryController'
-import type { useKifLibrarySort} from '../hooks/library/useKifLilbrarySort'
+import type { useKifLibrarySort} from '../hooks/library/useKifLibrarySort'
 import type { KifEntry } from './kifEntry'
 
 // hooks の返り値型を取得してまとめる
