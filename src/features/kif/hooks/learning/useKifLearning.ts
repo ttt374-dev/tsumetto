@@ -1,7 +1,10 @@
+
 import { useState, useEffect } from 'react'
 
 import type { KifLearningRecord} from "../../types/";
 import { useKifLearningPersist } from './useKifLearningPersist';
+import type { ProblemResult } from '../player/useProblemProgress';
+import { SettingsInputAntennaTwoTone } from '@mui/icons-material';
 
 interface UseKifLearning {
     records: Record<string, KifLearningRecord>;
@@ -15,6 +18,7 @@ interface UseKifLearning {
 
 
 export function useKifLearning(): UseKifLearning {
+    const [result, setResult] = useState<ProblemResult|null>(null)
     const [records, setRecords] =
         useState<Record<string, KifLearningRecord>>({});
     const persistApi = useKifLearningPersist()
@@ -39,6 +43,7 @@ export function useKifLearning(): UseKifLearning {
         }
     }
     const update = (entryId: string, updater: (r: KifLearningRecord) => KifLearningRecord) => {
+        
         setRecords(prev => {
             const current = prev[entryId] ?? {
                 entryId,
@@ -53,12 +58,14 @@ export function useKifLearning(): UseKifLearning {
         persist()
     };
 
-    const markSolved = (entryId: string) =>
+    function markSolved(entryId: string){
+        
         update(entryId, r => ({
             ...r,
             solvedCount: r.solvedCount + 1,
             lastAnsweredAt: Date.now(),
         }));
+    }
 
     const markFailed = (entryId: string) =>
         update(entryId, r => ({

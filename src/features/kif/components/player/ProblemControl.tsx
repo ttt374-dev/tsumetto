@@ -10,7 +10,7 @@ import CloseIcon from '@mui/icons-material/Close'
 type ProblemStatsProps = {
     learningRecord: KifLearningRecord
 }
-function ProblemStats({ learningRecord }: ProblemStatsProps) {
+export function ProblemStats({ learningRecord }: ProblemStatsProps) {
     return (
         <Stack gap={1}>
             {formatAccuracy(calcAccuracy(learningRecord))}

@@ -54,13 +54,13 @@ export default function PlayerScreen() {
     const events: KifEvent[] = kifData?.events ?? [];
     const { board: initialBoard, hands: initialHands } = kifData ?? createKifData()
        
-    const { board, hands, currentIndex, setCurrentIndex } =
+    const { board, hands, currentEventIndex, setCurrentEventIndex } =
         useKifReplay(initialBoard, initialHands, events, currentEntryId)
     const prevMove = () => {
-        currentIndex > 0 && setCurrentIndex(prev => prev - 1)
+        currentEventIndex > 0 && setCurrentEventIndex(prev => prev - 1)
     }
     const nextMove = () => {
-        currentIndex < events.length && setCurrentIndex(prev => prev + 1)
+        currentEventIndex < events.length && setCurrentEventIndex(prev => prev + 1)
     }
     //////////
     return (
@@ -112,15 +112,15 @@ export default function PlayerScreen() {
                         {currentPhase !== "problem" &&
                             <EventsView
                                 events={events}
-                                currentIndex={currentIndex}
-                                onMoveClick={(i) => setCurrentIndex(i)} />
+                                currentIndex={currentEventIndex}
+                                onMoveClick={(i) => setCurrentEventIndex(i)} />
 
                         }
                     </Box>
 
                     <Box border={1} sx={{ width: 200 }}>
                         <ControlPanel
-                            setCurrentIndex={setCurrentIndex}
+                            setCurrentIndex={setCurrentEventIndex}
                             currentEntryId={currentEntryId}
                             isFirstEntry={isFirstEntry}
                             isLastEntity={isLastEntry}

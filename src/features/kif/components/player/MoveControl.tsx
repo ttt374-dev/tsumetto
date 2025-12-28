@@ -3,21 +3,35 @@ import type { ProblemPhase } from "../../hooks/player/useProblemProgress"
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { noFocusVisible } from "../../utils";
+import { useSwipeable } from "react-swipeable";
 
 type Props = {
     prevMove: () => void
     nextMove: () => void
-    setPhase: (phase: ProblemPhase) => void
 }
-export default function MoveControl({ prevMove, nextMove, setPhase }: Props) {
+export default function MoveControl({ prevMove, nextMove }: Props) {
+        // スワイプハンドラ    
+    const moveSwipeHandlers = useSwipeable({
+        onSwipedUp: () => {
+            prevMove()
+        },
+        onSwipedDown: () => {
+            //currentPhase === "problem" && setPhase("solution")
+            nextMove()
+        },
+
+        trackMouse: true, // PCでもマウスでスワイプ可能
+        preventScrollOnSwipe: true,
+
+    })
     return (
-        <Stack direction="column">
+        <Stack {...moveSwipeHandlers} direction="column">
             <>
                 <IconButton sx={noFocusVisible} onClick={prevMove}>
                     <ExpandLessIcon />
                 </IconButton>
                 <IconButton sx={noFocusVisible}
-                    onClick={() => { setPhase("solution"); nextMove() }}>
+                    onClick={() => { nextMove() }}>
                     <ExpandMoreIcon />
                 </IconButton>
             </>

@@ -1,10 +1,19 @@
+import { ResetTv } from '@mui/icons-material'
 import { useState, useEffect } from 'react'
 
 // フェーズ定義
+/*
 export type ProblemPhase =
   | "problem"   // 盤面のみ表示（解答前）
   | "solution"  // 解答手順表示
   | "result"    // 正誤結果表示
+*/
+
+const phases = ["problem", "solution", "result"] as const;
+export type ProblemPhase = (typeof phases)[number];
+
+export const advancePhase = (phase: ProblemPhase): ProblemPhase =>
+  phases[Math.min(phases.indexOf(phase) + 1, phases.length - 1)];
 
 // 正答・誤答
 export type ProblemResult = "solved" | "failed" | null
@@ -17,7 +26,6 @@ export type ProblemProgressState = {
 
 // フック本体
 export function useProblemProgress(currentEntryId: string | null) {
-
   const [state, setState] = useState<ProblemProgressState>({
     phase: "problem",
     selectedResult: null,
@@ -37,7 +45,9 @@ export function useProblemProgress(currentEntryId: string | null) {
   function chooseResult(result: ProblemResult){
     setState(prev => ({ ...prev, phase: "result", selectedResult: result }))
   }  
-
+  function reset(){
+    setState({phase: "problem", selectedResult: null})
+  }
   return {
     currentPhase: state.phase,
     selectedResult: state.selectedResult,

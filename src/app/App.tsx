@@ -3,7 +3,7 @@ import './App.css'
 import { StatusBar, Style } from "@capacitor/status-bar";
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
-import PlayerScreen from '../features/kif/screens/PlayerScreen'
+import PlayerScreen from '../features/kif/screens/PlayScreen';
 import LibraryScreen from '../features/kif/screens/LibraryScreen';
 import { KifProvider } from './providers/KifProvider';
 //import ReplayScreen from '../features/kif/screens/ReplayScreen';
@@ -26,8 +26,9 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/player" element={<PlayerScreen />}/>
-          <Route path="/library" element={<LibraryScreen />}/>          
-          <Route path="/" element={<Navigate to="/player"/>} />
+          <Route path="/library" element={<LibraryScreen />}/>    
+          <Route path="/problem" element={<PlayerScreen/>}/>      
+          <Route path="/" element={<Navigate to="/problem"/>} />
         </Routes>
       </BrowserRouter>
     </KifProvider>

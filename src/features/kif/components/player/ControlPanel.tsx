@@ -37,6 +37,7 @@ export default function ControlPanel({
     
 }: Props){
     return (<Stack direction="column" divider={<Divider />}>
+        { /* 
         <SolutionControl
             prevMove={prevMove}
             nextMove={nextMove}
@@ -44,10 +45,10 @@ export default function ControlPanel({
             currentPhase={currentPhase}
             setCurrentIndex={setCurrentIndex}
         />
+        */}
         <MoveControl
             prevMove={prevMove}
             nextMove={nextMove}
-            setPhase={setPhase}
         />
 
         {learningRecord && currentEntryId &&

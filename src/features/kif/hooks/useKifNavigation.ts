@@ -1,9 +1,14 @@
 import { useState, useEffect, useMemo } from "react";
-import type { KifEntry } from "../types";
+import type { KifEntry, KifProblem } from "../types";
+import { createEmptyBoard, createEmptyHand, createEmptyHands } from "../domain/factory";
 
 export function useKifNavigation(sortedEntries: KifEntry[]) {
     //const [currentEntryId, setCurrentEntryId] = useState<string | null>(null);
     const [currentIndex, setCurrentIndex] = useState(0)
+    const queue = useMemo(
+        () => sortedEntries.map(e => e.id),
+        [sortedEntries]
+    )
 
     useEffect(() => {
         if (queue.length === 0) {
@@ -11,12 +16,8 @@ export function useKifNavigation(sortedEntries: KifEntry[]) {
         } else if (currentIndex >= queue.length) {
             setCurrentIndex(0);
         }
-    }, [])
+    }, [queue.length, currentIndex])
 
-    const queue = useMemo(
-        () => sortedEntries.map(e => e.id),
-        [sortedEntries]
-    )
 
     // id → entry のマップ（library から生成される想定）
     const entryMap: Record<string, KifEntry> = useMemo(() => {
@@ -37,7 +38,14 @@ export function useKifNavigation(sortedEntries: KifEntry[]) {
         return entryMap[currentEntryId] ?? null;
     }, [currentEntryId, entryMap]);
 
+    function advanceStep(){
+        if (queue.length === 0) return;
+        setCurrentIndex(0);
+
+    }
+
     // ナビゲーター
+    // deplicated
     const navigateTo = (dest: string) => {
         //if (!currentEntryId) return;       
 

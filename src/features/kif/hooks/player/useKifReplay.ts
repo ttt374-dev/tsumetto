@@ -8,23 +8,29 @@ export function useKifReplay(
     events: KifEvent[],
     currentEntryId: string | null,
 ) {
-    const [currentIndex, setCurrentIndex] = useState(0)
+    const [currentEventIndex, setCurrentEventIndex] = useState(0)
     
     const { board, hands } = useMemo(() => 
         {
             console.log("build board on memo")
-            return buildBoardUntil(initialBoard, initialHands, events, currentIndex)
+            return buildBoardUntil(initialBoard, initialHands, events, currentEventIndex)
         },
-        [currentIndex, initialBoard, initialHands, events]
+        [currentEventIndex, initialBoard, initialHands, events]
     );
     // ⭐ entry 切り替え時のリセット
     useEffect(() => {
-        setCurrentIndex(0);
+        setCurrentEventIndex(0);
     }, [currentEntryId]);
 
     
     return {
         board, hands,
-        currentIndex, setCurrentIndex,        
+        currentEventIndex, setCurrentEventIndex,        
+        movePrevEvent: () => {
+            currentEventIndex > 0 && setCurrentEventIndex(prev => prev - 1)
+        },
+        moveNextEvent: () => {
+           currentEventIndex < events.length && setCurrentEventIndex(prev => prev + 1)
+        }
     }
 }
