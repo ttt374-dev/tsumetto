@@ -16,14 +16,14 @@ import { formatAccuracy } from "../utils";
 import { useKifPlayer } from "../hooks/player/useKifPlayer";
 
 ///////////////////////////////////////
-export default function PlayerScreen(){
+export default function PlayerScreen(){        
     const { queue, entryMap } = useKif()
     const { 
         kifInfo: {
-            events, title
+            events, title, entryId,
         },
         queueInfo: {
-            currentIndex, advanceStep
+            currentIndex, advanceStep, setCurrentIndex,
         },
         replayInfo: {
             board, hands, 
@@ -41,6 +41,7 @@ export default function PlayerScreen(){
     } = useKifPlayer(queue, entryMap)
     const navigate = useNavigate()
 
+    
     ////////////////////
     return (
         <AppLayout
@@ -55,6 +56,7 @@ export default function PlayerScreen(){
             }      
         >
             <>
+                <Box>entryid: { entryId }</Box>
                 <Stack justifyContent="center">
                     <Box>
                         <BoardView

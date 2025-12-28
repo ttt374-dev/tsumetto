@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
+import { useParams } from "react-router-dom";
 
 import type { KifEntry } from "../../types";
 import { createEmptyBoard, createEmptyHands } from "../../domain/factory";
@@ -8,6 +9,8 @@ import { useKifPhase } from "./useKifPhase";
 
 export function useKifPlayer(queue: string[], entryMap: Record<string, KifEntry>){
     const [currentIndex, setCurrentIndex] = useState(0)
+    const { entryId: entryIdFromRoute } = useParams<{ entryId: string }>();
+    
     // queue
    // 初期化
     useEffect(() => {
@@ -18,6 +21,17 @@ export function useKifPlayer(queue: string[], entryMap: Record<string, KifEntry>
         }
     }, [queue.length, currentIndex])
 
+    // ルートパラメータに entryId があれば、queue 内の位置を currentIndex に設定
+    useEffect(() => {
+        if (entryIdFromRoute) {
+            const idx = queue.indexOf(entryIdFromRoute);                        
+            if (idx !== -1) setCurrentIndex(idx);
+
+            else setCurrentIndex(0); // 見つからなければ先頭
+        } else {
+            setCurrentIndex(0);
+        }
+    }, [entryIdFromRoute, queue]);
     // index
     function resetIndex() {
         setCurrentIndex(0)
@@ -50,14 +64,17 @@ export function useKifPlayer(queue: string[], entryMap: Record<string, KifEntry>
             initialHands: currentEntry?.kifData.hands ?? createEmptyHands(),
             events: currentEntry?.kifData.events ?? [],
             title: currentEntry?.title ?? "untitled",
+            entryId: currentEntry?.id ?? ""
         }
     const queueInfo = {
         queue, entryMap,
-        currentIndex,
+        currentIndex, setCurrentIndex,
         advanceStep,
     }
     const replay = useKifReplay(
-            kifInfo.initialBoard, kifInfo.initialHands, kifInfo.events)
+            kifInfo.initialBoard, kifInfo.initialHands, kifInfo.events,
+
+        )
 
     const kifLearning = useKifLearning()
     const { getLearningRecord } = kifLearning
