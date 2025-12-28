@@ -3,27 +3,37 @@ import { useState, useEffect } from 'react'
 const phases = ["problem", "solution", "result"] as const;
 export type PlayerPhase = (typeof phases)[number];
 
-export function useKifPhase(){
-    const initialPhase = phases[0]
-    const [phase, setPhase] = useState<PlayerPhase>(initialPhase)
+export function useKifPhase() {
+  const initialPhaseIndex = 0;
+  const [phaseIndex, setPhaseIndex] = useState(initialPhaseIndex);
 
-    // currentEntryId が変わったら初期化
-    useEffect(() => {
-        reset()
-    }, [])
+  // currentEntryId が変わったら初期化
+  useEffect(() => {
+    reset();
+  }, []); // 後で currentEntryId を依存に追加可能
 
-    function advancePhase(){
-        phases[Math.min(phase.indexOf(phase) + 1, phases.length - 1)];
-    }
-    function retreatPhase(){
-        phases[Math.max(phases.indexOf(phase) - 1, 0)];
-    }
-    function reset(){
-        setPhase(initialPhase)
-    }
-  return {
-    currentPhase: phase,    
-    setCurrentPhase: setPhase,    
-    advancePhase, retreatPhase
+  const currentPhase: PlayerPhase = phases[phaseIndex];
+
+  function advancePhase() {
+    setPhaseIndex(prev => Math.min(prev + 1, phases.length - 1));
   }
+
+  function retreatPhase() {
+    setPhaseIndex(prev => Math.max(prev - 1, 0));
+  }
+
+  function reset() {
+    setPhaseIndex(initialPhaseIndex);
+  }
+
+  return {
+    currentPhase,
+    setCurrentPhase: (phase: PlayerPhase) => {
+      const idx = phases.indexOf(phase);
+      if (idx !== -1) setPhaseIndex(idx);
+    },
+    advancePhase,
+    retreatPhase,
+    reset,
+  };
 }
