@@ -4,6 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { IconButton } from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ReplyIcon from "@mui/icons-material/Reply";
+
 
 import { AppLayout } from "../../../shared/components/AppLayout/AppLayout";
 import { useKif } from '../hooks/useKif'
@@ -76,7 +79,7 @@ export default function LibraryScreen() {
         <AppLayout
             header={"Library"}
             footer={
-                <Stack direction="row">
+                <Stack direction="row" justifyContent="center">
                     <MultipleFilesButton
                         label="登録"
                         useIconButton={false}
@@ -86,22 +89,11 @@ export default function LibraryScreen() {
                             }
                         }
                     />
-                    <button onClick={() => setBackupOpen(true)}>
-                        バックアップ
-                    </button>
-                        
-                    <button onClick={toggleEditMode}>
-                        切り替え
-                    </button>
-                    <button onClick={selectAllChecked}>
-                        全選択
-                    </button>
-                    <button onClick={clearChecked}>
-                        全クリア
-                    </button>
-                    <button onClick={() => navigate("/player")}>
+                    <button onClick={() => navigate(-1)}>
                         戻る
                     </button>
+
+                    
                 </Stack>
             }
         >
@@ -148,7 +140,7 @@ export default function LibraryScreen() {
                     } else {
                         toggleChecked(entryId)
                         //setCurrentEntryId(entryId)
-                        navigate("/player")
+                        navigate(`/player/${entryId}`)
                     }
                 }}
                 editMode={editMode}

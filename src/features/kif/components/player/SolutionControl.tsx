@@ -12,9 +12,12 @@ type Props = {
     //setCurrentIndex: (index: number) => void;
     onShowAnswer: () => void;
     onHideAnswer: () => void;
+    
 }
 //export default function SolutionControl({currentPhase, prevMove, nextMove, setPhase, setCurrentIndex}: Props){
-export default function SolutionControl({currentPhase, onShowAnswer, onHideAnswer}: Props){
+export default function SolutionControl({
+    currentPhase, onShowAnswer, onHideAnswer
+}: Props){
     
 
     return (

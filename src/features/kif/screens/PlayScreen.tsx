@@ -4,6 +4,7 @@ import { useNavigate, } from "react-router-dom";
 import EditIcon from '@mui/icons-material/Edit'
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 import { Stack, Divider } from '@mui/material';
+import ViewListIcon from "@mui/icons-material/ViewList";
 
 import { AppLayout } from '../../../shared/components/AppLayout/AppLayout';
 import { useKif } from '../hooks/useKif'
@@ -48,6 +49,10 @@ export default function PlayerScreen(){
             header={`${currentIndex+1}: ${title}`}      
             footer={
                 <Stack gap={2} direction="row" justifyContent="center">
+                    <IconButton
+                        onClick={() => navigate("/deck")}>
+                        <ViewListIcon />
+                    </IconButton>
                     <IconButton
                         onClick={() => navigate("/library")}>
                         <LibraryBooksIcon />
@@ -98,15 +103,17 @@ export default function PlayerScreen(){
                             onHideAnswer={() => {
                                 retreatPhase()
                                 setCurrentEventIndex(0)
-                            }
-                            }
+                            }}
+                            
+                            
                         />
-                        {currentPhase !== "problem" &&
-                            <MoveControl
-                                prevMove={movePrevEvent}
-                                nextMove={moveNextEvent}
-                            />
-                        }
+
+                        <MoveControl 
+                            disabled={currentPhase === "problem"}
+                            prevMove={movePrevEvent}
+                            nextMove={moveNextEvent}
+                        />
+
                         <Box>
                             { `${formatAccuracy(solvedCount/(solvedCount+failedCount))}` }
                         </Box>
@@ -122,14 +129,14 @@ export default function PlayerScreen(){
                                 markFailedCurrent()
                                 advancePhase()
                             }}                            
-                            
+                            disabled={currentPhase === 'problem'}
                         />   
 
-                        { currentPhase === "result" &&
-                            <button onClick={advanceStep}>
-                                次の問題へ
-                            </button>
-                        }
+                        
+                        <button onClick={advanceStep}>
+                            次の問題へ
+                        </button>
+
                     </Box>
                 </Box>
             </>

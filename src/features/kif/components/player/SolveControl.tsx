@@ -9,12 +9,12 @@ export type PlayerResult = "solved" | "failed" | null
 
 type Props = {
     onSolved: () => void,
-    onFailed: () => void,    
+    onFailed: () => void,
+    disabled?: boolean    
 }
 
-export default function SolveControl({
-    
-    onSolved, onFailed, 
+export default function SolveControl({    
+    onSolved, onFailed, disabled=false,
 }: Props) {
     const [result, setResult] = useState<PlayerResult|null>(null)    
     return (
@@ -23,13 +23,15 @@ export default function SolveControl({
             <Stack gap={2}>
                 <Stack direction="row" gap={2}  justifyContent="center">
                     <IconButton
-    
-                        onClick={onSolved}>
+                        onClick={onSolved}
+                        disabled={disabled}
+                    >
                         <CheckCircleIcon />
                     </IconButton>
-                    <IconButton
-    
-                        onClick={onFailed}>
+                    <IconButton    
+                        onClick={onFailed}
+                        disabled={disabled}
+                    >
                         <CloseIcon />
                     </IconButton>            
                 </Stack>

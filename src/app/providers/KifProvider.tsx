@@ -36,8 +36,8 @@ export const KifProvider = ({ children }: { children: ReactNode }) => {
   //const kifPlayer = useKifPlayer(entries);
   //const kifNavigation = useKifNavigation(entries)
   useEffect(() => {
-  console.log("provider sort", kifLibrarySort.sort)
-}, [kifLibrarySort.sort])
+    console.log("provider sort", kifLibrarySort.sort)
+  }, [kifLibrarySort.sort])
 
   return (    
     <KifContext.Provider value={{ 

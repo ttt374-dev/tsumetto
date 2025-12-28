@@ -7,8 +7,9 @@ import { useSwipeable } from "react-swipeable";
 type Props = {
     prevMove: () => void
     nextMove: () => void
+    disabled: boolean,
 }
-export default function MoveControl({ prevMove, nextMove }: Props) {
+export default function MoveControl({ prevMove, nextMove, disabled=false }: Props) {
         // スワイプハンドラ    
     const moveSwipeHandlers = useSwipeable({
         onSwipedUp: () => {
@@ -26,11 +27,18 @@ export default function MoveControl({ prevMove, nextMove }: Props) {
     return (
         <Stack {...moveSwipeHandlers} direction="column">
             <>
-                <IconButton sx={noFocusVisible} onClick={prevMove}>
+                <IconButton 
+                    sx={noFocusVisible}
+                    onClick={prevMove}
+                    disabled={disabled}
+                >
                     <ExpandLessIcon />
                 </IconButton>
-                <IconButton sx={noFocusVisible}
-                    onClick={() => { nextMove() }}>
+                <IconButton 
+                    sx={noFocusVisible}
+                    onClick={() => { nextMove() }}
+                    disabled={disabled}
+                >
                     <ExpandMoreIcon />
                 </IconButton>
             </>

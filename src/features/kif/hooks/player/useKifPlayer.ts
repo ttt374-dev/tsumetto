@@ -41,18 +41,8 @@ export function useKifPlayer(queue: string[], entryMap: Record<string, KifEntry>
             setCurrentIndex(prev => prev + 1)
         }
     }
-    // ** 暫定的に entryid を使用 (learning db 用)
-    const currentEntryId =
-        currentIndex >= 0 && currentIndex < queue.length
-            ? queue[currentIndex]
-            : null;
-
-    const currentEntry = useMemo(() => {
-        if (!currentEntryId) return null;
-        return entryMap[currentEntryId] ?? null;
-    }, [currentEntryId, entryMap]);
-    
-    // phase
+    const currentEntryId = queue[currentIndex] ?? null;
+    const currentEntry = currentEntryId ? entryMap[currentEntryId] ?? null : null;
     
     // 初期化
     useEffect(()=>{      
@@ -73,7 +63,6 @@ export function useKifPlayer(queue: string[], entryMap: Record<string, KifEntry>
     }
     const replay = useKifReplay(
             kifInfo.initialBoard, kifInfo.initialHands, kifInfo.events,
-
         )
 
     const kifLearning = useKifLearning()
