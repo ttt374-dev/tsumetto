@@ -6,7 +6,6 @@ export function useKifReplay(
     initialBoard: Board, 
     initialHands: Hands, 
     events: KifEvent[],
-    currentEntryId: string | null,
 ) {
     const [currentEventIndex, setCurrentEventIndex] = useState(0)
     

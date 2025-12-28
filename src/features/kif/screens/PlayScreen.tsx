@@ -17,7 +17,7 @@ import { useKifPlayer } from "../hooks/player/useKifPlayer";
 
 ///////////////////////////////////////
 export default function PlayerScreen(){
-    const { sortedEntries, queue, entryMap } = useKif()
+    const { queue, entryMap } = useKif()
     const { 
         kifInfo: {
             events, title
@@ -38,7 +38,7 @@ export default function PlayerScreen(){
             solvedCount, failedCount,
             markSolvedCurrent, markFailedCurrent
         }
-    } = useKifPlayer(sortedEntries)
+    } = useKifPlayer(queue, entryMap)
     const navigate = useNavigate()
 
     ////////////////////

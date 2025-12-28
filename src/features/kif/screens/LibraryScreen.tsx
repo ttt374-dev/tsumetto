@@ -1,10 +1,8 @@
-import { useState } from 'react'
 import { Stack, Box  } from "@mui/material";
 import BackupIcon from '@mui/icons-material/Backup';
 import { useNavigate } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import UploadFileIcon from '@mui/icons-material/UploadFile';
 import { IconButton } from "@mui/material";
 
 import { AppLayout } from "../../../shared/components/AppLayout/AppLayout";
@@ -19,12 +17,11 @@ import LibraryList from '../components/library/LibraryList';
 import KifEntryEditDialog from '../dialogs/KifEntryEditDialog';
 import KifBackupDialog from '../dialogs/KifBackupDialog';
 import { useKifLibraryUI } from '../hooks/library/useKifLibraryUI';
-import { useKifLibrarySort } from '../hooks/library/useKifLibrarySort';
 
 //////////////
 export default function LibraryScreen() {    
     const navigate = useNavigate()
-    const { kifEntryController, kifNavigation,         
+    const { kifEntryController, 
         kifLibrarySort, sortedEntries, kifLearning,
     } = useKif()
     const {
@@ -32,12 +29,13 @@ export default function LibraryScreen() {
         deleteEntries,
     } = kifEntryController
     
+    /*
     const {
         setCurrentEntryId,
     } = kifNavigation
-    
+    */
     const { sort, setSortOrder, setSortKey } = kifLibrarySort
-    const { getLearningRecord, markSolved, markFailed } = kifLearning
+    const { getLearningRecord } = kifLearning
     
     const {
         checkedIds, isChecked, toggleChecked, 
@@ -149,7 +147,7 @@ export default function LibraryScreen() {
                         setOpenEditDialog(true)
                     } else {
                         toggleChecked(entryId)
-                        setCurrentEntryId(entryId)
+                        //setCurrentEntryId(entryId)
                         navigate("/player")
                     }
                 }}

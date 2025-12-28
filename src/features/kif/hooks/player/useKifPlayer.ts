@@ -5,15 +5,29 @@ import { createEmptyBoard, createEmptyHands } from "../../domain/factory";
 import { useKifReplay } from "./useKifReplay";
 import { useKifLearning } from "../learning/useKifLearning";
 import { useKifPhase } from "./useKifPhase";
-import { useKifQueue } from "../library/useKifQueue";
 
-export function useKifPlayer(sortedEntries: KifEntry[]){
+export function useKifPlayer(queue: string[], entryMap: Record<string, KifEntry>){
+    const [currentIndex, setCurrentIndex] = useState(0)
     // queue
-    const { queue, entryMap, 
-        currentIndex, resetIndex, advanceStep 
-    } = useKifQueue(sortedEntries)
-    
-    // ** 暫定的に entryid を使用
+   // 初期化
+    useEffect(() => {
+        if (queue.length === 0) {
+            resetIndex()
+        } else if (currentIndex >= queue.length) {
+            resetIndex()
+        }
+    }, [queue.length, currentIndex])
+
+    // index
+    function resetIndex() {
+        setCurrentIndex(0)
+    }
+    function advanceStep() {
+        if (currentIndex < queue.length - 1) {
+            setCurrentIndex(prev => prev + 1)
+        }
+    }
+    // ** 暫定的に entryid を使用 (learning db 用)
     const currentEntryId =
         currentIndex >= 0 && currentIndex < queue.length
             ? queue[currentIndex]
@@ -29,7 +43,7 @@ export function useKifPlayer(sortedEntries: KifEntry[]){
     // 初期化
     useEffect(()=>{      
         reset()
-    }, [sortedEntries, currentEntryId])
+    }, [currentIndex, queue, entryMap])
     
     const kifInfo = {
             initialBoard: currentEntry?.kifData.board ?? createEmptyBoard(),
@@ -38,12 +52,12 @@ export function useKifPlayer(sortedEntries: KifEntry[]){
             title: currentEntry?.title ?? "untitled",
         }
     const queueInfo = {
-        queue,
+        queue, entryMap,
         currentIndex,
         advanceStep,
     }
     const replay = useKifReplay(
-            kifInfo.initialBoard, kifInfo.initialHands, kifInfo.events, currentEntryId)
+            kifInfo.initialBoard, kifInfo.initialHands, kifInfo.events)
 
     const kifLearning = useKifLearning()
     const { getLearningRecord } = kifLearning
@@ -65,15 +79,10 @@ export function useKifPlayer(sortedEntries: KifEntry[]){
 
     ////////////////////
     return {
-        // static
         kifInfo: kifInfo,
-        // queue
         queueInfo: queueInfo,
-        // replay
         replayInfo: replay,               
-        // phase
         phaseInfo: phaseInfo,
-
         learnInfo: learningInfo
     }
 }

@@ -1,6 +1,5 @@
 import React, { createContext, useContext, type ReactNode, useMemo, useEffect, useRef } from "react";
 import { useKifLearning } from "../../features/kif/hooks/learning/useKifLearning";
-import { useKifNavigation } from '../../features/kif/hooks/useKifNavigation'
 import type { KifContextValue } from "../../features/kif/types/kifContextValue";
 import { useKifEntryController } from "../../features/kif/hooks/useKifEntryController";
 import { useKifSortedEntries } from "../../features/kif/hooks/library/useKifSortedEntries";
@@ -32,7 +31,7 @@ export const KifProvider = ({ children }: { children: ReactNode }) => {
   const prevSortRef = useRef<SortState | null>(null);
 
   //const kifPlayer = useKifPlayer(sortedEntries);
-  const kifNavigation = useKifNavigation(sortedEntries)
+  //const kifNavigation = useKifNavigation(sortedEntries)
   
   //const kifPlayer = useKifPlayer(entries);
   //const kifNavigation = useKifNavigation(entries)
@@ -42,7 +41,7 @@ export const KifProvider = ({ children }: { children: ReactNode }) => {
 
   return (    
     <KifContext.Provider value={{ 
-       kifLearning, kifNavigation, 
+       kifLearning, 
        kifEntryController, kifLibrarySort, 
        sortedEntries, queue, entryMap }}>
       {children}
