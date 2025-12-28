@@ -17,12 +17,10 @@ export function useKifReplay(
         },
         [currentEventIndex, initialBoard, initialHands, events]
     );
-    // ⭐ entry 切り替え時のリセット
-    useEffect(() => {
-        setCurrentEventIndex(0);
-    }, [currentEntryId]);
-
     
+    function reset(){
+        setCurrentEventIndex(0);
+    }
     return {
         board, hands,
         currentEventIndex, setCurrentEventIndex,        
@@ -31,6 +29,7 @@ export function useKifReplay(
         },
         moveNextEvent: () => {
            currentEventIndex < events.length && setCurrentEventIndex(prev => prev + 1)
-        }
+        },
+        reset
     }
 }

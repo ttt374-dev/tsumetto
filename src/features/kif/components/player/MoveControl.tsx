@@ -1,5 +1,4 @@
 import { Stack, IconButton } from "@mui/material"
-import type { ProblemPhase } from "../../hooks/player/useProblemProgress"
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { noFocusVisible } from "../../utils";

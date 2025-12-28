@@ -7,11 +7,6 @@ export function useKifPhase() {
   const initialPhaseIndex = 0;
   const [phaseIndex, setPhaseIndex] = useState(initialPhaseIndex);
 
-  // currentEntryId が変わったら初期化
-  useEffect(() => {
-    reset();
-  }, []); // 後で currentEntryId を依存に追加可能
-
   const currentPhase: PlayerPhase = phases[phaseIndex];
 
   function advancePhase() {

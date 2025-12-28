@@ -7,23 +7,10 @@ import { Stack, Divider } from '@mui/material';
 
 import { AppLayout } from '../../../shared/components/AppLayout/AppLayout';
 import { useKif } from '../hooks/useKif'
-import { createKifData } from '../domain/factory/KifDataFactory';
-import KifEntryEditDialog from "../dialogs/KifEntryEditDialog";
-import { useKifPlayerUI } from '../hooks/player/useKifPlayerUI';
-import { useKifReplay } from '../hooks/player/useKifReplay';
 import EventsView from '../components/player/EventsView';
-import { useProblemProgress } from '../hooks/player/useProblemProgress';
-import BoardPanel from '../components/player/BoardPanel';
 import MoveControl from '../components/player/MoveControl';
 import SolutionControl from '../components/player/SolutionControl';
-import type { KifEvent, KifProblem } from "../types";
-import type { KifLearningRecord } from "../types";
-import type { ProblemPhase, ProblemProgressState, ProblemResult } from "../hooks/player/useProblemProgress";
-import ControlPanel from "../components/player/ControlPanel";
-import { createEmptyBoard, createEmptyHands } from "../domain/factory";
 import BoardView from "../components/player/BoardView";
-import type { KifEntry } from "../types";
-import { useKifLearning } from "../hooks/learning/useKifLearning";
 import SolveControl from "../components/player/SolveControl";
 import { formatAccuracy } from "../utils";
 import { useKifPlayer } from "../hooks/player/useKifPlayer";

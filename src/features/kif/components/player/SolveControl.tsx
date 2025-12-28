@@ -2,10 +2,10 @@ import { useState } from "react";
 import { Box, Stack, IconButton } from "@mui/material";
 import { calcAccuracy, formatAccuracy } from '../../utils';
 import type { KifLearningRecord } from '../../types'
-import type { ProblemPhase, ProblemResult } from "../../hooks/player/useProblemProgress";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CloseIcon from '@mui/icons-material/Close'
 
+export type PlayerResult = "solved" | "failed" | null
 
 type Props = {
     onSolved: () => void,
@@ -16,7 +16,7 @@ export default function SolveControl({
     
     onSolved, onFailed, 
 }: Props) {
-    const [result, setResult] = useState<ProblemResult|null>(null)    
+    const [result, setResult] = useState<PlayerResult|null>(null)    
     return (
         <Stack gap={2} margin={2}>           
             

@@ -1,9 +1,4 @@
 import { useState, useMemo, useEffect } from "react";
-import { Box, IconButton, Button, Typography } from "@mui/material";
-import { useNavigate, } from "react-router-dom";
-import EditIcon from '@mui/icons-material/Edit'
-import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
-import { Stack, Divider } from '@mui/material';
 
 import type { KifEntry } from "../../types";
 import { createEmptyBoard, createEmptyHands } from "../../domain/factory";
@@ -43,12 +38,8 @@ export function useKifPlayer(sortedEntries: KifEntry[]){
         return entryMap[currentEntryId] ?? null;
     }, [currentEntryId, entryMap]);
 
-    // 初期化
-    useEffect(()=>{        
-    }, [sortedEntries, currentEntryId])
-
+    
     // phase
-    //const { currentPhase, setPhase} = useProblemProgress(currentEntryId)
     useEffect(() => {
         if (queue.length === 0) {
             setCurrentIndex(0);
@@ -56,7 +47,10 @@ export function useKifPlayer(sortedEntries: KifEntry[]){
             setCurrentIndex(0);
         }
     }, [queue.length, currentIndex])
-
+    // 初期化
+    useEffect(()=>{      
+        reset()
+    }, [sortedEntries, currentEntryId])
     
     const kifInfo = {
             initialBoard: currentEntry?.kifData.board ?? createEmptyBoard(),
@@ -82,7 +76,13 @@ export function useKifPlayer(sortedEntries: KifEntry[]){
         markSolvedCurrent: () => { currentEntryId && kifLearning.markSolved(currentEntryId)},
         markFailedCurrent: () => { currentEntryId && kifLearning.markFailed(currentEntryId)}
     }
+    function reset(){
+        replay.reset
+        phaseInfo.reset
+    }
+    const phaseInfo = useKifPhase()
     
+
     ////////////////////
     return {
         // static
@@ -92,7 +92,7 @@ export function useKifPlayer(sortedEntries: KifEntry[]){
         // replay
         replayInfo: replay,               
         // phase
-        phaseInfo: useKifPhase(),
+        phaseInfo: phaseInfo,
 
         learnInfo: learningInfo
     }

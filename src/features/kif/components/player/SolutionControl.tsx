@@ -1,11 +1,11 @@
 import { Stack } from "@mui/material";
 
+import type { PlayerPhase } from "../../hooks/player/useKifPhase";
 
-import type { ProblemPhase } from "../../hooks/player/useProblemProgress"
 
 
 type Props = {
-    currentPhase: ProblemPhase 
+    currentPhase: PlayerPhase 
     //prevMove: () => void,
     //nextMove: () => void,
     //setPhase: (phase: ProblemPhase) => void;

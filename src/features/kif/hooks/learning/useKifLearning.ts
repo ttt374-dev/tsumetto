@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react'
 
 import type { KifLearningRecord} from "../../types/";
 import { useKifLearningPersist } from './useKifLearningPersist';
-import type { ProblemResult } from '../player/useProblemProgress';
 import { SettingsInputAntennaTwoTone } from '@mui/icons-material';
 
 interface UseKifLearning {
@@ -16,9 +15,7 @@ interface UseKifLearning {
     replaceAll(records: Record<string, KifLearningRecord>): void;
 };
 
-
-export function useKifLearning(): UseKifLearning {
-    const [result, setResult] = useState<ProblemResult|null>(null)
+export function useKifLearning(): UseKifLearning {    
     const [records, setRecords] =
         useState<Record<string, KifLearningRecord>>({});
     const persistApi = useKifLearningPersist()
