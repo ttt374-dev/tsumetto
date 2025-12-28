@@ -60,8 +60,7 @@ export default function PlayerScreen(){
                 </Stack>
             }      
         >
-            <>
-                <Box>entryid: { entryId }</Box>
+            <>                
                 <Stack justifyContent="center">
                     <Box>
                         <BoardView
@@ -89,10 +88,7 @@ export default function PlayerScreen(){
                     </Box>
 
                     { /* コントロール */}
-                    <Box border={1} sx={{ width: 200 }}>
-                        <Box>
-                            Phase: { currentPhase}
-                        </Box>
+                    <Box border={1} sx={{ width: 150 }}>                        
                         <SolutionControl
                             currentPhase={currentPhase}
                             onShowAnswer={() => {
@@ -115,11 +111,9 @@ export default function PlayerScreen(){
                         />
 
                         <Box>
-                            { `${formatAccuracy(solvedCount/(solvedCount+failedCount))}` }
+                            { `${formatAccuracy(solvedCount/(solvedCount+failedCount))} [${solvedCount} | ${failedCount}]` }
                         </Box>
-                        <Box>
-                            { `${solvedCount} | ${failedCount}`}
-                        </Box>
+                        
                         <SolveControl
                             onSolved={() => {
                                 markSolvedCurrent()
@@ -129,7 +123,7 @@ export default function PlayerScreen(){
                                 markFailedCurrent()
                                 advancePhase()
                             }}                            
-                            disabled={currentPhase === 'problem'}
+                            disabled={currentPhase !== 'solution'}
                         />   
 
                         

@@ -25,8 +25,8 @@ export default function MoveControl({ prevMove, nextMove, disabled=false }: Prop
 
     })
     return (
-        <Stack {...moveSwipeHandlers} direction="column">
-            <>
+        <Stack {...moveSwipeHandlers} direction="column" justifyContent="center">
+            
                 <IconButton 
                     sx={noFocusVisible}
                     onClick={prevMove}
@@ -41,6 +41,6 @@ export default function MoveControl({ prevMove, nextMove, disabled=false }: Prop
                 >
                     <ExpandMoreIcon />
                 </IconButton>
-            </>
+            
         </Stack>)
 }

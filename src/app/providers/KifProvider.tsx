@@ -5,7 +5,7 @@ import { useKifEntryController } from "../../features/kif/hooks/useKifEntryContr
 import { useKifSortedEntries } from "../../features/kif/hooks/library/useKifSortedEntries";
 import { useKifLibrarySort } from "../../features/kif/hooks/library/useKifLibrarySort";
 import type { SortState, KifEntry } from "../../features/kif/types";
-
+import { useKifFilteredEntries } from "../../features/kif/hooks/useKifFilteredEntries";
 export const KifContext = createContext<KifContextValue | null>(null);
 
 // Provider 関数は型注釈なしで安全
@@ -20,7 +20,11 @@ export const KifProvider = ({ children }: { children: ReactNode }) => {
   const kifLibrarySort = useKifLibrarySort()  
   const sort = kifLibrarySort.sort
   const { records } = kifLearning  
-  const sortedEntries = useKifSortedEntries(entries, records, sort,)
+
+  // フィルターをまず適用する
+  const filteredEntries = useKifFilteredEntries(entries, records)
+  // その後ソート
+  const sortedEntries = useKifSortedEntries(filteredEntries, records, sort,)
   const queue = useMemo(() => sortedEntries.map(e => e.id), [sortedEntries])
   const entryMap = useMemo(() => {
     const map: Record<string, KifEntry> = {};

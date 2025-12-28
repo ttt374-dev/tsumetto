@@ -11,8 +11,6 @@ export function useKifSortedEntries(
 ): KifEntry[] {
 
   //console.log("sorted entries:", entities, sort)
-  console.warn("HOOK sort arg", sort);
-
   return useMemo(() => {
     if (!entities || entities.length === 0) return []
 
