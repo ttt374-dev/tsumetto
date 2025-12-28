@@ -5,28 +5,14 @@ import { createEmptyBoard, createEmptyHands } from "../../domain/factory";
 import { useKifReplay } from "./useKifReplay";
 import { useKifLearning } from "../learning/useKifLearning";
 import { useKifPhase } from "./useKifPhase";
+import { useKifQueue } from "../library/useKifQueue";
 
 export function useKifPlayer(sortedEntries: KifEntry[]){
     // queue
-    const [currentIndex, setCurrentIndex] = useState(0)
-    const queue = useMemo(
-            () => sortedEntries.map(e => e.id),
-            [sortedEntries]
-        )
-    function advanceStep(){
-        if (currentIndex < queue.length - 1){
-            setCurrentIndex(prev => prev + 1)
-        }
-    }
-    // id → entry のマップ（library から生成される想定）
-    const entryMap: Record<string, KifEntry> = useMemo(() => {
-        const map: Record<string, KifEntry> = {};
-        sortedEntries.forEach(e => {
-            map[e.id] = e;
-        });
-        return map;
-    }, [sortedEntries]);
-
+    const { queue, entryMap, 
+        currentIndex, resetIndex, advanceStep 
+    } = useKifQueue(sortedEntries)
+    
     // ** 暫定的に entryid を使用
     const currentEntryId =
         currentIndex >= 0 && currentIndex < queue.length
@@ -37,16 +23,9 @@ export function useKifPlayer(sortedEntries: KifEntry[]){
         if (!currentEntryId) return null;
         return entryMap[currentEntryId] ?? null;
     }, [currentEntryId, entryMap]);
-
     
     // phase
-    useEffect(() => {
-        if (queue.length === 0) {
-            setCurrentIndex(0);
-        } else if (currentIndex >= queue.length) {
-            setCurrentIndex(0);
-        }
-    }, [queue.length, currentIndex])
+    
     // 初期化
     useEffect(()=>{      
         reset()
@@ -79,6 +58,7 @@ export function useKifPlayer(sortedEntries: KifEntry[]){
     function reset(){
         replay.reset
         phaseInfo.reset
+        resetIndex
     }
     const phaseInfo = useKifPhase()
     
