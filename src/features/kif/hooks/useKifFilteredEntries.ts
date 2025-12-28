@@ -13,16 +13,18 @@ function isUnansweredRecord(
 
 
 export function useKifFilteredEntries(
-  entries: KifEntry[],
-  learningRecords: Record<string, KifLearningRecord>,  
-  
+    entries: KifEntry[],
+    learningRecords: Record<string, KifLearningRecord>,
+    filter: DeckFilter
+
 ): KifEntry[] {
     const unansweredEntries = useMemo(() => {
         return entries.filter(entry => {
             const record = learningRecords[entry.id]
             return isUnansweredRecord(record);
         });
-    }, [entries, learningRecords]);
+    }, [entries, learningRecords, filter]);
 
-    return unansweredEntries    
+    if (filter.unansweredOnly) return unansweredEntries
+    else return entries
 }

@@ -11,18 +11,18 @@ import { FormControl, TextField, Checkbox, Select, MenuItem, Divider } from "@mu
 import type { DeckFilter } from '../types/'
 
 export default function DeckScreen() {
-    const { kifLibrarySort, sortedEntries, kifLearning } = useKif()
-    const { getLearningRecord, records: learningRecords } = kifLearning
+    const { kifLibrarySort, kifDeckFilter,
+     } = useKif()
+    //const { getLearningRecord, records: learningRecords } = kifLearning
     const navigate = useNavigate()
     const { sort, setSortKey, setSortOrder } = kifLibrarySort
-    const [filter, setFilter] = useState<DeckFilter>({unansweredOnly: false});
+    //const [filter, setFilter] = useState<DeckFilter>({unansweredOnly: false});
     
     const handleChangeKey = (e: any) => {
         console.log("set sort key", e.target.value)
         setSortKey(e.target.value)
     }
-
-
+    const { filter, setFilter } = kifDeckFilter
 
     return (
         <AppLayout

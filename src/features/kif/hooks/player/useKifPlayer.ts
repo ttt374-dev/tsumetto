@@ -6,6 +6,7 @@ import { createEmptyBoard, createEmptyHands } from "../../domain/factory";
 import { useKifReplay } from "./useKifReplay";
 import { useKifLearning } from "../learning/useKifLearning";
 import { useKifPhase } from "./useKifPhase";
+import { calcAccuracy } from "../../utils";
 
 export function useKifPlayer(queue: string[], entryMap: Record<string, KifEntry>){
     const [currentIndex, setCurrentIndex] = useState(0)
@@ -70,6 +71,8 @@ export function useKifPlayer(queue: string[], entryMap: Record<string, KifEntry>
     
     const learningRecord = getLearningRecord(currentEntryId)
     const learningInfo = {
+        learningRecord: learningRecord,
+        accuracy: calcAccuracy(learningRecord ?? undefined),
         solvedCount: learningRecord?.solvedCount ?? 0,
         failedCount: learningRecord?.failedCount ?? 0,
         markSolvedCurrent: () => { currentEntryId && kifLearning.markSolved(currentEntryId)},

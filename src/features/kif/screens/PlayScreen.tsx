@@ -36,7 +36,7 @@ export default function PlayerScreen(){
             advancePhase, retreatPhase
         },
         learnInfo: {
-            solvedCount, failedCount,
+            solvedCount, failedCount, accuracy,
             markSolvedCurrent, markFailedCurrent
         }
     } = useKifPlayer(queue, entryMap)
@@ -111,7 +111,7 @@ export default function PlayerScreen(){
                         />
 
                         <Box>
-                            { `${formatAccuracy(solvedCount/(solvedCount+failedCount))} [${solvedCount} | ${failedCount}]` }
+                            { `${formatAccuracy(accuracy)} [${solvedCount} | ${failedCount}]` }
                         </Box>
                         
                         <SolveControl
