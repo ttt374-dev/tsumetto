@@ -17,13 +17,13 @@ import { useKifPlayer } from "../hooks/player/useKifPlayer";
 
 ///////////////////////////////////////
 export default function PlayerScreen(){
-    const { sortedEntries } = useKif()
+    const { sortedEntries, queue, entryMap } = useKif()
     const { 
         kifInfo: {
             events, title
         },
         queueInfo: {
-            queue, currentIndex, advanceStep
+            currentIndex, advanceStep
         },
         replayInfo: {
             board, hands, 

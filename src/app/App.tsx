@@ -15,46 +15,16 @@ import { KifProvider } from './providers/KifProvider';
 //StatusBar.setStyle({ style: Style.Dark });
 
 export default function App() {
-  /*
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-  const kifLibrary = useKifLibrary()
-  const kifPlayer = useKifPlayer(kifLibrary.library, selectedIndex);
-  */
-
   return (
     <KifProvider>
       <BrowserRouter>
         <Routes>
           <Route path="/player" element={<PlayerScreen />}/>
           <Route path="/library" element={<LibraryScreen />}/>    
-          <Route path="/problem" element={<PlayerScreen/>}/>      
-          <Route path="/" element={<Navigate to="/problem"/>} />
+          <Route path="/" element={<Navigate to="/player"/>} />
         </Routes>
       </BrowserRouter>
     </KifProvider>
-    /*
-    <LayoutTestScreen/>
-    <BrowserRouter>
-
-      <Routes>
-        <Route
-          path="/player"
-          element={<PlayerScreen {...kifPlayer} library={kifLibrary.library} importFile={kifLibrary.importFile}
-            onSelect={(index) => setSelectedIndex(index)           
-
-            } />}
-        />
-        <Route
-          path="/library"
-          element={<LibraryScreen library={kifLibrary.library} importFile={kifLibrary.importFile}
-            deleteEntry={kifLibrary.deleteEntry}
-            onSelect={(index) => setSelectedIndex(index)} />}
-        />
-        <Route path="*" element={<Navigate to="/player" replace={false}/>} />
-      </Routes>
-
-
-    </BrowserRouter>
-    */
+    
   );
 }

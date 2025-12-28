@@ -1,15 +1,11 @@
-import React, { createContext, useContext, type ReactNode, useEffect, useRef } from "react";
-//import { useKifLibrary } from '../../features/kif/hooks/useKifLibrary'
-//import { useKifPlayer } from "../../features/kif/hooks/player/useKifPlayer";
+import React, { createContext, useContext, type ReactNode, useMemo, useEffect, useRef } from "react";
 import { useKifLearning } from "../../features/kif/hooks/learning/useKifLearning";
 import { useKifNavigation } from '../../features/kif/hooks/useKifNavigation'
-import { useKifPlayerUI } from "../../features/kif/hooks/player/useKifPlayerUI";
-
 import type { KifContextValue } from "../../features/kif/types/kifContextValue";
 import { useKifEntryController } from "../../features/kif/hooks/useKifEntryController";
 import { useKifSortedEntries } from "../../features/kif/hooks/library/useKifSortedEntries";
 import { useKifLibrarySort } from "../../features/kif/hooks/library/useKifLibrarySort";
-import type { SortState } from "../../features/kif/types";
+import type { SortState, KifEntry } from "../../features/kif/types";
 
 export const KifContext = createContext<KifContextValue | null>(null);
 
@@ -26,30 +22,14 @@ export const KifProvider = ({ children }: { children: ReactNode }) => {
   const sort = kifLibrarySort.sort
   const { records } = kifLearning  
   const sortedEntries = useKifSortedEntries(entries, records, sort,)
+  const queue = useMemo(() => sortedEntries.map(e => e.id), [sortedEntries])
+  const entryMap = useMemo(() => {
+    const map: Record<string, KifEntry> = {};
+    entries.forEach(e => { map[e.id] = e; });
+    return map;
+  }, [entries]);
 
-  useEffect(() => {
-  console.warn(
-    "PROVIDER sortedEntries",
-    sortedEntries.map(e => e.id)
-  );
-}, [sortedEntries]);
-
-useEffect(() => {
-  console.warn("SORT identity", kifLibrarySort.sort);
-}, [sort]);
-
-const prevSortRef = useRef<SortState | null>(null);
-
-useEffect(() => {
-  console.warn(
-    "SORT same?",
-    prevSortRef.current === kifLibrarySort.sort
-  );
-  prevSortRef.current = kifLibrarySort.sort;
-}, [kifLibrarySort.sort]);
-
-
-  //nsole.log("sorted entries on provider", sortedEntries, kifLibrarySort.sort)
+  const prevSortRef = useRef<SortState | null>(null);
 
   //const kifPlayer = useKifPlayer(sortedEntries);
   const kifNavigation = useKifNavigation(sortedEntries)
@@ -63,7 +43,8 @@ useEffect(() => {
   return (    
     <KifContext.Provider value={{ 
        kifLearning, kifNavigation, 
-       kifEntryController, kifLibrarySort, sortedEntries }}>
+       kifEntryController, kifLibrarySort, 
+       sortedEntries, queue, entryMap }}>
       {children}
     </KifContext.Provider>
   );
