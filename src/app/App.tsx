@@ -3,7 +3,7 @@ import './App.css'
 import { StatusBar, Style } from "@capacitor/status-bar";
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
-import PlayerScreen from '../features/kif/screens/PlayScreen';
+import PlayerScreen from '../features/kif/screens/PlayerScreen';
 import LibraryScreen from '../features/kif/screens/LibraryScreen';
 import DeckScreen from '../features/kif/screens/DeckScreen';
 import { KifProvider } from './providers/KifProvider';

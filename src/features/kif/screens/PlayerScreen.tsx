@@ -21,11 +21,11 @@ export default function PlayerScreen() {
 
     //const { queue, entryMap, playerSession } = useKif()
     const { problemMap, playerSessionApi } = useKif()
-    const { session, isFinished,
+    const { session, isFinished, isLastIndex,
         advance: advanceStep, retreat: retreatStep, 
     } = playerSessionApi
     const queue: QueueItem[] = session?.queue ?? []
-    const currentIndex = session?.currentIndex
+    const currentIndex = session?.currentIndex ?? 0
 
     console.log("player session", playerSessionApi) 
    
@@ -55,12 +55,6 @@ export default function PlayerScreen() {
         }
     } = useKifPlayer(session, problemMap)
 
-const handleFinish = () => {
-        if (isFinished){
-        //if (currentIndex == queue.length - 1) {  // 最後の問題
-            navigate("/summary", { state: { queue, queueResultMap } })
-        }
-    }
     
     
     //const showMove = currentPhase !== "problem"
@@ -96,7 +90,13 @@ const handleFinish = () => {
                         setCurrentAnswer("correct")
                         
                         //setResult(true)
-                        advanceStep()
+                        console.log("is last", isLastIndex, currentIndex, session?.queue.length)
+                        if (isLastIndex){
+                            navigate("/summary", { state: { queue, queueResultMap } })
+                        } else {
+                            advanceStep()
+                        }
+                        
                     }}>
                     正解
                 </Button>
@@ -107,7 +107,7 @@ const handleFinish = () => {
     ////
     return (
         <AppLayout
-            header={`${currentIndex ?? 0 + 1}: ${title}`}
+            header={`${currentIndex + 1}: ${title}`}
             footer={
                 <Stack direction="row">
                     { phaseActions[currentPhase] }
@@ -169,9 +169,7 @@ const handleFinish = () => {
                                 ↓次の手
                             </button>
                         
-                        </>}
-
-                        
+                        </>}                        
                         
                     <button onClick={() =>
                         navigate("/summary", { state: { queue, queueResultMap} })

@@ -64,9 +64,11 @@ export function usePlayerSession() {
 
     const isFinished =
         !!session && session.currentIndex >= session.queue.length
-
+    
+    const isLastIndex = 
+        !!session && session.currentIndex == session.queue.length - 1
     return {
         session, setSession, startSession, advance, retreat,
-        currentProblemId, isFinished,
+        currentProblemId, isFinished, isLastIndex,
     }
 }
