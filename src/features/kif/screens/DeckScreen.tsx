@@ -19,7 +19,7 @@ import MultipleFilesButton from "../../../shared/components/MultipleFilesButton"
 export default function DeckScreen() {
     const { filter, setFilter
      } = useKifDeckFilter()
-    //const { getLearningRecord, records: learningRecords } = kifLearning
+    
     const navigate = useNavigate()
     const { sort, setSortKey, setSortOrder } = useKifLibrarySort()
     //const [filter, setFilter] = useState<DeckFilter>({unansweredOnly: false});

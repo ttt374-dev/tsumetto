@@ -26,43 +26,20 @@ import { useProblemImporter } from "../hooks/problem/useProblemImporter";
 
 //////////////
 export default function LibraryScreen() {    
-    const { sort, setSortKey, setSortOrder }= useKifLibrarySort()
-    
-
+    const { sort, setSortKey, setSortOrder }= useKifLibrarySort()    
     const navigate = useNavigate()
-    const { //kifEntryController, 
-        learningRepository: kifLearning, entries, problemRepository,
+    const { 
+        learningRepository, entries, problemRepository,
     } = useKif()
-    const { records: learningRecords } = kifLearning
+    const { records, getLearningRecord } = learningRepository
     const { importFiles } = useProblemImporter()
-    /*
-    const {
-        importFiles,
-        deleteEntries,
-    } = kifEntryController
-     */
-    const sortedEntries = useKifSortedEntries(entries, learningRecords, sort)
-    /*
-    const {
-        setCurrentEntryId,
-    } = kifNavigation
-    */
-    //const { sort, setSortOrder, setSortKey } = kifLibrarySort
-    const { getLearningRecord } = kifLearning
-    
+    const sortedEntries = useKifSortedEntries(entries, records, sort)
+
     const {
         checkedIds, isChecked, toggleChecked, 
         clearChecked, selectAllChecked
     } = useKifLibraryList(sortedEntries)
-
-    // edit mode
     
-    /*
-    const {
-        //updateTitle,
-        //deleteEntry,
-    } = kifEntryController
-     */
     const { 
         entryToEditId,
         setEntryToEditId,
@@ -78,15 +55,6 @@ export default function LibraryScreen() {
     } = useKifLibraryUI()
     const { removeMany } = problemRepository
 
-    /*
-    const [entryToEditId, setEntryToEditId ] = useState<string|null>(null)
-    const [ editMode, setEditMode ] = useState(false)
-    const toggleEditMode = () => {
-        setEditMode(prev => !prev)
-    }
-    const [openEditDialog, setOpenEditDialog] = useState(false)
-    const [backupOpen, setBackupOpen] = useState(false)
-    */
     ////////////////////////////////////////
     const firstSelectedId = checkedIds.values().next().value
     return (

@@ -7,19 +7,16 @@ import type { SortState, KifEntry, DeckFilter } from "../../features/kif/types";
 import { useKifFilteredEntries } from "../../features/kif/hooks/deck/useKifFilteredEntries";
 import { useKifDeckFilter } from "../../features/kif/hooks/deck/useKifDeckFilter";
 import { useProblemRepository } from "../../features/kif/hooks/problem/useProblemRepository";
-
+import type { Problem } from "../../features/kif/types";
 export const KifContext = createContext<KifContextValue | null>(null);
 
 // Provider 関数は型注釈なしで安全
 export const KifProvider = ({ children }: { children: ReactNode }) => {
-  //const kifLibrary = useKifLibrary();  
-  console.error("KifProvider MOUNT", Math.random());
-  //const [deckFilter, setDeckFilter] = useState<DeckFilter>({unansweredOnly: false})
-
-  const learningRepository = useLearningRepository()
   const problemRepository = useProblemRepository()
-
-  const entries = problemRepository.problems
+  const learningRepository = useLearningRepository()
+  
+  const problems = problemRepository.problems
+  const entries = problems
   const { records } = useLearningRepository()
 
 
@@ -37,6 +34,12 @@ export const KifProvider = ({ children }: { children: ReactNode }) => {
     entries.forEach(e => { map[e.id] = e; });
     return map;
   }, [entries]);
+  const problemMap = useMemo(() => {
+    const map: Record<string, Problem> = {};
+    entries.forEach(e => { map[e.id] = e; });
+    return map;
+  }, [problems]);
+  
 
   //const prevSortRef = useRef<SortState | null>(null);
 
@@ -51,9 +54,9 @@ export const KifProvider = ({ children }: { children: ReactNode }) => {
       learningRepository,
       problemRepository,
 
-      queue, entryMap,
-      entries,
-
+      queue, 
+      entries, entryMap,
+      problems, problemMap,
     }}>
       {children}
     </KifContext.Provider>
