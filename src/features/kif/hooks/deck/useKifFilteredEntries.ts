@@ -1,7 +1,7 @@
 // features/kif/hooks/useSortedEntries.ts
 import { useMemo } from "react"
-import type { DeckFilter, KifEntry, KifLearningRecord, SortState } from "../types"
-import { useKifSortedEntries } from "./library/useKifSortedEntries"
+import type { DeckFilter, KifEntry, KifLearningRecord, SortState } from "../../types"
+import { useKifSortedEntries } from "../library/useKifSortedEntries"
 
 
 function isUnansweredRecord(

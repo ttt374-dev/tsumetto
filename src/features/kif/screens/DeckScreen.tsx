@@ -11,7 +11,7 @@ import { AppLayout } from "../../../shared/components/AppLayout/AppLayout";
 import { useKif } from '../hooks/useKif'
 import { FormControl, TextField, Checkbox, Select, MenuItem, Divider } from "@mui/material";
 import { useKifLibrarySort } from "../hooks/library/useKifLibrarySort";
-import { useKifDeckFilter } from "../hooks/useKifDeckFilter";
+import { useKifDeckFilter } from "../hooks/deck/useKifDeckFilter";
 import { createKifData, createKifEntryFromText } from "../domain/factory";
 import MultipleFilesButton from "../../../shared/components/MultipleFilesButton";
 

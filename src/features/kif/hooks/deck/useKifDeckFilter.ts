@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { DeckFilter } from "../types";
+import type { DeckFilter } from "../../types";
 
 export function useKifDeckFilter(){
     const [ filter, setFilter ] = useState<DeckFilter>({

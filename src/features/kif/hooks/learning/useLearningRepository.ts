@@ -2,10 +2,10 @@
 import { useState, useEffect } from 'react'
 
 import type { KifLearningRecord} from "../../types";
-import { useKifLearningPersist } from './useKifLearningPersist';
+import { useLearningPersist } from './useLearningPersist';
 import { SettingsInputAntennaTwoTone } from '@mui/icons-material';
 
-interface UseKifLearningRepository {
+interface UseLearningRepository {
     records: Record<string, KifLearningRecord>;
 
     getLearningRecord(entryId: string | null): KifLearningRecord | null;
@@ -15,10 +15,10 @@ interface UseKifLearningRepository {
     replaceAll(records: Record<string, KifLearningRecord>): void;
 };
 
-export function useKifLearning(): UseKifLearningRepository {    
+export function useLearning(): UseLearningRepository {    
     const [records, setRecords] =
         useState<Record<string, KifLearningRecord>>({});
-    const persistApi = useKifLearningPersist()
+    const persistApi = useLearningPersist()
    
 
     useEffect(() => {

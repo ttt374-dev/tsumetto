@@ -1,11 +1,11 @@
 import React, { createContext, useContext, type ReactNode, useState, useMemo, useEffect, useRef } from "react";
-import { useKifLearning } from "../../features/kif/hooks/learning/useKifLearningRepository";
+import { useLearning } from "../../features/kif/hooks/learning/useLearningRepository";
 import type { KifContextValue } from "../../features/kif/types/kifContextValue";
 import { useKifSortedEntries } from "../../features/kif/hooks/library/useKifSortedEntries";
 import { useKifLibrarySort } from "../../features/kif/hooks/library/useKifLibrarySort";
 import type { SortState, KifEntry, DeckFilter } from "../../features/kif/types";
-import { useKifFilteredEntries } from "../../features/kif/hooks/useKifFilteredEntries";
-import { useKifDeckFilter } from "../../features/kif/hooks/useKifDeckFilter";
+import { useKifFilteredEntries } from "../../features/kif/hooks/deck/useKifFilteredEntries";
+import { useKifDeckFilter } from "../../features/kif/hooks/deck/useKifDeckFilter";
 import { useProblemRepository } from "../../features/kif/hooks/problem/useProblemRepository";
 
 export const KifContext = createContext<KifContextValue | null>(null);
@@ -16,7 +16,7 @@ export const KifProvider = ({ children }: { children: ReactNode }) => {
   console.error("KifProvider MOUNT", Math.random());
   //const [deckFilter, setDeckFilter] = useState<DeckFilter>({unansweredOnly: false})
 
-  const kifLearning = useKifLearning()
+  const kifLearning = useLearning()
   const problemRepository = useProblemRepository()
 
   const entries = problemRepository.problems

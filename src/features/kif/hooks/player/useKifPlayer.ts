@@ -4,11 +4,11 @@ import { useParams } from "react-router-dom";
 import type { KifEntry } from "../../types";
 import { createEmptyBoard, createEmptyHands } from "../../domain/factory";
 import { useKifReplay } from "./useKifReplay";
-import { useKifLearning } from "../learning/useKifLearningRepository";
+import { useLearning } from "../learning/useLearningRepository";
 import { useKifPhase } from "./useKifPhase";
 import { calcAccuracy } from "../../utils";
-import { useQueueResult } from "../useQueueResult";
-import type { AnswerResult } from "../useQueueResult";
+import { useQueueResult } from "../deck/useQueueResult";
+import type { AnswerResult } from "../deck/useQueueResult";
 
 export function useKifPlayer(
     queue: string[], 
@@ -73,7 +73,7 @@ export function useKifPlayer(
             kifInfo.initialBoard, kifInfo.initialHands, kifInfo.events,
         )
 
-    const kifLearning = useKifLearning()
+    const kifLearning = useLearning()
     const { getLearningRecord } = kifLearning
     
     const learningRecord = getLearningRecord(currentEntryId)

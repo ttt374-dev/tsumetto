@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
 import { Filesystem, Directory, Encoding } from "@capacitor/filesystem";
 
-import type { KifLearningRecord, KifLearningStore } from "../../types/";
+import type { KifLearningRecord, KifLearningStore } from "../../types";
 
 const LEARNING_FILE = "kif-learning.json";
 
-export const useKifLearningPersist = () => {
+export const useLearningPersist = () => {
     const load = async (): Promise<Record<string, KifLearningRecord>> => {
         console.log("learning persist: load start")
 
