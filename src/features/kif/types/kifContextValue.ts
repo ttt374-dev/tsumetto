@@ -1,4 +1,4 @@
-import type { useKifLearning} from '../hooks/learning/useKifLearning'
+import type { useKifLearning} from '../hooks/learning/useKifLearningRepository'
 import type { KifEntry } from './kifEntry'
 import { useProblemRepository } from '../hooks/problem/useProblemRepository';
 

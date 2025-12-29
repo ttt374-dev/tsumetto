@@ -1,5 +1,5 @@
 import React, { createContext, useContext, type ReactNode, useState, useMemo, useEffect, useRef } from "react";
-import { useKifLearning } from "../../features/kif/hooks/learning/useKifLearning";
+import { useKifLearning } from "../../features/kif/hooks/learning/useKifLearningRepository";
 import type { KifContextValue } from "../../features/kif/types/kifContextValue";
 import { useKifSortedEntries } from "../../features/kif/hooks/library/useKifSortedEntries";
 import { useKifLibrarySort } from "../../features/kif/hooks/library/useKifLibrarySort";

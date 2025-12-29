@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import type { KifEntry } from "../../types";
 import { createEmptyBoard, createEmptyHands } from "../../domain/factory";
 import { useKifReplay } from "./useKifReplay";
-import { useKifLearning } from "../learning/useKifLearning";
+import { useKifLearning } from "../learning/useKifLearningRepository";
 import { useKifPhase } from "./useKifPhase";
 import { calcAccuracy } from "../../utils";
 import { useQueueResult } from "../useQueueResult";

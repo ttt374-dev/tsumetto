@@ -1,11 +1,11 @@
 
 import { useState, useEffect } from 'react'
 
-import type { KifLearningRecord} from "../../types/";
+import type { KifLearningRecord} from "../../types";
 import { useKifLearningPersist } from './useKifLearningPersist';
 import { SettingsInputAntennaTwoTone } from '@mui/icons-material';
 
-interface UseKifLearning {
+interface UseKifLearningRepository {
     records: Record<string, KifLearningRecord>;
 
     getLearningRecord(entryId: string | null): KifLearningRecord | null;
@@ -15,7 +15,7 @@ interface UseKifLearning {
     replaceAll(records: Record<string, KifLearningRecord>): void;
 };
 
-export function useKifLearning(): UseKifLearning {    
+export function useKifLearning(): UseKifLearningRepository {    
     const [records, setRecords] =
         useState<Record<string, KifLearningRecord>>({});
     const persistApi = useKifLearningPersist()
@@ -31,7 +31,7 @@ export function useKifLearning(): UseKifLearning {
     }, []);
 
 
-    const getLearningRecord = (entryId: string | null) => {
+    const get = (entryId: string | null) => {
         if (!entryId) return null
         return records[entryId] ?? {
             entryId,
@@ -93,5 +93,5 @@ export function useKifLearning(): UseKifLearning {
         persist()
     }
 
-    return { records, getLearningRecord, markSolved, markFailed, reset, replaceAll };
+    return { records, getLearningRecord: get, markSolved, markFailed, reset, replaceAll };
 }
