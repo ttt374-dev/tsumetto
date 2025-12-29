@@ -18,6 +18,8 @@ import { formatAccuracy } from "../utils";
 import { useKifPlayer } from "../hooks/player/useKifPlayer";
 import type { PlayerPhase } from "../hooks/player/useKifPhase";
 import type { JSX } from "react";
+import type { Board, Hands } from "../types";
+import { BoardPanel } from "../components/player/BoardPanel";
 
 ///////////////////////////////////////
 export default function PlayerScreen() {
@@ -61,26 +63,7 @@ export default function PlayerScreen() {
 
     //const showMove = currentPhase !== "problem"
     useEffect(() => { setResult(null) }, [currentIndex])
-    const stepSwipeHandlers = useSwipeable({
-        onSwipedRight: () => {
-            retreatStep()
-        },
-        onSwipedLeft: () => {
-            advanceStep()            
-        },
-        onSwipedDown: () => {             
-            currentPhase === "problem" && advancePhase()
-            advanceEvent()
-        },
-        onSwipedUp: () => {
-            currentPhase === "solution" && retreatPhase()
-            retreatEvent()
-        },
-
-        trackMouse: true, // PCでもマウスでスワイプ可能
-        preventScrollOnSwipe: true,
-
-    })
+    
     ////////////////////
     // フッターのアクションボタン
     const phaseActions: Record<PlayerPhase, JSX.Element> = {
@@ -130,14 +113,18 @@ export default function PlayerScreen() {
             }
         >
             <>
-                <Stack justifyContent="center" m={2} >
-                    <Box {...stepSwipeHandlers} sx={{ userSelect: "none", }}>
-                        <BoardView
-                            board={board}
-                            hands={hands}>
-                        </BoardView>
-                    </Box>
-                </Stack>
+                
+                <BoardPanel 
+                    board={board}
+                    hands={hands}
+                    currentPhase={currentPhase}
+                    advanceEvent={advanceEvent}
+                    retreatEvent={retreatEvent}
+                    advancePhase={advancePhase}
+                    retreatPhase={retreatPhase}
+                    advanceStep={advanceStep}
+                    retreatStep={retreatStep}
+                />
 
                 <Box sx={{ minHeight: 0, display: "flex", flexDirection: "row" }}>
                     { /* 手順リスト */}
@@ -184,26 +171,6 @@ export default function PlayerScreen() {
                     }>
                         セッション終了
                     </button>
-                        { /* 
-                        <MoveControl 
-                            disabled={currentPhase === "problem"}
-                            prevMove={movePrevEvent}
-                            nextMove={moveNextEvent}
-                        />*/ }
-
-                        { /* 
-                        <SolveControl
-                            onSolved={() => {
-                                markSolvedCurrent()
-                                advancePhase()
-                            }}
-                            onFailed={()=>{
-                                markFailedCurrent()
-                                advancePhase()
-                            }}                            
-                            disabled={currentPhase !== 'solution'}
-                        />   
-*/ }
 
                     </Stack>
                 </Box>
