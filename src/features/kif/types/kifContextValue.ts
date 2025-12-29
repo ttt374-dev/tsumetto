@@ -8,7 +8,7 @@ import type { useKifDeckFilter } from '../hooks/useKifDeckFilter';
 // hooks の返り値型を取得してまとめる
 export type KifContextValue = {
   kifLearning: ReturnType<typeof useKifLearning>
-  kifEntryController: ReturnType<typeof useKifEntryController>
+  //kifEntryController: ReturnType<typeof useKifEntryController>
   //kifLibrarySort: ReturnType<typeof useKifLibrarySort>
   //kifDeckFilter: ReturnType<typeof useKifDeckFilter>
   //sortedEntries: KifEntry[]

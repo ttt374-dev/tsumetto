@@ -22,6 +22,8 @@ import KifBackupDialog from '../dialogs/KifBackupDialog';
 import { useKifLibraryUI } from '../hooks/library/useKifLibraryUI';
 import { useKifLibrarySort } from "../hooks/library/useKifLibrarySort";
 import { useKifSortedEntries } from "../hooks/library/useKifSortedEntries";
+import { useProblemImporter } from "../hooks/problem/useProblemImporter";
+import { useProblemRepository } from "../hooks/problem/useProblemRepository";
 
 //////////////
 export default function LibraryScreen() {    
@@ -29,14 +31,17 @@ export default function LibraryScreen() {
     
 
     const navigate = useNavigate()
-    const { kifEntryController, 
+    const { //kifEntryController, 
         kifLearning, entries,
     } = useKif()
     const { records: learningRecords } = kifLearning
+    const { importFiles } = useProblemImporter()
+    /*
     const {
         importFiles,
         deleteEntries,
     } = kifEntryController
+     */
     const sortedEntries = useKifSortedEntries(entries, learningRecords, sort)
     /*
     const {
@@ -53,10 +58,12 @@ export default function LibraryScreen() {
 
     // edit mode
     
+    /*
     const {
-        updateTitle,
-        deleteEntry,
+        //updateTitle,
+        //deleteEntry,
     } = kifEntryController
+     */
     const { 
         entryToEditId,
         setEntryToEditId,
@@ -70,6 +77,8 @@ export default function LibraryScreen() {
         setBackupOpen,
 
     } = useKifLibraryUI()
+    const { removeMany } = useProblemRepository()
+    
     /*
     const [entryToEditId, setEntryToEditId ] = useState<string|null>(null)
     const [ editMode, setEditMode ] = useState(false)
@@ -120,7 +129,8 @@ export default function LibraryScreen() {
                 <LibraryDeleteControl
                     entries={sortedEntries}
                     checkedIds={checkedIds}
-                    onDelete={(entries: KifEntry[]) => deleteEntries(entries)}
+                    onDelete={(entries: KifEntry[]) => removeMany(entries.map(e => e.id))}
+                    //onDelete={(entries: KifEntry[]) => deleteEntries(entries)}
                 />
                 <IconButton onClick={toggleEditMode}>
                     {editMode ? <EditIcon /> : <VisibilityIcon />}
@@ -155,14 +165,17 @@ export default function LibraryScreen() {
                 getLearningRecord={getLearningRecord}
             />
             { /* ダイアログ　*/ }
+            
             {entryToEditId &&
                 <KifEntryEditDialog
                     open={openEditDialog}
                     entryId={entryToEditId}
-                    onUpdateTitle={(title: string) => updateTitle(entryToEditId, title)}
+                    //onUpdateTitle={(title: string) => updateTitle(entryToEditId, title)}
+                    onUpdateTitle={(title: string)=> {}}   // TODO
                     onConfirm={() => { }}
-                    onClose={() => setOpenEditDialog(false)}
-                    onDelete={() => deleteEntry(entryToEditId)}
+                    onClose={() => setOpenEditDialog(false)}                    
+                    //onDelete={() => deleteEntry(entryToEditId)}
+                    onDelete={(() => {})}  // TODO
                 />
             }
             <KifBackupDialog

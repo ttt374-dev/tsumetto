@@ -5,5 +5,6 @@ export * from './kifContextValue'
 export * from './kifBackup'
 export * from './kifSort'
 export * from './pieceType'
-export * from './kifProblem'
 export * from './kifDeckFilter'
+
+export * from './problem'

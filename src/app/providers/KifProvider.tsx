@@ -49,7 +49,7 @@ export const KifProvider = ({ children }: { children: ReactNode }) => {
   return (    
     <KifContext.Provider value={{ 
        kifLearning, 
-       kifEntryController, 
+       //kifEntryController, 
   
        queue, entryMap,
        entries,

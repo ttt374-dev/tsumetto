@@ -5,11 +5,15 @@ import type { KifEntry } from '../types'
 import { useKifLibraryPersist } from "./library/useLibraryPersist";
 import { parseKif } from '../domain/parser';
 import { createKifEntryFromText, validateTitle, createKifEntry, splitFilename, resolveUniqTitle} from '../domain/factory/KifEntryFactory';
+import { useProblemPersist } from './problem/useProblemPersist';
+import { useProblemRepository } from './problem/useProblemRepository';
+import { useProblemImporter } from './problem/useProblemImporter';
 
 export function useKifEntryController() {
     const [ entries, setEntries ] = useState<KifEntry[]>([])
-    const persistApi = useKifLibraryPersist()
-
+    //const persistApi = useKifLibraryPersist()
+    const persistApi = useProblemPersist()
+    const { importFiles } = useProblemImporter()
     
     // 初期ロード
     useEffect(() => {
@@ -24,6 +28,7 @@ export function useKifEntryController() {
 
     // インポート
     // 単体ファイルをインポートして保存
+    /*
     const importFile = async (
         file: File,
         extraEntries: KifEntry[] = [], // importFiles から呼ぶ場合に追加分を渡す
@@ -65,6 +70,7 @@ export function useKifEntryController() {
         }
         return results;
     };
+    */
     // エントリ更新
     const updateTitle = async (entryId: string, newTitle: string) => {
         // 重複チェック（任意）

@@ -2,15 +2,19 @@ import { useState, useMemo } from "react";
 import { Stack, Box, InputLabel, FormControlLabel } from "@mui/material";
 import { Navigate, useNavigate } from 'react-router-dom';
 import { IconButton } from "@mui/material";
+import { v4 } from 'uuid'
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import { parseKif } from "../domain/parser";
 
 import { AppLayout } from "../../../shared/components/AppLayout/AppLayout";
 import { useKif } from '../hooks/useKif'
 import { FormControl, TextField, Checkbox, Select, MenuItem, Divider } from "@mui/material";
-import type { DeckFilter } from '../types/'
 import { useKifLibrarySort } from "../hooks/library/useKifLibrarySort";
 import { useKifDeckFilter } from "../hooks/useKifDeckFilter";
+import { createKifData, createKifEntryFromText } from "../domain/factory";
+import MultipleFilesButton from "../../../shared/components/MultipleFilesButton";
+
 
 export default function DeckScreen() {
     const { filter, setFilter
@@ -25,7 +29,8 @@ export default function DeckScreen() {
         setSortKey(e.target.value)
     }
     //nst { filter, setFilter } = kifDeckFilter//
-
+    
+    /////////////////////////
     return (
         <AppLayout
             header={<Box>Deck</Box>}
@@ -79,6 +84,10 @@ export default function DeckScreen() {
                     <button onClick={() => navigate("/library")}>
                         Library
                     </button>
+                    
+                        
+                        
+                    
                 </Stack>
             </>
         </AppLayout>

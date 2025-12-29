@@ -1,23 +1,22 @@
-import type { Board, Hands, KifEvent, Move } from "./kifData"
+import type { Board, Hands, Move, KifEvent, KifData } from "./kifData"
+import type { KifEntry } from "./kifEntry"
 
+export type Problem = KifEntry
+export type KifContent = KifData
 
+/*
 export type Problem = {
-    core: ProblemCore,
-    meta: ProblemMeta,
-}
-
-type ProblemCore = KifContent
-
-type ProblemMeta = {
     id: string
     title: string
     headers: string[]    
     createdAt: number,
+    kifContent: KifData,
 }
 
-type KifContent = {
+export type KifContent = {
     initialBoard: Board,
     initialHands: Hands,
-    move: Move,
+    events: KifEvent[]
 
 }
+    */

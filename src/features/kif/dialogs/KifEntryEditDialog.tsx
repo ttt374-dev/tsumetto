@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom"
 import type { KifEntry } from "../types/kifEntry";
 import { useKif } from '../hooks/useKif'
 import { kanToNumber } from "../domain/parser/kanToNumber";
+import { useProblemRepository } from "../hooks/problem/useProblemRepository";
 
 type Props = {
   open: boolean
@@ -43,7 +44,8 @@ export default function KifEntryEditDialog({
   const [title, setTitle] = useState("")
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(title);
-  const entries = useKif().kifEntryController.entries
+  //const entries = useKif().kifEntryController.entries
+  const { problems: entries } = useProblemRepository()
   const entry = useMemo(
     () => entries.find(e => e.id === entryId),
     [entries, entryId]
