@@ -20,30 +20,21 @@ export default function PlayerScreen() {
     const navigate = useNavigate()
 
     //const { queue, entryMap, playerSession } = useKif()
-    const { problemMap, playerSession } = useKif()
+    const { problemMap, playerSessionApi } = useKif()
     const { session, isFinished,
         advance: advanceStep, retreat: retreatStep, 
-    } = playerSession
+    } = playerSessionApi
     const queue: QueueItem[] = session?.queue ?? []
     const currentIndex = session?.currentIndex
 
-    console.log("player session", playerSession) 
-    const handleFinish = () => {
-        if (isFinished){
-        //if (currentIndex == queue.length - 1) {  // 最後の問題
-            navigate("/summary", { state: { queue, queueResultMap } })
-        }
-    }
-    
-    
-    
-
+    console.log("player session", playerSessionApi) 
+   
     const {
         kifInfo: {
             events, title,
         },
         queueInfo: {
-            //currentIndex, advanceStep, retreatStep,
+            //currentIndex, 
         },
         replayInfo: {
             board, hands,
@@ -62,9 +53,16 @@ export default function PlayerScreen() {
             setCurrentAnswer, queueResultMap,
             summary: queueResultSummary,
         }
-    } = useKifPlayer(queue, problemMap, handleFinish)
+    } = useKifPlayer(session, problemMap)
 
-
+const handleFinish = () => {
+        if (isFinished){
+        //if (currentIndex == queue.length - 1) {  // 最後の問題
+            navigate("/summary", { state: { queue, queueResultMap } })
+        }
+    }
+    
+    
     //const showMove = currentPhase !== "problem"
     //useEffect(() => { setResult(null) }, [currentIndex])
     
@@ -160,7 +158,7 @@ export default function PlayerScreen() {
                             
                         </Box>
                         <Box>
-                            length: { playerSession.session && `${playerSession.session.queue.length}`}
+                            length: { session && `${session.queue.length}`}
                         </Box>
                         {currentPhase === "solution" && <>
                             <button onClick={retreatEvent}>

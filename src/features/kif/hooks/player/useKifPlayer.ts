@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
-import type { KifEntry, QueueItem, AnswerResult } from "../../types";
+import type { KifEntry, QueueItem, AnswerResult, PlayerSession } from "../../types";
 import { createEmptyBoard, createEmptyHands } from "../../domain/factory";
 import { useKifReplay } from "./useKifReplay";
 import { useLearningRepository } from "../learning/useLearningRepository";
@@ -11,21 +11,23 @@ import { useQueueResult } from "../session/useQueueResult";
 
 
 export function useKifPlayer(
-    queue: QueueItem[], 
+    //queue: QueueItem[], 
+    playerSession: PlayerSession | null,
     entryMap: Record<string, KifEntry>,
-    onFinish: () => void,
+    //onFinish: () => void,
 ){
-    const [currentIndex, setCurrentIndex] = useState(0)
+    //const [currentIndex, setCurrentIndex] = useState(0)
     const { entryId: entryIdFromRoute } = useParams<{ entryId: string }>();
     
+    //const queue: QueueItem[] = playerSession?.queue ?? []
     
     // 初期化
     //  インデックスが変われば中身をリセット
     useEffect(()=>{      
         reset()
-    }, [currentIndex, queue, entryMap])
+    }, [playerSession?.queue, entryMap])
     // ルートパラメータに entryId があれば、queue 内の位置を currentIndex に設定
-    
+    { /* 
     useEffect(() => {
         if (entryIdFromRoute) {
             const idx = queue.findIndex(item => item.problemId === entryIdFromRoute) 
@@ -36,27 +38,15 @@ export function useKifPlayer(
             resetIndex()
         }
     }, [entryIdFromRoute, queue]);
+    */ }
     
     // step index
     function resetIndex() {
-        setCurrentIndex(0)
+       // setCurrentIndex(0)
     }
-    function advanceStep() {
-        if (currentIndex < queue.length - 1) {
-           
-            setCurrentIndex(prev => prev + 1)
-        } else {
-            onFinish?.()
-        }
-    }
-    function retreatStep() {
-        if (currentIndex > 0) {
-            setCurrentIndex(prev => prev - 1)
-        }
-    }
-    const currentEntryId = queue[currentIndex].problemId ?? null;
+    
+    const currentEntryId = playerSession?.queue[playerSession.currentIndex].problemId ?? null;
     const currentEntry = currentEntryId ? entryMap[currentEntryId] ?? null : null;
-   
     
     const kifInfo = {
             initialBoard: currentEntry?.kifData.board ?? createEmptyBoard(),
@@ -66,9 +56,8 @@ export function useKifPlayer(
             entryId: currentEntry?.id ?? ""
         }
     const queueInfo = {
-        queue, entryMap,
-        currentIndex, setCurrentIndex,
-        advanceStep, retreatStep,
+        //queue, entryMap,
+        //currentIndex: playerSession.currentIndex,
     }
     const replayInfo = useKifReplay(
             kifInfo.initialBoard, kifInfo.initialHands, kifInfo.events,
@@ -89,7 +78,8 @@ export function useKifPlayer(
     const { resultMap, setAnswer, summary, } = useQueueResult()
     const queueResultInfo = {
         queueResultMap: resultMap,
-        setCurrentAnswer: (answer: AnswerResult) => { setAnswer(currentEntryId, answer)},
+        setCurrentAnswer: (answer: AnswerResult) => { 
+            currentEntryId && setAnswer(currentEntryId, answer)},
         summary
     }
     function reset(){

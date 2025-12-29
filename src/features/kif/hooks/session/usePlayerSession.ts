@@ -51,11 +51,12 @@ export function usePlayerSession() {
                 currentIndex: prev.currentIndex - 1,
             }
         })
-    }, [])
+    }, [])    
 
     const reset = useCallback(() => {
             setSession(null)
         }, [])
+    
     const currentProblemId =
         session && session.currentIndex < session.queue.length
             ? session.queue[session.currentIndex]

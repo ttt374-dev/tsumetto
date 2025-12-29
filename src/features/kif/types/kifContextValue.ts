@@ -8,7 +8,7 @@ import { usePlayerSession } from '../hooks/session/usePlayerSession';
 export type KifContextValue = {
   learningRepository: ReturnType<typeof useLearningRepository>
   problemRepository: ReturnType<typeof useProblemRepository>
-  playerSession: ReturnType<typeof usePlayerSession>
+  playerSessionApi: ReturnType<typeof usePlayerSession>
   entries: KifEntry[]
   problems: Problem[]
   queue: string[]

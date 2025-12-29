@@ -18,11 +18,11 @@ import type { Deck, Problem, QueueItem} from "../types";
 
 export default function DeckScreen() {
     //const [session, setSession] = useState<PlayerSession>()
-    const { problems, playerSession, } = useKif()
+    const { problems, playerSessionApi, } = useKif()
     
     const { filter, setFilter
      } = useKifDeckFilter()
-    const { session, setSession } = playerSession
+    const { session, setSession } = playerSessionApi
     
     const navigate = useNavigate()
     const { sort, setSortKey, setSortOrder } = useKifLibrarySort()
@@ -41,7 +41,7 @@ export default function DeckScreen() {
     const handleSessionStart = () => {
         const queue = deck.buildQueue(problems)
         console.log("built queue" ,queue)
-        playerSession.startSession(deck.id, queue)
+        playerSessionApi.startSession(deck.id, queue)
         navigate("/player")
     }
     

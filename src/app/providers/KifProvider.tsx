@@ -40,7 +40,7 @@ export const KifProvider = ({ children }: { children: ReactNode }) => {
     entries.forEach(e => { map[e.id] = e; });
     return map;
   }, [problems]);
-  const playerSession = usePlayerSession()
+  const playerSessionApi = usePlayerSession()
 
   //const prevSortRef = useRef<SortState | null>(null);
 
@@ -59,7 +59,7 @@ export const KifProvider = ({ children }: { children: ReactNode }) => {
       entries, entryMap,
       problems, problemMap,
 
-      playerSession,
+      playerSessionApi,
     }}>
       {children}
     </KifContext.Provider>
