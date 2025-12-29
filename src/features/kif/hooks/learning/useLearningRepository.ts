@@ -15,7 +15,7 @@ interface UseLearningRepository {
     replaceAll(records: Record<string, KifLearningRecord>): void;
 };
 
-export function useLearning(): UseLearningRepository {    
+export function useLearningRepository(): UseLearningRepository {    
     const [records, setRecords] =
         useState<Record<string, KifLearningRecord>>({});
     const persistApi = useLearningPersist()

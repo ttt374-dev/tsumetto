@@ -1,5 +1,5 @@
 import React, { createContext, useContext, type ReactNode, useState, useMemo, useEffect, useRef } from "react";
-import { useLearning } from "../../features/kif/hooks/learning/useLearningRepository";
+import { useLearningRepository } from "../../features/kif/hooks/learning/useLearningRepository";
 import type { KifContextValue } from "../../features/kif/types/kifContextValue";
 import { useKifSortedEntries } from "../../features/kif/hooks/library/useKifSortedEntries";
 import { useKifLibrarySort } from "../../features/kif/hooks/library/useKifLibrarySort";
@@ -16,13 +16,13 @@ export const KifProvider = ({ children }: { children: ReactNode }) => {
   console.error("KifProvider MOUNT", Math.random());
   //const [deckFilter, setDeckFilter] = useState<DeckFilter>({unansweredOnly: false})
 
-  const kifLearning = useLearning()
+  const learningRepository = useLearningRepository()
   const problemRepository = useProblemRepository()
 
   const entries = problemRepository.problems
-  const { records } = kifLearning  
+  const { records } = useLearningRepository()
 
-  
+
   // フィルターをまず適用する
   //const kifDeckFilter = useKifDeckFilter()  
   //const filteredEntries = useKifFilteredEntries(entries, records, kifDeckFilter.filter)
@@ -31,7 +31,7 @@ export const KifProvider = ({ children }: { children: ReactNode }) => {
   //const sortedEntries = useKifSortedEntries(filteredEntries, records, kifLibrarySort.sort,)
 
   // キューの生成
-  const queue = useMemo(() => entries.map(e => e.id), [entries])
+  const queue = useMemo(() => entries.map(e => e.id), [entries, records])
   const entryMap = useMemo(() => {
     const map: Record<string, KifEntry> = {};
     entries.forEach(e => { map[e.id] = e; });
@@ -42,20 +42,19 @@ export const KifProvider = ({ children }: { children: ReactNode }) => {
 
   //const kifPlayer = useKifPlayer(sortedEntries);
   //const kifNavigation = useKifNavigation(sortedEntries)
-  
+
   //const kifPlayer = useKifPlayer(entries);
   //const kifNavigation = useKifNavigation(entries)
-  
-  return (    
-    <KifContext.Provider value={{ 
-       kifLearning, 
-       //kifEntryController, 
-       problemRepository,
-  
-       queue, entryMap,
-       entries,
-       
-        }}>
+
+  return (
+    <KifContext.Provider value={{
+      learningRepository,
+      problemRepository,
+
+      queue, entryMap,
+      entries,
+
+    }}>
       {children}
     </KifContext.Provider>
   );

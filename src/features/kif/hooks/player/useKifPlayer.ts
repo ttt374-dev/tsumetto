@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import type { KifEntry } from "../../types";
 import { createEmptyBoard, createEmptyHands } from "../../domain/factory";
 import { useKifReplay } from "./useKifReplay";
-import { useLearning } from "../learning/useLearningRepository";
+import { useLearningRepository } from "../learning/useLearningRepository";
 import { useKifPhase } from "./useKifPhase";
 import { calcAccuracy } from "../../utils";
 import { useQueueResult } from "../deck/useQueueResult";
@@ -73,7 +73,7 @@ export function useKifPlayer(
             kifInfo.initialBoard, kifInfo.initialHands, kifInfo.events,
         )
 
-    const kifLearning = useLearning()
+    const kifLearning = useLearningRepository()
     const { getLearningRecord } = kifLearning
     
     const learningRecord = getLearningRecord(currentEntryId)

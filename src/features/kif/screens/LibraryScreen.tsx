@@ -31,7 +31,7 @@ export default function LibraryScreen() {
 
     const navigate = useNavigate()
     const { //kifEntryController, 
-        kifLearning, entries, problemRepository,
+        learningRepository: kifLearning, entries, problemRepository,
     } = useKif()
     const { records: learningRecords } = kifLearning
     const { importFiles } = useProblemImporter()

@@ -6,7 +6,7 @@ import { useKif } from '../useKif'
 export function useKifBackupRestore() {
   //const kifLibrary = useKifLibrary()
   //const kifLearning = useKifLearning()
-  const { kifEntryController, kifLearning } = useKif()
+  const { kifEntryController, learningRepository: kifLearning } = useKif()
 
   const backup = (): KifBackupV1 => {
     return {
