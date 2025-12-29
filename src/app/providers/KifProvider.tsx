@@ -24,14 +24,14 @@ export const KifProvider = ({ children }: { children: ReactNode }) => {
 
   
   // フィルターをまず適用する
-  const kifDeckFilter = useKifDeckFilter()  
-  const filteredEntries = useKifFilteredEntries(entries, records, kifDeckFilter.filter)
+  //const kifDeckFilter = useKifDeckFilter()  
+  //const filteredEntries = useKifFilteredEntries(entries, records, kifDeckFilter.filter)
   // その後ソート
-  const kifLibrarySort = useKifLibrarySort()    
-  const sortedEntries = useKifSortedEntries(filteredEntries, records, kifLibrarySort.sort,)
+  //const kifLibrarySort = useKifLibrarySort()    
+  //const sortedEntries = useKifSortedEntries(filteredEntries, records, kifLibrarySort.sort,)
 
   // キューの生成
-  const queue = useMemo(() => sortedEntries.map(e => e.id), [sortedEntries])
+  const queue = useMemo(() => entries.map(e => e.id), [entries])
   const entryMap = useMemo(() => {
     const map: Record<string, KifEntry> = {};
     entries.forEach(e => { map[e.id] = e; });
@@ -45,17 +45,14 @@ export const KifProvider = ({ children }: { children: ReactNode }) => {
   
   //const kifPlayer = useKifPlayer(entries);
   //const kifNavigation = useKifNavigation(entries)
-  useEffect(() => {
-    console.log("provider sort", kifLibrarySort.sort)
-  }, [kifLibrarySort.sort])
-
+  
   return (    
     <KifContext.Provider value={{ 
        kifLearning, 
        kifEntryController, 
-       kifDeckFilter, 
-       kifLibrarySort, sortedEntries, 
+  
        queue, entryMap,
+       entries,
        
         }}>
       {children}

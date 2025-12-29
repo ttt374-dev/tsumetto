@@ -9,20 +9,22 @@ import { AppLayout } from "../../../shared/components/AppLayout/AppLayout";
 import { useKif } from '../hooks/useKif'
 import { FormControl, TextField, Checkbox, Select, MenuItem, Divider } from "@mui/material";
 import type { DeckFilter } from '../types/'
+import { useKifLibrarySort } from "../hooks/library/useKifLibrarySort";
+import { useKifDeckFilter } from "../hooks/useKifDeckFilter";
 
 export default function DeckScreen() {
-    const { kifLibrarySort, kifDeckFilter,
-     } = useKif()
+    const { filter, setFilter
+     } = useKifDeckFilter()
     //const { getLearningRecord, records: learningRecords } = kifLearning
     const navigate = useNavigate()
-    const { sort, setSortKey, setSortOrder } = kifLibrarySort
+    const { sort, setSortKey, setSortOrder } = useKifLibrarySort()
     //const [filter, setFilter] = useState<DeckFilter>({unansweredOnly: false});
     
     const handleChangeKey = (e: any) => {
         console.log("set sort key", e.target.value)
         setSortKey(e.target.value)
     }
-    const { filter, setFilter } = kifDeckFilter
+    //nst { filter, setFilter } = kifDeckFilter//
 
     return (
         <AppLayout

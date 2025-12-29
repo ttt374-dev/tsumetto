@@ -9,9 +9,10 @@ import type { useKifDeckFilter } from '../hooks/useKifDeckFilter';
 export type KifContextValue = {
   kifLearning: ReturnType<typeof useKifLearning>
   kifEntryController: ReturnType<typeof useKifEntryController>
-  kifLibrarySort: ReturnType<typeof useKifLibrarySort>
-  kifDeckFilter: ReturnType<typeof useKifDeckFilter>
-  sortedEntries: KifEntry[]
+  //kifLibrarySort: ReturnType<typeof useKifLibrarySort>
+  //kifDeckFilter: ReturnType<typeof useKifDeckFilter>
+  //sortedEntries: KifEntry[]
+  entries: KifEntry[]
   queue: string[]
   entryMap: Record<string, KifEntry>
   //deckFilter: DeckFilter

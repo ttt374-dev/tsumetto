@@ -20,24 +20,30 @@ import LibraryList from '../components/library/LibraryList';
 import KifEntryEditDialog from '../dialogs/KifEntryEditDialog';
 import KifBackupDialog from '../dialogs/KifBackupDialog';
 import { useKifLibraryUI } from '../hooks/library/useKifLibraryUI';
+import { useKifLibrarySort } from "../hooks/library/useKifLibrarySort";
+import { useKifSortedEntries } from "../hooks/library/useKifSortedEntries";
 
 //////////////
 export default function LibraryScreen() {    
+    const { sort, setSortKey, setSortOrder }= useKifLibrarySort()
+    
+
     const navigate = useNavigate()
     const { kifEntryController, 
-        kifLibrarySort, sortedEntries, kifLearning,
+        kifLearning, entries,
     } = useKif()
+    const { records: learningRecords } = kifLearning
     const {
         importFiles,
         deleteEntries,
     } = kifEntryController
-    
+    const sortedEntries = useKifSortedEntries(entries, learningRecords, sort)
     /*
     const {
         setCurrentEntryId,
     } = kifNavigation
     */
-    const { sort, setSortOrder, setSortKey } = kifLibrarySort
+    //const { sort, setSortOrder, setSortKey } = kifLibrarySort
     const { getLearningRecord } = kifLearning
     
     const {
