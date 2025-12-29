@@ -5,7 +5,8 @@ export type QueueItem = {
 }
 
 export type PlayerSession = {
-    //sessionId: string
+    deckId: string
+    sessionId: string
     queue: QueueItem[]
     currentIndex: number
     //startedAt: number

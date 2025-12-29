@@ -8,11 +8,12 @@ export function usePlayerSession() {
     const [session, setSession] = useState<PlayerSession | null>(null)
 
 
-    const startSession = (queue: QueueItem[]) => {
+    const startSession = (deckId: string, queue: QueueItem[]) => {
         if (queue.length === 0) return
 
         setSession({
-            //sessionId: v4(),
+            deckId: deckId,
+            sessionId: v4(),
             queue: queue,
             currentIndex: 0,
             //startedAt: Date.now(),

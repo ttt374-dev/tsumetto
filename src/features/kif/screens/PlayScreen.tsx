@@ -157,6 +157,10 @@ export default function PlayerScreen() {
                         </Box>
                         <Box>
                             Session: {`${queueResultSummary.correct} | ${queueResultSummary.wrong} / ${queueResultSummary.totalAnswered}`}
+                            
+                        </Box>
+                        <Box>
+                            length: { playerSession.session && `${playerSession.session.queue.length}`}
                         </Box>
                         {currentPhase === "solution" && <>
                             <button onClick={retreatEvent}>

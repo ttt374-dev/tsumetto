@@ -14,16 +14,12 @@ import { useKifLibrarySort } from "../hooks/library/useKifLibrarySort";
 import { useKifDeckFilter } from "../hooks/deck/useKifDeckFilter";
 import { createKifData, createKifEntryFromText } from "../domain/factory";
 import MultipleFilesButton from "../../../shared/components/MultipleFilesButton";
-import type { Problem, QueueItem} from "../types";
-
-type PlayerSession = {
-  queue: QueueItem[]
-  currentIndex: number
-}
+import type { Deck, Problem, QueueItem} from "../types";
 
 export default function DeckScreen() {
     //const [session, setSession] = useState<PlayerSession>()
     const { problems, playerSession, } = useKif()
+    
     const { filter, setFilter
      } = useKifDeckFilter()
     const { session, setSession } = playerSession
@@ -31,26 +27,21 @@ export default function DeckScreen() {
     const navigate = useNavigate()
     const { sort, setSortKey, setSortOrder } = useKifLibrarySort()
     //const [filter, setFilter] = useState<DeckFilter>({unansweredOnly: false});
-
-    function buildDefaultQueue(
-        problems: Problem[]
-    ): QueueItem[] {
-        return problems.map(p => ({
+    
+    const deck: Deck = {
+        id: v4(),
+        name: "default",
+        buildQueue: (problems: Problem[]): QueueItem[] =>{
+            return problems.map(p => ({
             problemId: p.id,
-        }))
+        }))}
+          
     }
-    function createSession(queue: QueueItem[]) {
-        console.log("create session", queue)        
-        setSession({
-            queue,
-            currentIndex: 0,
-        })
-    }
-
+    
     const handleSessionStart = () => {
-        const queue = buildDefaultQueue(problems)
+        const queue = deck.buildQueue(problems)
         console.log("built queue" ,queue)
-        createSession(queue)
+        playerSession.startSession(deck.id, queue)
         navigate("/player")
     }
     
