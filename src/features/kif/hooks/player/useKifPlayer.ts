@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 import type { KifEntry, QueueItem, AnswerResult, PlayerSession } from "../../types";
-import { createEmptyBoard, createEmptyHands } from "../../domain/factory";
+import { createEmptyBoard, createEmptyHands, createKifData, createKifEntry } from "../../domain/factory";
 import { useKifReplay } from "./useKifReplay";
 import { useLearningRepository } from "../learning/useLearningRepository";
 import { useKifPhase } from "./useKifPhase";
@@ -55,35 +55,43 @@ export function useKifPlayer(
             title: currentEntry?.title ?? "untitled",
             entryId: currentEntry?.id ?? ""
         }
+        /*
     const queueInfo = {
         //queue, entryMap,
         //currentIndex: playerSession.currentIndex,
-    }
-    const replayInfo = useKifReplay(
-            kifInfo.initialBoard, kifInfo.initialHands, kifInfo.events,
+    }*/
+    //const currentProblem = currentEntry ?? createKifEntry()
+    
+    const currentProblem = currentEntry ?? createKifEntry()
+    const kifContent = currentProblem.kifData
+
+    const replayApi = useKifReplay(
+            kifContent.board, kifContent.hands, kifContent.events
+            //kifInfo.initialBoard, kifInfo.initialHands, kifInfo.events,
         )
 
-    const kifLearning = useLearningRepository()
-    const { getLearningRecord } = kifLearning
+    const learningRepository = useLearningRepository()
+    const { getLearningRecord } = learningRepository
     
     const learningRecord = getLearningRecord(currentEntryId)
-    const learningInfo = {
+    const learningApi = {
         learningRecord: learningRecord,
         accuracy: calcAccuracy(learningRecord ?? undefined),
         solvedCount: learningRecord?.solvedCount ?? 0,
         failedCount: learningRecord?.failedCount ?? 0,
-        markSolvedCurrent: () => { currentEntryId && kifLearning.markSolved(currentEntryId)},
-        markFailedCurrent: () => { currentEntryId && kifLearning.markFailed(currentEntryId)}
+        markSolvedCurrent: () => { currentEntryId && learningRepository.markSolved(currentEntryId)},
+        markFailedCurrent: () => { currentEntryId && learningRepository.markFailed(currentEntryId)}
     }
+    /*
     const { resultMap, setAnswer, summary, } = useQueueResult()
     const queueResultInfo = {
         queueResultMap: resultMap,
         setCurrentAnswer: (answer: AnswerResult) => { 
             currentEntryId && setAnswer(currentEntryId, answer)},
         summary
-    }
+    }*/
     function reset(){
-        replayInfo.reset()
+        replayApi.reset()
         phaseInfo.reset()                
     }
     const phaseInfo = useKifPhase()
@@ -91,11 +99,10 @@ export function useKifPlayer(
 
     ////////////////////
     return {
-        kifInfo: kifInfo,
-        queueInfo: queueInfo,
-        replayInfo: replayInfo,               
-        phaseInfo: phaseInfo,
-        learnInfo: learningInfo,
-        queueResultInfo: queueResultInfo,
+        currentProblem: currentProblem,
+        //kifInfo: kifInfo,
+        replayApi: replayApi,               
+        phaseApi: phaseInfo,
+        learnApi: learningApi,
     }
 }

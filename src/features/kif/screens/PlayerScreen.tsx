@@ -15,13 +15,12 @@ import type { QueueItem } from "../types";
 
 ///////////////////////////////////////
 export default function PlayerScreen() {
-    //const [result, setResult] = useState<boolean | null>(false)
-    
+    //const [result, setResult] = useState<boolean | null>(false)    
     const navigate = useNavigate()
 
     //const { queue, entryMap, playerSession } = useKif()
     const { problemMap, playerSessionApi } = useKif()
-    const { session, isFinished, isLastIndex,
+    const { session, isLastIndex,
         advance: advanceStep, retreat: retreatStep, 
     } = playerSessionApi
     const queue: QueueItem[] = session?.queue ?? []
@@ -30,35 +29,21 @@ export default function PlayerScreen() {
     console.log("player session", playerSessionApi) 
    
     const {
-        kifInfo: {
-            events, title,
-        },
-        queueInfo: {
-            //currentIndex, 
-        },
-        replayInfo: {
-            board, hands,
+        currentProblem,
+        replayApi: {
             currentEventIndex, setCurrentEventIndex,
             retreatEvent, advanceEvent,
         },
-        phaseInfo: {
+        phaseApi: {
             currentPhase,
             advancePhase, retreatPhase
         },
-        learnInfo: {
+        learnApi: {
             solvedCount, failedCount, accuracy,
             markSolvedCurrent, markFailedCurrent
         },
-        queueResultInfo: {
-            setCurrentAnswer, queueResultMap,
-            summary: queueResultSummary,
-        }
     } = useKifPlayer(session, problemMap)
-
-    
-    
-    //const showMove = currentPhase !== "problem"
-    //useEffect(() => { setResult(null) }, [currentIndex])
+    const { title, kifData: { board, hands, events} } = currentProblem    
     
     ////////////////////
     // フッターのアクションボタン
@@ -76,7 +61,7 @@ export default function PlayerScreen() {
                 <Button fullWidth variant="contained" color="error"
                     onClick={() => {
                         markFailedCurrent()
-                        setCurrentAnswer("wrong")
+                        //setCurrentAnswer("wrong")
                         
                         //setResult(false)
                         advanceStep()
@@ -87,12 +72,12 @@ export default function PlayerScreen() {
                 <Button fullWidth variant="contained" color="success"
                     onClick={() => {
                         markSolvedCurrent()
-                        setCurrentAnswer("correct")
+                        //setCurrentAnswer("correct")
                         
                         //setResult(true)
-                        console.log("is last", isLastIndex, currentIndex, session?.queue.length)
+                        //console.log("is last", isLastIndex, currentIndex, session?.queue.length)
                         if (isLastIndex){
-                            navigate("/summary", { state: { queue, queueResultMap } })
+                            navigate("/summary", { state: { queue} })
                         } else {
                             advanceStep()
                         }
@@ -154,7 +139,7 @@ export default function PlayerScreen() {
                             Problem: {`${formatAccuracy(accuracy)} [${solvedCount} | ${failedCount}]`}
                         </Box>
                         <Box>
-                            Session: {`${queueResultSummary.correct} | ${queueResultSummary.wrong} / ${queueResultSummary.totalAnswered}`}
+                            
                             
                         </Box>
                         <Box>
@@ -163,8 +148,7 @@ export default function PlayerScreen() {
                         {currentPhase === "solution" && <>
                             <button onClick={retreatEvent}>
                                 ↑前の手
-                            </button>                       
-                        
+                            </button>
                             <button onClick={advanceEvent}>
                                 ↓次の手
                             </button>
@@ -172,9 +156,9 @@ export default function PlayerScreen() {
                         </>}                        
                         
                     <button onClick={() =>
-                        navigate("/summary", { state: { queue, queueResultMap} })
+                        navigate("/deck")
                     }>
-                        セッション終了
+                        デッキに戻る
                     </button>
 
                     </Stack>

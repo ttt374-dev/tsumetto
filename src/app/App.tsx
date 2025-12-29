@@ -26,7 +26,7 @@ export default function App() {
           <Route path="/library" element={<LibraryScreen />}/>    
           <Route path="/deck" element={<DeckScreen />}/>    
           <Route path="/summary" element={<SummaryScreen/>}/>
-          <Route path="/" element={<Navigate to="/player"/>} />
+          <Route path="/" element={<Navigate to="/deck"/>} />
         </Routes>
       </BrowserRouter>
     </KifProvider>
