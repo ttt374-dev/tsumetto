@@ -7,21 +7,23 @@ import { useKifReplay } from "./useKifReplay";
 import { useKifLearning } from "../learning/useKifLearning";
 import { useKifPhase } from "./useKifPhase";
 import { calcAccuracy } from "../../utils";
+import { useQueueResult } from "../useQueueResult";
+import type { AnswerResult } from "../useQueueResult";
 
-export function useKifPlayer(queue: string[], entryMap: Record<string, KifEntry>){
+export function useKifPlayer(
+    queue: string[], 
+    entryMap: Record<string, KifEntry>,
+    onFinish: () => void,
+){
     const [currentIndex, setCurrentIndex] = useState(0)
     const { entryId: entryIdFromRoute } = useParams<{ entryId: string }>();
     
-    // queue
-   // 初期化
-    useEffect(() => {
-        if (queue.length === 0) {
-            resetIndex()
-        } else if (currentIndex >= queue.length) {
-            resetIndex()
-        }
-    }, [queue.length, currentIndex])
-
+    
+    // 初期化
+    //  インデックスが変われば中身をリセット
+    useEffect(()=>{      
+        reset()
+    }, [currentIndex, queue, entryMap])
     // ルートパラメータに entryId があれば、queue 内の位置を currentIndex に設定
     useEffect(() => {
         if (entryIdFromRoute) {
@@ -30,25 +32,30 @@ export function useKifPlayer(queue: string[], entryMap: Record<string, KifEntry>
 
             else setCurrentIndex(0); // 見つからなければ先頭
         } else {
-            setCurrentIndex(0);
+            resetIndex()
         }
     }, [entryIdFromRoute, queue]);
-    // index
+
+    // step index
     function resetIndex() {
         setCurrentIndex(0)
     }
     function advanceStep() {
         if (currentIndex < queue.length - 1) {
+           
             setCurrentIndex(prev => prev + 1)
+        } else {
+            onFinish?.()
+        }
+    }
+    function retreatStep() {
+        if (currentIndex > 0) {
+            setCurrentIndex(prev => prev - 1)
         }
     }
     const currentEntryId = queue[currentIndex] ?? null;
     const currentEntry = currentEntryId ? entryMap[currentEntryId] ?? null : null;
-    
-    // 初期化
-    useEffect(()=>{      
-        reset()
-    }, [currentIndex, queue, entryMap])
+   
     
     const kifInfo = {
             initialBoard: currentEntry?.kifData.board ?? createEmptyBoard(),
@@ -60,9 +67,9 @@ export function useKifPlayer(queue: string[], entryMap: Record<string, KifEntry>
     const queueInfo = {
         queue, entryMap,
         currentIndex, setCurrentIndex,
-        advanceStep,
+        advanceStep, retreatStep,
     }
-    const replay = useKifReplay(
+    const replayInfo = useKifReplay(
             kifInfo.initialBoard, kifInfo.initialHands, kifInfo.events,
         )
 
@@ -78,10 +85,15 @@ export function useKifPlayer(queue: string[], entryMap: Record<string, KifEntry>
         markSolvedCurrent: () => { currentEntryId && kifLearning.markSolved(currentEntryId)},
         markFailedCurrent: () => { currentEntryId && kifLearning.markFailed(currentEntryId)}
     }
+    const { resultMap, setAnswer, summary, } = useQueueResult()
+    const queueResultInfo = {
+        queueResultMap: resultMap,
+        setCurrentAnswer: (answer: AnswerResult) => { setAnswer(currentEntryId, answer)},
+        summary
+    }
     function reset(){
-        replay.reset
-        phaseInfo.reset
-        resetIndex
+        replayInfo.reset()
+        phaseInfo.reset()                
     }
     const phaseInfo = useKifPhase()
     
@@ -90,8 +102,9 @@ export function useKifPlayer(queue: string[], entryMap: Record<string, KifEntry>
     return {
         kifInfo: kifInfo,
         queueInfo: queueInfo,
-        replayInfo: replay,               
+        replayInfo: replayInfo,               
         phaseInfo: phaseInfo,
-        learnInfo: learningInfo
+        learnInfo: learningInfo,
+        queueResultInfo: queueResultInfo,
     }
 }

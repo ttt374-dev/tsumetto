@@ -11,7 +11,6 @@ function isUnansweredRecord(
     return record.solvedCount + record.failedCount === 0;
 }
 
-
 export function useKifFilteredEntries(
     entries: KifEntry[],
     learningRecords: Record<string, KifLearningRecord>,

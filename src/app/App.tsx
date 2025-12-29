@@ -7,6 +7,7 @@ import PlayerScreen from '../features/kif/screens/PlayScreen';
 import LibraryScreen from '../features/kif/screens/LibraryScreen';
 import DeckScreen from '../features/kif/screens/DeckScreen';
 import { KifProvider } from './providers/KifProvider';
+import SummaryScreen from '../features/kif/screens/SummaryScreen';
 
 
 
@@ -24,6 +25,7 @@ export default function App() {
           <Route path="/player/:entryId" element={<PlayerScreen />}/>
           <Route path="/library" element={<LibraryScreen />}/>    
           <Route path="/deck" element={<DeckScreen />}/>    
+          <Route path="/summary" element={<SummaryScreen/>}/>
           <Route path="/" element={<Navigate to="/player"/>} />
         </Routes>
       </BrowserRouter>

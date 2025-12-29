@@ -23,10 +23,10 @@ export function useKifReplay(
     return {
         board, hands,
         currentEventIndex, setCurrentEventIndex,        
-        movePrevEvent: () => {
+        retreatEvent: () => {
             currentEventIndex > 0 && setCurrentEventIndex(prev => prev - 1)
         },
-        moveNextEvent: () => {
+        advanceEvent: () => {
            currentEventIndex < events.length && setCurrentEventIndex(prev => prev + 1)
         },
         reset

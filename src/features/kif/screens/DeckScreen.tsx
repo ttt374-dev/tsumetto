@@ -72,7 +72,7 @@ export default function DeckScreen() {
 
                 <Stack direction="row" gap={2} justifyContent="center">
                     <button onClick={() => navigate("/player")}>
-                        Start
+                        セッション開始
                     </button>
                     <button onClick={() => navigate("/library")}>
                         Library

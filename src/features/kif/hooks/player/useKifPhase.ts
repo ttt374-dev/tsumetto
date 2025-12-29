@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 
-const phases = ["problem", "solution", "result"] as const;
+//const phases = ["problem", "solution", "result"] as const;
+const phases = ["problem", "solution"] as const;
 export type PlayerPhase = (typeof phases)[number];
 
 export function useKifPhase() {

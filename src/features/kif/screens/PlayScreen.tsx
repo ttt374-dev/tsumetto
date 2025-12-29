@@ -5,6 +5,7 @@ import EditIcon from '@mui/icons-material/Edit'
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 import { Stack, Divider } from '@mui/material';
 import ViewListIcon from "@mui/icons-material/ViewList";
+import { useSwipeable } from "react-swipeable";
 
 import { AppLayout } from '../../../shared/components/AppLayout/AppLayout';
 import { useKif } from '../hooks/useKif'
@@ -15,62 +16,131 @@ import BoardView from "../components/player/BoardView";
 import SolveControl from "../components/player/SolveControl";
 import { formatAccuracy } from "../utils";
 import { useKifPlayer } from "../hooks/player/useKifPlayer";
+import type { PlayerPhase } from "../hooks/player/useKifPhase";
+import type { JSX } from "react";
 
 ///////////////////////////////////////
-export default function PlayerScreen(){        
+export default function PlayerScreen() {
+    const [result, setResult] = useState<boolean | null>(false)
+    const navigate = useNavigate()
+
     const { queue, entryMap } = useKif()
-    const { 
+    const handleFinish = () => {
+        if (currentIndex == queue.length - 1) {  // 最後の問題
+            navigate("/summary", { state: { queue, queueResultMap } })
+
+        }
+    }
+
+    const {
         kifInfo: {
-            events, title, entryId,
+            events, title,
         },
         queueInfo: {
-            currentIndex, advanceStep, setCurrentIndex,
+            currentIndex, advanceStep, retreatStep,
         },
         replayInfo: {
-            board, hands, 
+            board, hands,
             currentEventIndex, setCurrentEventIndex,
-            moveNextEvent, movePrevEvent,
+            retreatEvent, advanceEvent,
         },
         phaseInfo: {
-            currentPhase, setCurrentPhase,
+            currentPhase,
             advancePhase, retreatPhase
         },
         learnInfo: {
             solvedCount, failedCount, accuracy,
             markSolvedCurrent, markFailedCurrent
+        },
+        queueResultInfo: {
+            setCurrentAnswer, queueResultMap,
+            summary: queueResultSummary,
         }
-    } = useKifPlayer(queue, entryMap)
-    const navigate = useNavigate()
+    } = useKifPlayer(queue, entryMap, handleFinish)
 
-    
+
+    //const showMove = currentPhase !== "problem"
+    useEffect(() => { setResult(null) }, [currentIndex])
+    const stepSwipeHandlers = useSwipeable({
+        onSwipedRight: () => {
+            retreatStep()
+        },
+        onSwipedLeft: () => {
+            advanceStep()            
+        },
+        onSwipedDown: () => {             
+            currentPhase === "problem" && advancePhase()
+            advanceEvent()
+        },
+        onSwipedUp: () => {
+            currentPhase === "solution" && retreatPhase()
+            retreatEvent()
+        },
+
+        trackMouse: true, // PCでもマウスでスワイプ可能
+        preventScrollOnSwipe: true,
+
+    })
     ////////////////////
+    // フッターのアクションボタン
+    const phaseActions: Record<PlayerPhase, JSX.Element> = {
+        problem: (
+            <Button fullWidth variant="contained" color="primary" onClick={() => {
+                advancePhase();
+                advanceEvent();
+            }}>
+                手筋を表示
+            </Button>
+        ),
+        solution: (
+            <>                
+                <Button fullWidth variant="contained" color="error"
+                    onClick={() => {
+                        markFailedCurrent()
+                        setCurrentAnswer("wrong")
+                        
+                        setResult(false)
+                        advanceStep()
+                    }}
+                >
+                    不正解
+                </Button>
+                <Button fullWidth variant="contained" color="success"
+                    onClick={() => {
+                        markSolvedCurrent()
+                        setCurrentAnswer("correct")
+                        
+                        //setResult(true)
+                        advanceStep()
+                    }}>
+                    正解
+                </Button>
+            </>
+        ),        
+    };
+
+    ////
     return (
         <AppLayout
-            header={`${currentIndex+1}: ${title}`}      
+            header={`${currentIndex + 1}: ${title}`}
             footer={
-                <Stack gap={2} direction="row" justifyContent="center">
-                    <IconButton
-                        onClick={() => navigate("/deck")}>
-                        <ViewListIcon />
-                    </IconButton>
-                    <IconButton
-                        onClick={() => navigate("/library")}>
-                        <LibraryBooksIcon />
-                    </IconButton>
+                <Stack direction="row">
+                    { phaseActions[currentPhase] }
                 </Stack>
-            }      
+            }
         >
-            <>                
-                <Stack justifyContent="center">
-                    <Box>
+            <>
+                <Stack justifyContent="center" m={2} >
+                    <Box {...stepSwipeHandlers} sx={{ userSelect: "none", }}>
                         <BoardView
                             board={board}
                             hands={hands}>
                         </BoardView>
                     </Box>
                 </Stack>
-                { /* 左：手順リスト、右：操作コントロール */}
+
                 <Box sx={{ minHeight: 0, display: "flex", flexDirection: "row" }}>
+                    { /* 手順リスト */}
                     <Box
                         border={1}
                         sx={{
@@ -79,41 +149,49 @@ export default function PlayerScreen(){
                             overflowY: "auto",
                             gap: 2, flex: 7,
                         }}>
-                            { currentPhase !== "problem" &&
-                        <EventsView
-                            events={events}
-                            currentIndex={currentEventIndex}
-                            onMoveClick={(i) => setCurrentEventIndex(i)} />                        
-}
+                        {currentPhase === "solution" &&
+                            <EventsView
+                                events={events}
+                                currentIndex={currentEventIndex}
+                                onMoveClick={(i) => setCurrentEventIndex(i)} />
+                        }
                     </Box>
 
                     { /* コントロール */}
-                    <Box border={1} sx={{ width: 150 }}>                        
-                        <SolutionControl
-                            currentPhase={currentPhase}
-                            onShowAnswer={() => {
-                                //setPhase("solution")                                
-                                advancePhase()
-                                moveNextEvent()
-                            }}
-                            onHideAnswer={() => {
-                                retreatPhase()
-                                setCurrentEventIndex(0)
-                            }}
-                            
-                            
-                        />
+                    <Stack border={1} sx={{ width: 150 }} gap={2} p={2}>
+                        
+                        <Box> {result !== null && (result ? "〇" : "×")}
+                            Problem: {`${formatAccuracy(accuracy)} [${solvedCount} | ${failedCount}]`}
+                        </Box>
+                        <Box>
+                            Session: {`${queueResultSummary.correct} | ${queueResultSummary.wrong} / ${queueResultSummary.totalAnswered}`}
+                        </Box>
+                        {currentPhase === "solution" && <>
+                            <button onClick={retreatEvent}>
+                                ↑前の手
+                            </button>                       
+                        
+                            <button onClick={advanceEvent}>
+                                ↓次の手
+                            </button>
+                        
+                        </>}
 
+                        
+                        
+                    <button onClick={() =>
+                        navigate("/summary", { state: { queue, queueResultMap} })
+                    }>
+                        セッション終了
+                    </button>
+                        { /* 
                         <MoveControl 
                             disabled={currentPhase === "problem"}
                             prevMove={movePrevEvent}
                             nextMove={moveNextEvent}
-                        />
+                        />*/ }
 
-                        <Box>
-                            { `${formatAccuracy(accuracy)} [${solvedCount} | ${failedCount}]` }
-                        </Box>
-                        
+                        { /* 
                         <SolveControl
                             onSolved={() => {
                                 markSolvedCurrent()
@@ -125,13 +203,9 @@ export default function PlayerScreen(){
                             }}                            
                             disabled={currentPhase !== 'solution'}
                         />   
+*/ }
 
-                        
-                        <button onClick={advanceStep}>
-                            次の問題へ
-                        </button>
-
-                    </Box>
+                    </Stack>
                 </Box>
             </>
         </AppLayout>
