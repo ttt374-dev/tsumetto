@@ -16,7 +16,8 @@ export function usePlayerSession() {
             sessionId: v4(),
             queue: queue,
             currentIndex: 0,
-            //startedAt: Date.now(),
+            //startedAt: Date.now(),,
+            results: {}
         })
     }
     const advance = useCallback(() => {
@@ -30,16 +31,31 @@ export function usePlayerSession() {
                     currentIndex: prev.queue.length, // finished 状態
                 }
             }
-
             return {
                 ...prev,
                 currentIndex: nextIndex,
             }
         })
-        const reset = useCallback(() => {
+        
+    }, [])
+    const retreat = useCallback(() => {
+        setSession(prev => {
+            if (!prev) return prev
+
+            if (prev.currentIndex <= 0) {
+                return prev
+            }
+
+            return {
+                ...prev,
+                currentIndex: prev.currentIndex - 1,
+            }
+        })
+    }, [])
+
+    const reset = useCallback(() => {
             setSession(null)
         }, [])
-    }, [])
     const currentProblemId =
         session && session.currentIndex < session.queue.length
             ? session.queue[session.currentIndex]
@@ -49,6 +65,7 @@ export function usePlayerSession() {
         !!session && session.currentIndex >= session.queue.length
 
     return {
-        session, setSession, startSession, advance,
+        session, setSession, startSession, advance, retreat,
+        currentProblemId, isFinished,
     }
 }

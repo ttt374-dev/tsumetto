@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-export type AnswerResult = "correct" | "wrong" | "skipped";
+import type { AnswerResult } from "../../types";
 
 export function useQueueResult() {
   const [resultMap, setResultMap] = useState<Record<string, AnswerResult>>({});

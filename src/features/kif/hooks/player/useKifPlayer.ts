@@ -1,14 +1,13 @@
 import { useState, useMemo, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
-import type { KifEntry, QueueItem } from "../../types";
+import type { KifEntry, QueueItem, AnswerResult } from "../../types";
 import { createEmptyBoard, createEmptyHands } from "../../domain/factory";
 import { useKifReplay } from "./useKifReplay";
 import { useLearningRepository } from "../learning/useLearningRepository";
 import { useKifPhase } from "./useKifPhase";
 import { calcAccuracy } from "../../utils";
-import { useQueueResult } from "../deck/useQueueResult";
-import type { AnswerResult } from "../deck/useQueueResult";
+import { useQueueResult } from "../session/useQueueResult";
 
 
 export function useKifPlayer(

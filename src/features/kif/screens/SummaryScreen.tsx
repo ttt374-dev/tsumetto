@@ -17,7 +17,7 @@ import BoardView from "../components/player/BoardView";
 import SolveControl from "../components/player/SolveControl";
 import { formatAccuracy } from "../utils";
 import { useKifPlayer } from "../hooks/player/useKifPlayer";
-import type { AnswerResult } from "../hooks/deck/useQueueResult";
+import type { AnswerResult } from "../hooks/session/useQueueResult";
 import { Apple } from "@mui/icons-material";
 
 export default function SummaryScreen(){

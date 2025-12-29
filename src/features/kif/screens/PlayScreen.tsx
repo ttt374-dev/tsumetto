@@ -1,50 +1,49 @@
 import { useState, useMemo, useEffect } from "react";
 import { Box, IconButton, Button, Typography } from "@mui/material";
 import { useNavigate, } from "react-router-dom";
-import EditIcon from '@mui/icons-material/Edit'
-import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 import { Stack, Divider } from '@mui/material';
-import ViewListIcon from "@mui/icons-material/ViewList";
-import { useSwipeable } from "react-swipeable";
 
 import { AppLayout } from '../../../shared/components/AppLayout/AppLayout';
 import { useKif } from '../hooks/useKif'
 import EventsView from '../components/player/EventsView';
-import MoveControl from '../components/player/MoveControl';
-import SolutionControl from '../components/player/SolutionControl';
-import BoardView from "../components/player/BoardView";
-import SolveControl from "../components/player/SolveControl";
 import { formatAccuracy } from "../utils";
 import { useKifPlayer } from "../hooks/player/useKifPlayer";
 import type { PlayerPhase } from "../hooks/player/useKifPhase";
 import type { JSX } from "react";
-import type { Board, Hands } from "../types";
 import { BoardPanel } from "../components/player/BoardPanel";
+import type { QueueItem } from "../types";
 
 ///////////////////////////////////////
 export default function PlayerScreen() {
-    const [result, setResult] = useState<boolean | null>(false)
+    //const [result, setResult] = useState<boolean | null>(false)
     
     const navigate = useNavigate()
 
     //const { queue, entryMap, playerSession } = useKif()
-    const { problems, entryMap: problemMap, playerSession } = useKif()
-    const queue = playerSession.session?.queue ?? []
+    const { problemMap, playerSession } = useKif()
+    const { session, isFinished,
+        advance: advanceStep, retreat: retreatStep, 
+    } = playerSession
+    const queue: QueueItem[] = session?.queue ?? []
+    const currentIndex = session?.currentIndex
 
     console.log("player session", playerSession) 
     const handleFinish = () => {
-        if (currentIndex == queue.length - 1) {  // 最後の問題
+        if (isFinished){
+        //if (currentIndex == queue.length - 1) {  // 最後の問題
             navigate("/summary", { state: { queue, queueResultMap } })
-
         }
     }
+    
+    
+    
 
     const {
         kifInfo: {
             events, title,
         },
         queueInfo: {
-            currentIndex, advanceStep, retreatStep,
+            //currentIndex, advanceStep, retreatStep,
         },
         replayInfo: {
             board, hands,
@@ -67,7 +66,7 @@ export default function PlayerScreen() {
 
 
     //const showMove = currentPhase !== "problem"
-    useEffect(() => { setResult(null) }, [currentIndex])
+    //useEffect(() => { setResult(null) }, [currentIndex])
     
     ////////////////////
     // フッターのアクションボタン
@@ -87,7 +86,7 @@ export default function PlayerScreen() {
                         markFailedCurrent()
                         setCurrentAnswer("wrong")
                         
-                        setResult(false)
+                        //setResult(false)
                         advanceStep()
                     }}
                 >
@@ -110,7 +109,7 @@ export default function PlayerScreen() {
     ////
     return (
         <AppLayout
-            header={`${currentIndex + 1}: ${title}`}
+            header={`${currentIndex ?? 0 + 1}: ${title}`}
             footer={
                 <Stack direction="row">
                     { phaseActions[currentPhase] }
@@ -152,7 +151,8 @@ export default function PlayerScreen() {
                     { /* コントロール */}
                     <Stack border={1} sx={{ width: 150 }} gap={2} p={2}>
                         
-                        <Box> {result !== null && (result ? "〇" : "×")}
+                        { /*  {result !== null && (result ? "〇" : "×")} */ } 
+                        <Box>
                             Problem: {`${formatAccuracy(accuracy)} [${solvedCount} | ${failedCount}]`}
                         </Box>
                         <Box>
