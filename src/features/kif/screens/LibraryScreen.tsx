@@ -23,7 +23,6 @@ import { useKifLibraryUI } from '../hooks/library/useKifLibraryUI';
 import { useKifLibrarySort } from "../hooks/library/useKifLibrarySort";
 import { useKifSortedEntries } from "../hooks/library/useKifSortedEntries";
 import { useProblemImporter } from "../hooks/problem/useProblemImporter";
-import { useProblemRepository } from "../hooks/problem/useProblemRepository";
 
 //////////////
 export default function LibraryScreen() {    
@@ -32,7 +31,7 @@ export default function LibraryScreen() {
 
     const navigate = useNavigate()
     const { //kifEntryController, 
-        kifLearning, entries,
+        kifLearning, entries, problemRepository,
     } = useKif()
     const { records: learningRecords } = kifLearning
     const { importFiles } = useProblemImporter()
@@ -77,8 +76,8 @@ export default function LibraryScreen() {
         setBackupOpen,
 
     } = useKifLibraryUI()
-    const { removeMany } = useProblemRepository()
-    
+    const { removeMany } = problemRepository
+
     /*
     const [entryToEditId, setEntryToEditId ] = useState<string|null>(null)
     const [ editMode, setEditMode ] = useState(false)

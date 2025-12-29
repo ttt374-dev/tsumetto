@@ -4,6 +4,7 @@ import type { useKifLibrarySort} from '../hooks/library/useKifLibrarySort'
 import type { KifEntry } from './kifEntry'
 import type { DeckFilter } from './kifDeckFilter';
 import type { useKifDeckFilter } from '../hooks/useKifDeckFilter';
+import { useProblemRepository } from '../hooks/problem/useProblemRepository';
 
 // hooks の返り値型を取得してまとめる
 export type KifContextValue = {
@@ -12,6 +13,7 @@ export type KifContextValue = {
   //kifLibrarySort: ReturnType<typeof useKifLibrarySort>
   //kifDeckFilter: ReturnType<typeof useKifDeckFilter>
   //sortedEntries: KifEntry[]
+  problemRepository: ReturnType<typeof useProblemRepository>
   entries: KifEntry[]
   queue: string[]
   entryMap: Record<string, KifEntry>

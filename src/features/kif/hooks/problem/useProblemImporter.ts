@@ -2,9 +2,11 @@ import { useProblemRepository } from "./useProblemRepository";
 import { parseKif } from "../../domain/parser/"
 import type { Problem } from "../../types";
 import { v4 } from "uuid";
+import { useKif } from "../useKif";
 
 export function useProblemImporter() {
-  const { add } = useProblemRepository();
+    const { problemRepository} = useKif()
+  const { add } = problemRepository;
 
   const importFiles = async (files: File[]): Promise<void> => {
     for (const file of files) {

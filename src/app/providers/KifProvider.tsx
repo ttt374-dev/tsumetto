@@ -7,6 +7,7 @@ import { useKifLibrarySort } from "../../features/kif/hooks/library/useKifLibrar
 import type { SortState, KifEntry, DeckFilter } from "../../features/kif/types";
 import { useKifFilteredEntries } from "../../features/kif/hooks/useKifFilteredEntries";
 import { useKifDeckFilter } from "../../features/kif/hooks/useKifDeckFilter";
+import { useProblemRepository } from "../../features/kif/hooks/problem/useProblemRepository";
 
 export const KifContext = createContext<KifContextValue | null>(null);
 
@@ -18,6 +19,7 @@ export const KifProvider = ({ children }: { children: ReactNode }) => {
 
   const kifLearning = useKifLearning()
   const kifEntryController = useKifEntryController()
+  const problemRepository = useProblemRepository()
 
   const entries = kifEntryController.entries
   const { records } = kifLearning  
@@ -50,6 +52,7 @@ export const KifProvider = ({ children }: { children: ReactNode }) => {
     <KifContext.Provider value={{ 
        kifLearning, 
        //kifEntryController, 
+       problemRepository,
   
        queue, entryMap,
        entries,

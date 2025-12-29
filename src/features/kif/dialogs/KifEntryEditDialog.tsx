@@ -45,7 +45,8 @@ export default function KifEntryEditDialog({
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(title);
   //const entries = useKif().kifEntryController.entries
-  const { problems: entries } = useProblemRepository()
+  const { problemRepository } = useKif()
+  const { problems: entries } = problemRepository
   const entry = useMemo(
     () => entries.find(e => e.id === entryId),
     [entries, entryId]
