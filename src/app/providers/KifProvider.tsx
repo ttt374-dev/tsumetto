@@ -8,6 +8,7 @@ import { useKifFilteredEntries } from "../../features/kif/hooks/deck/useKifFilte
 import { useKifDeckFilter } from "../../features/kif/hooks/deck/useKifDeckFilter";
 import { useProblemRepository } from "../../features/kif/hooks/problem/useProblemRepository";
 import type { Problem } from "../../features/kif/types";
+import { usePlayerSession } from "../../features/kif/hooks/session/usePlayerSession";
 export const KifContext = createContext<KifContextValue | null>(null);
 
 // Provider 関数は型注釈なしで安全
@@ -39,7 +40,7 @@ export const KifProvider = ({ children }: { children: ReactNode }) => {
     entries.forEach(e => { map[e.id] = e; });
     return map;
   }, [problems]);
-  
+  const playerSession = usePlayerSession()
 
   //const prevSortRef = useRef<SortState | null>(null);
 
@@ -57,6 +58,8 @@ export const KifProvider = ({ children }: { children: ReactNode }) => {
       queue, 
       entries, entryMap,
       problems, problemMap,
+
+      playerSession,
     }}>
       {children}
     </KifContext.Provider>

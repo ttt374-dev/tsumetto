@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { Stack, Box, InputLabel, FormControlLabel } from "@mui/material";
-import { Navigate, useNavigate } from 'react-router-dom';
+import { createSession, Navigate, useNavigate } from 'react-router-dom';
 import { IconButton } from "@mui/material";
 import { v4 } from 'uuid'
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
@@ -14,15 +14,45 @@ import { useKifLibrarySort } from "../hooks/library/useKifLibrarySort";
 import { useKifDeckFilter } from "../hooks/deck/useKifDeckFilter";
 import { createKifData, createKifEntryFromText } from "../domain/factory";
 import MultipleFilesButton from "../../../shared/components/MultipleFilesButton";
+import type { Problem, QueueItem} from "../types";
 
+type PlayerSession = {
+  queue: QueueItem[]
+  currentIndex: number
+}
 
 export default function DeckScreen() {
+    //const [session, setSession] = useState<PlayerSession>()
+    const { problems, playerSession, } = useKif()
     const { filter, setFilter
      } = useKifDeckFilter()
+    const { session, setSession } = playerSession
     
     const navigate = useNavigate()
     const { sort, setSortKey, setSortOrder } = useKifLibrarySort()
     //const [filter, setFilter] = useState<DeckFilter>({unansweredOnly: false});
+
+    function buildDefaultQueue(
+        problems: Problem[]
+    ): QueueItem[] {
+        return problems.map(p => ({
+            problemId: p.id,
+        }))
+    }
+    function createSession(queue: QueueItem[]) {
+        console.log("create session", queue)        
+        setSession({
+            queue,
+            currentIndex: 0,
+        })
+    }
+
+    const handleSessionStart = () => {
+        const queue = buildDefaultQueue(problems)
+        console.log("built queue" ,queue)
+        createSession(queue)
+        navigate("/player")
+    }
     
     const handleChangeKey = (e: any) => {
         console.log("set sort key", e.target.value)
@@ -78,7 +108,7 @@ export default function DeckScreen() {
                 </FormControl>
 
                 <Stack direction="row" gap={2} justifyContent="center">
-                    <button onClick={() => navigate("/player")}>
+                    <button onClick={handleSessionStart}>
                         セッション開始
                     </button>
                     <button onClick={() => navigate("/library")}>

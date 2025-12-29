@@ -36,7 +36,7 @@ export function parseEvents(lines: string[]): KifEvent[]{ // ParseResult<KifEven
 }
 
 export function parseEventLine(line: string, prevPosition?: Position): ParseResult<KifEvent>{
-    console.log("parse event line", line)
+    //console.log("parse event line", line)
     /// move
     //  例: "  5 １六歩(43)    ( 0:00/00:00:00)"
     

@@ -2,7 +2,7 @@ import type { Hand, HandPieceKey } from '../../types'
 import { NumberToKanji } from './kanToNumber';
 
 export function formatHand(hand: Hand): string {
-  console.log("format hand", hand)
+  //console.log("format hand", hand)
   const parts: string[] = [];
 
   (Object.keys(hand) as HandPieceKey[]).forEach((piece) => {

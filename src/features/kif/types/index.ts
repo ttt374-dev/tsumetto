@@ -8,3 +8,5 @@ export * from './pieceType'
 export * from './kifDeckFilter'
 
 export * from './problem'
+export * from './deck'
+export * from './session'

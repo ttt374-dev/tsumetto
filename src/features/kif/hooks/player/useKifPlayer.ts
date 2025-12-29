@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
-import type { KifEntry } from "../../types";
+import type { KifEntry, QueueItem } from "../../types";
 import { createEmptyBoard, createEmptyHands } from "../../domain/factory";
 import { useKifReplay } from "./useKifReplay";
 import { useLearningRepository } from "../learning/useLearningRepository";
@@ -10,8 +10,9 @@ import { calcAccuracy } from "../../utils";
 import { useQueueResult } from "../deck/useQueueResult";
 import type { AnswerResult } from "../deck/useQueueResult";
 
+
 export function useKifPlayer(
-    queue: string[], 
+    queue: QueueItem[], 
     entryMap: Record<string, KifEntry>,
     onFinish: () => void,
 ){
@@ -25,9 +26,10 @@ export function useKifPlayer(
         reset()
     }, [currentIndex, queue, entryMap])
     // ルートパラメータに entryId があれば、queue 内の位置を currentIndex に設定
+    
     useEffect(() => {
         if (entryIdFromRoute) {
-            const idx = queue.indexOf(entryIdFromRoute);                        
+            const idx = queue.findIndex(item => item.problemId === entryIdFromRoute) 
             if (idx !== -1) setCurrentIndex(idx);
 
             else setCurrentIndex(0); // 見つからなければ先頭
@@ -35,7 +37,7 @@ export function useKifPlayer(
             resetIndex()
         }
     }, [entryIdFromRoute, queue]);
-
+    
     // step index
     function resetIndex() {
         setCurrentIndex(0)
@@ -53,7 +55,7 @@ export function useKifPlayer(
             setCurrentIndex(prev => prev - 1)
         }
     }
-    const currentEntryId = queue[currentIndex] ?? null;
+    const currentEntryId = queue[currentIndex].problemId ?? null;
     const currentEntry = currentEntryId ? entryMap[currentEntryId] ?? null : null;
    
     

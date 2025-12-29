@@ -24,9 +24,14 @@ import { BoardPanel } from "../components/player/BoardPanel";
 ///////////////////////////////////////
 export default function PlayerScreen() {
     const [result, setResult] = useState<boolean | null>(false)
+    
     const navigate = useNavigate()
 
-    const { queue, entryMap } = useKif()
+    //const { queue, entryMap, playerSession } = useKif()
+    const { problems, entryMap: problemMap, playerSession } = useKif()
+    const queue = playerSession.session?.queue ?? []
+
+    console.log("player session", playerSession) 
     const handleFinish = () => {
         if (currentIndex == queue.length - 1) {  // 最後の問題
             navigate("/summary", { state: { queue, queueResultMap } })
@@ -58,7 +63,7 @@ export default function PlayerScreen() {
             setCurrentAnswer, queueResultMap,
             summary: queueResultSummary,
         }
-    } = useKifPlayer(queue, entryMap, handleFinish)
+    } = useKifPlayer(queue, problemMap, handleFinish)
 
 
     //const showMove = currentPhase !== "problem"
