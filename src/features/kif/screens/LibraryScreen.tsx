@@ -41,7 +41,7 @@ export default function LibraryScreen() {
     } = useKifLibraryList(sortedEntries)
     
     const { 
-        entryToEditId,
+        entryToEditId: entryIdToEdit,
         setEntryToEditId,
         editMode,
         setEditMode,
@@ -56,12 +56,18 @@ export default function LibraryScreen() {
     const { removeMany, findById, update } = problemRepository
 
     const handleUpdateTitle = (title: string) => {
-        const targetProblem: Problem | null = entryToEditId !== null ? findById(entryToEditId) : null
+        const targetProblem: Problem | null = entryIdToEdit !== null ? findById(entryIdToEdit) : null
         if (!targetProblem) return 
         const newProblem: Problem = {...targetProblem, title: title}
         update(newProblem)
     }
-
+    const handleDeleteMany = (problems: Problem[]):  Promise<void> => {
+        //(entries: KifEntry[]) => removeMany(entries.map(e => e.id))
+        return removeMany(problems.map(e => e.id))
+    }
+    const handleDeleteOnEditDialog = () => {
+        entryIdToEdit && problemRepository.remove(entryIdToEdit)
+    }
     ////////////////////////////////////////
     const firstSelectedId = checkedIds.values().next().value
     return (
@@ -103,7 +109,7 @@ export default function LibraryScreen() {
                 <LibraryDeleteControl
                     entries={sortedEntries}
                     checkedIds={checkedIds}
-                    onDelete={(entries: KifEntry[]) => removeMany(entries.map(e => e.id))}
+                    onDelete={handleDeleteMany}
                     //onDelete={(entries: KifEntry[]) => deleteEntries(entries)}
                 />
                 <IconButton onClick={toggleEditMode}>
@@ -140,16 +146,16 @@ export default function LibraryScreen() {
             />
             { /* ダイアログ　*/ }
             
-            {entryToEditId &&
+            {entryIdToEdit &&
                 <KifEntryEditDialog
                     open={openEditDialog}
-                    entryId={entryToEditId}
+                    entryId={entryIdToEdit}
                     //onUpdateTitle={(title: string) => updateTitle(entryToEditId, title)}
                     onUpdateTitle={handleUpdateTitle}   // TODO
                     onConfirm={() => { }}
                     onClose={() => setOpenEditDialog(false)}                    
                     //onDelete={() => deleteEntry(entryToEditId)}
-                    onDelete={(() => {})}  // TODO
+                    onDelete={handleDeleteOnEditDialog}  // TODO
                 />
             }
             <KifBackupDialog

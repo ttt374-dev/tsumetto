@@ -33,6 +33,7 @@ export function useProblemRepository() {
     if (ids.length === 0) return;
     const idSet = new Set(ids); // 高速判定
     const next = problems.filter((p) => !idSet.has(p.id));
+    console.log("remove many: ", next)
     await persist(next);
   }
   const update = async (updatedProblem: Problem): Promise<void> => {
