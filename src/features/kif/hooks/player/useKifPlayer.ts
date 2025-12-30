@@ -1,7 +1,7 @@
-import { useState, useMemo, useEffect } from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 
-import type { KifEntry, QueueItem, AnswerResult, PlayerSession } from "../../types";
+import type { KifEntry, PlayerSession } from "../../types";
 import { createEmptyBoard, createEmptyHands, createKifData, createKifEntry } from "../../domain/factory";
 import { useKifReplay } from "./useKifReplay";
 import { useLearningRepository } from "../learning/useLearningRepository";
@@ -17,7 +17,7 @@ export function useKifPlayer(
     //onFinish: () => void,
 ){
     //const [currentIndex, setCurrentIndex] = useState(0)
-    const { entryId: entryIdFromRoute } = useParams<{ entryId: string }>();
+    //const { entryId: entryIdFromRoute } = useParams<{ entryId: string }>();
     
     //const queue: QueueItem[] = playerSession?.queue ?? []
     
@@ -48,6 +48,7 @@ export function useKifPlayer(
     const currentEntryId = playerSession?.queue[playerSession.currentIndex].problemId ?? null;
     const currentEntry = currentEntryId ? entryMap[currentEntryId] ?? null : null;
     
+    /*
     const kifInfo = {
             initialBoard: currentEntry?.kifData.board ?? createEmptyBoard(),
             initialHands: currentEntry?.kifData.hands ?? createEmptyHands(),
@@ -55,6 +56,7 @@ export function useKifPlayer(
             title: currentEntry?.title ?? "untitled",
             entryId: currentEntry?.id ?? ""
         }
+            */
         /*
     const queueInfo = {
         //queue, entryMap,

@@ -26,7 +26,7 @@ export default function PlayerScreen() {
     const queue: QueueItem[] = session?.queue ?? []
     const currentIndex = session?.currentIndex ?? 0
 
-    console.log("player session", playerSessionApi) 
+    //console.log("player session", playerSessionApi) 
    
     const {
         currentProblem,
@@ -99,8 +99,7 @@ export default function PlayerScreen() {
                 </Stack>
             }
         >
-            <>
-                
+            <>                
                 <BoardPanel 
                     board={board}
                     hands={hands}
