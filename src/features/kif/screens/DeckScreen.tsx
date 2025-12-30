@@ -44,12 +44,10 @@ export default function DeckScreen() {
     const filteredProblems = useKifFilteredEntries(problems, records, filter)
     const deck: Deck = useMemo(() => buildDeck(), [filteredProblems]);
     //const filteredProblems: Problem[] = []
-    console.log("filter", filter)
-    console.log("filtered problems", filteredProblems)    
     
     const handleSessionStart = () => {
         const queue = deck.buildQueue(filteredProblems)
-        console.log("built queue" ,queue)
+        //console.log("built queue" ,queue)
         playerSessionApi.startSession(deck.id, queue)
         navigate("/player")
     }

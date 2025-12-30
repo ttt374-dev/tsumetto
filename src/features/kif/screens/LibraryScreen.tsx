@@ -4,9 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { IconButton } from "@mui/material";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import ReplyIcon from "@mui/icons-material/Reply";
-
 
 import { AppLayout } from "../../../shared/components/AppLayout/AppLayout";
 import { useKif } from '../hooks/useKif'
@@ -23,17 +20,18 @@ import { useKifLibraryUI } from '../hooks/library/useKifLibraryUI';
 import { useKifLibrarySort } from "../hooks/library/useKifLibrarySort";
 import { useKifSortedEntries } from "../hooks/library/useKifSortedEntries";
 import { useProblemImporter } from "../hooks/problem/useProblemImporter";
+import { useEditDialog } from "../hooks/library/useEditDialog";
 
 //////////////
 export default function LibraryScreen() {    
-    const { sort, setSortKey, setSortOrder }= useKifLibrarySort()    
-    const navigate = useNavigate()
     const { 
-        learningRepository, entries, problemRepository,
+        learningRepository, problems, problemRepository,
     } = useKif()
+    const { sort, setSortKey, setSortOrder }= useKifLibrarySort()    
+    
     const { records, getLearningRecord } = learningRepository
     const { importFiles } = useProblemImporter()
-    const sortedEntries = useKifSortedEntries(entries, records, sort)
+    const sortedEntries = useKifSortedEntries(problems, records, sort)
 
     const {
         checkedIds, isChecked, toggleChecked, 
@@ -53,23 +51,18 @@ export default function LibraryScreen() {
         setBackupOpen,
 
     } = useKifLibraryUI()
+    const editDialogApi = useEditDialog(entryIdToEdit, problemRepository)
     const { removeMany, findById, update } = problemRepository
+    const { updateTitle: handleUpdateTitle } = useEditDialog(entryIdToEdit, problemRepository)
+    const navigate = useNavigate()
 
-    const handleUpdateTitle = (title: string) => {
-        const targetProblem: Problem | null = entryIdToEdit !== null ? findById(entryIdToEdit) : null
-        if (!targetProblem) return 
-        const newProblem: Problem = {...targetProblem, title: title}
-        update(newProblem)
-    }
     const handleDeleteMany = (problems: Problem[]):  Promise<void> => {
         //(entries: KifEntry[]) => removeMany(entries.map(e => e.id))
         return removeMany(problems.map(e => e.id))
     }
-    const handleDeleteOnEditDialog = () => {
-        entryIdToEdit && problemRepository.remove(entryIdToEdit)
-    }
+    
     ////////////////////////////////////////
-    const firstSelectedId = checkedIds.values().next().value
+    //const firstSelectedId = checkedIds.values().next().value
     return (
         <AppLayout
             header={"Library"}
@@ -151,11 +144,11 @@ export default function LibraryScreen() {
                     open={openEditDialog}
                     entryId={entryIdToEdit}
                     //onUpdateTitle={(title: string) => updateTitle(entryToEditId, title)}
-                    onUpdateTitle={handleUpdateTitle}   // TODO
+                    onUpdateTitle={(title) => editDialogApi.updateTitle(title)}   // TODO
                     onConfirm={() => { }}
                     onClose={() => setOpenEditDialog(false)}                    
                     //onDelete={() => deleteEntry(entryToEditId)}
-                    onDelete={handleDeleteOnEditDialog}  // TODO
+                    onDelete={() => editDialogApi.remove()}  // TODO
                 />
             }
             <KifBackupDialog

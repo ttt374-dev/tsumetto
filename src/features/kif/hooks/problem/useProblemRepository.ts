@@ -2,7 +2,16 @@ import { useEffect, useState } from "react"
 import type { Problem } from "../../types/problem"
 import { useProblemPersist } from "./useProblemPersist"
 
-export function useProblemRepository() {
+export interface ProblemRepositoryApi {
+  problems: Problem[]
+  findById: (id: string) => Problem | null
+  add: (problem: Problem) => Promise<void>
+  addMany: (problems: Problem[]) => Promise<void>
+  remove: (id: string) => Promise<void>
+  removeMany: (ids: string[]) => Promise<void>
+  update: (problem: Problem) => Promise<void>
+}
+export function useProblemRepository(): ProblemRepositoryApi {
   const [problems, setProblems] = useState<Problem[]>([]);
   const persistApi = useProblemPersist();
 
