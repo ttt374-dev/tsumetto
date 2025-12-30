@@ -65,12 +65,11 @@ export function buildBoardUntil(
         initialHands: Hands, 
         //events: KifEvent[],
         moves: Move[],
-        viewerIndex: number): ReplayState {
+        plyIndex: number): ReplayState {
         const board = cloneBoard(initialBoard);
-        const hands = cloneHands(initialHands)          
+        const hands = cloneHands(initialHands)                  
         
-        
-        for (let i = 0; i <= viewerIndex; i++) {
+        for (let i = 0; i <= plyIndex; i++) {
             const moveIndex = i - 1 // vieweIndex: 0 は初期盤面    
             const move = moves[moveIndex]
             if (!move) continue   // 防護

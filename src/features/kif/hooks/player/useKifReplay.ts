@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from 'react'
 import type { Board, Hands, Move, KifEvent } from '../../types'
-import { buildBoardUntil } from '../../domain/replay/applyMove'
+import { buildBoardUntil } from '../../domain/replay/boardBuilder'
 
 export function useKifReplay(
     initialBoard: Board, 

@@ -25,7 +25,7 @@ export function useKifPlayer(
     //  インデックスが変われば中身をリセット
     useEffect(()=>{      
         reset()
-    }, [playerSession?.queue, playerSession?.currentIndex, entryMap])
+    }, [playerSession?.queue, playerSession?.currentPlyIndex, entryMap])
     // ルートパラメータに entryId があれば、queue 内の位置を currentIndex に設定
     { /* 
     useEffect(() => {
@@ -45,7 +45,7 @@ export function useKifPlayer(
        // setCurrentIndex(0)
     }
     
-    const currentEntryId = playerSession?.queue[playerSession.currentIndex].problemId ?? null;
+    const currentEntryId = playerSession?.queue[playerSession.currentPlyIndex].problemId ?? null;
     const currentEntry = currentEntryId ? entryMap[currentEntryId] ?? null : null;
     
     /*

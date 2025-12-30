@@ -15,7 +15,7 @@ export function usePlayerSession() {
             deckId: deckId,
             sessionId: v4(),
             queue: queue,
-            currentIndex: 0,
+            currentPlyIndex: 0,
             //startedAt: Date.now(),,
             results: {}
         })
@@ -24,16 +24,16 @@ export function usePlayerSession() {
         setSession(prev => {
             if (!prev) return prev
 
-            const nextIndex = prev.currentIndex + 1
+            const nextIndex = prev.currentPlyIndex + 1
             if (nextIndex >= prev.queue.length) {
                 return {
                     ...prev,
-                    currentIndex: prev.queue.length, // finished 状態
+                    currentPlyIndex: prev.queue.length, // finished 状態
                 }
             }
             return {
                 ...prev,
-                currentIndex: nextIndex,
+                currentPlyIndex: nextIndex,
             }
         })
         
@@ -42,13 +42,13 @@ export function usePlayerSession() {
         setSession(prev => {
             if (!prev) return prev
 
-            if (prev.currentIndex <= 0) {
+            if (prev.currentPlyIndex <= 0) {
                 return prev
             }
 
             return {
                 ...prev,
-                currentIndex: prev.currentIndex - 1,
+                currentPlyIndex: prev.currentPlyIndex - 1,
             }
         })
     }, [])    
@@ -58,15 +58,15 @@ export function usePlayerSession() {
         }, [])
     
     const currentProblemId =
-        session && session.currentIndex < session.queue.length
-            ? session.queue[session.currentIndex]
+        session && session.currentPlyIndex < session.queue.length
+            ? session.queue[session.currentPlyIndex]
             : null
 
     const isFinished =
-        !!session && session.currentIndex >= session.queue.length
+        !!session && session.currentPlyIndex >= session.queue.length
     
     const isLastIndex = 
-        !!session && session.currentIndex == session.queue.length - 1
+        !!session && session.currentPlyIndex == session.queue.length - 1
     return {
         session, setSession, startSession, advance, retreat,
         currentProblemId, isFinished, isLastIndex,

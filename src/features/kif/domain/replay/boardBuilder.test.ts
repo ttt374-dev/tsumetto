@@ -1,4 +1,4 @@
-import { applyMove } from "./applyMove";
+import { applyMove } from "./boardBuilder";
 import { describe, it, expect } from 'vitest'
 import { createDefaultBoard } from "../factory/KifBoardFactroy";
 import { createEmptyHand } from "../factory/KifHandFactory";

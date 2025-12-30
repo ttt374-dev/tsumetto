@@ -7,7 +7,7 @@ export type PlayerSession = {
     deckId: string
     sessionId: string
     queue: QueueItem[]
-    currentIndex: number
+    currentPlyIndex: number
     results: Record<string, AnswerResult>
     //startedAt: number
 }

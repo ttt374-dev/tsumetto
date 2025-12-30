@@ -24,7 +24,7 @@ export default function PlayerScreen() {
         advance: advanceStep, retreat: retreatStep, 
     } = playerSessionApi
     const queue: QueueItem[] = session?.queue ?? []
-    const currentIndex = session?.currentIndex ?? 0
+    const currentPlyIndex = session?.currentPlyIndex ?? 0
 
     //console.log("player session", playerSessionApi) 
    
@@ -94,7 +94,7 @@ export default function PlayerScreen() {
     ////
     return (
         <AppLayout
-            header={`${currentIndex + 1}: ${title}`}
+            header={`${currentPlyIndex + 1}: ${title}`}
             footer={
                 <Stack direction="row">
                     { phaseActions[currentPhase] }
@@ -140,7 +140,7 @@ export default function PlayerScreen() {
                             Problem: {`${formatAccuracy(accuracy)} [${solvedCount} | ${failedCount}]`}
                         </Box>
                         <Box>
-                            { currentIndex }
+                            { currentPlyIndex }
                             
                         </Box>
                         <Box>
