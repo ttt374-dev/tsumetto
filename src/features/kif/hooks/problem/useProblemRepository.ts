@@ -24,6 +24,9 @@ export function useProblemRepository() {
   const add = async (problem: Problem): Promise<void> => {
     await persist([...problems, problem]);
   };
+  const addMany = async (problemsToAdd: Problem[]): Promise<void> => {
+    await persist([...problems, ...problemsToAdd ])
+  }
 
   const remove = async (id: string): Promise<void> => {
     const next = problems.filter((e) => e.id !== id);
@@ -43,5 +46,5 @@ export function useProblemRepository() {
     await persist(next);
   };
 
-  return { findById, add, remove, removeMany, update, problems };
+  return { findById, add, addMany, remove, removeMany, update, problems };
 }

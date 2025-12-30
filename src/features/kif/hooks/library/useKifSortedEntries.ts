@@ -49,8 +49,7 @@ export function useKifSortedEntries(
     //alert("sorted")
 
     //console.log("sorted:", sorted)
-    console.log("useKifSortedEntries called", sort)
-    console.log("sorted", sorted)
+
     return sorted
   }, [entities, sort])
 }

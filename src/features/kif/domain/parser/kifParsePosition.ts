@@ -24,7 +24,7 @@ export function parsePosition(moveStr: string, prevPosition?: Position): ParseRe
 
   //if (!file || !rank) throw new Error(`invalid move: ${moveStr}: ${file} ${rank}`);
   if (!file || !rank) return { ok: false, error: { message: `invalid move: ${moveStr}: ${file} ${rank}`}}
-  console.log("parsed: ", file, rank)
+  //console.log("parsed: ", file, rank)
   return { ok: true, value: { file, rank }}
 }
 

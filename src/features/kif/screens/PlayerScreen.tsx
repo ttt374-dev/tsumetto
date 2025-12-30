@@ -46,6 +46,11 @@ export default function PlayerScreen() {
     } = useKifPlayer(session, problemMap)
     const { title, kifData: { events} } = currentProblem    
     const moves = events.filter(e => e.type === "move")
+
+    // currentProblem が空なら deck へ戻る
+    if (currentProblem === null){
+        navigate("/deck")
+    }
     
     ////////////////////
     // フッターのアクションボタン

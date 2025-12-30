@@ -30,7 +30,7 @@ export function parseHandString(
 
     hand[parsed.piece] += parsed.count;
   }
-  console.log("parsehand str", text, hand)
+  //console.log("parsehand str", text, hand)
   return hand;
 }
 export function parseHands(lines: string[]): Hands{

@@ -21,7 +21,7 @@ export default function MultipleFilesButton({
     if (files){
         onFileSelected(Array.from(files))
     }
-
+    e.target.value = "";  // リセットしないと、再度同じファイルを開いても発火しない
     //const file = e.target.files?.[0];
     //if (file) onFileSelected(file);
   };

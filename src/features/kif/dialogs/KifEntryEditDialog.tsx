@@ -142,7 +142,7 @@ export default function KifEntryEditDialog({
           登録日：{ (entry != null) ? new Date(entry.createdAt).toLocaleString("ja-JP") : "-" }
         </Box>
         <Box>
-          UUID: { entryId?.slice(0, 5)}...
+          UUID: { entryId }
         </Box>
         
         { /* 正答誤答*/ }

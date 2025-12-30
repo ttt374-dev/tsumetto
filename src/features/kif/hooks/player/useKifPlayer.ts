@@ -17,7 +17,7 @@ export function useKifPlayer(
     //onFinish: () => void,
 ){
     //const [currentIndex, setCurrentIndex] = useState(0)
-    //const { entryId: entryIdFromRoute } = useParams<{ entryId: string }>();
+    const { entryId: entryIdFromRoute } = useParams<{ entryId: string }>();
     
     //const queue: QueueItem[] = playerSession?.queue ?? []
     
@@ -26,27 +26,20 @@ export function useKifPlayer(
     useEffect(()=>{      
         reset()
     }, [playerSession?.queue, playerSession?.currentPlyIndex, entryMap])
-    // ルートパラメータに entryId があれば、queue 内の位置を currentIndex に設定
-    { /* 
-    useEffect(() => {
-        if (entryIdFromRoute) {
-            const idx = queue.findIndex(item => item.problemId === entryIdFromRoute) 
-            if (idx !== -1) setCurrentIndex(idx);
 
-            else setCurrentIndex(0); // 見つからなければ先頭
-        } else {
-            resetIndex()
-        }
-    }, [entryIdFromRoute, queue]);
-    */ }
+     
     
     // step index
     function resetIndex() {
        // setCurrentIndex(0)
     }
     
-    const currentEntryId = playerSession?.queue[playerSession.currentPlyIndex].problemId ?? null;
+    //const currentEntryId = playerSession?.queue[playerSession.currentPlyIndex].problemId ?? null;
+    // ルートパラメータに entryId があればそれを使用。なければセッションから取り出す
+    const currentEntryId = entryIdFromRoute ? entryIdFromRoute :
+        playerSession?.queue[playerSession.currentPlyIndex].problemId ?? null;
     const currentEntry = currentEntryId ? entryMap[currentEntryId] ?? null : null;
+    
     
     /*
     const kifInfo = {

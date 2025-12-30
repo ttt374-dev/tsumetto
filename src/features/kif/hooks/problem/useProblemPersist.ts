@@ -18,7 +18,7 @@ export function useProblemPersist() {
         : await result.data.text();
 
     const parsed = JSON.parse(dataStr);
-    console.log("persiste loaded", parsed)
+    //console.log("persiste loaded", parsed)
     return Array.isArray(parsed) ? parsed : [];
   };
 
