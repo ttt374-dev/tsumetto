@@ -20,7 +20,7 @@ export const KifProvider = ({ children }: { children: ReactNode }) => {
   const entries = problems
   const { records } = useLearningRepository()
 
-
+  
   // フィルターをまず適用する
   //const kifDeckFilter = useKifDeckFilter()  
   //const filteredEntries = useKifFilteredEntries(entries, records, kifDeckFilter.filter)

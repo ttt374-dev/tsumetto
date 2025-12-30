@@ -29,7 +29,7 @@ export default function LibraryScreen() {
     } = useKif()
     const { sort, setSortKey, setSortOrder }= useKifLibrarySort()    
     
-    const { records, getLearningRecord } = learningRepository
+    const { records, findByProblemId } = learningRepository
     const { importFiles } = useProblemImporter()
     const sortedEntries = useKifSortedEntries(problems, records, sort)
 
@@ -135,7 +135,7 @@ export default function LibraryScreen() {
                 editMode={editMode}
                 toggleEditMode={toggleEditMode}
                 clearAllCheckbox={clearChecked}
-                getLearningRecord={getLearningRecord}
+                getLearningRecord={findByProblemId}
             />
             { /* ダイアログ　*/ }
             

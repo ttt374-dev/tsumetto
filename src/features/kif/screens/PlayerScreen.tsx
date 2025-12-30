@@ -41,7 +41,7 @@ export default function PlayerScreen() {
     const navigate = useNavigate()
 
     //const { queue, entryMap, playerSession } = useKif()
-    const { problemMap, playerSessionApi } = useKif()
+    const { problemMap, playerSessionApi, learningRepository } = useKif()
     const { session, isLastIndex,
         advance: advanceStep, retreat: retreatStep, 
     } = playerSessionApi
@@ -50,7 +50,7 @@ export default function PlayerScreen() {
 
     //console.log("player session", session)
     //console.log("player session", playerSessionApi) 
-    console.log("sessionId on /player", session?.sessionId)
+    //console.log("sessionId on /player", session?.sessionId)
     const {
         currentProblem,
         replayApi: {
@@ -66,7 +66,7 @@ export default function PlayerScreen() {
             solvedCount, failedCount, accuracy,
             markSolvedCurrent, markFailedCurrent
         },
-    } = useKifPlayer(session, problemMap)
+    } = useKifPlayer(session, problemMap, learningRepository)
     const { title, kifData: { events} } = currentProblem    
     const moves = events.filter(e => e.type === "move")
     const timer = useTimer()

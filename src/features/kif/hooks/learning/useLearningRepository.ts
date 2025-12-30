@@ -5,22 +5,25 @@ import type { KifLearningRecord} from "../../types";
 import { useLearningPersist } from './useLearningPersist';
 import { SettingsInputAntennaTwoTone } from '@mui/icons-material';
 
-interface UseLearningRepository {
+type Solution = "solved" | "failed"
+
+export interface LearningRepositoryApi {
     records: Record<string, KifLearningRecord>;
 
-    getLearningRecord(entryId: string | null): KifLearningRecord | null;
+    findByProblemId(problemId: string | null): KifLearningRecord | null;
+    //getLearningRecord(entryId: string | null): KifLearningRecord | null;
+    mark(problemId: string, solution: Solution): void;
     markSolved(entryId: string): void;
     markFailed(entryId: string): void;
     reset(entryId: string): void;
     replaceAll(records: Record<string, KifLearningRecord>): void;
 };
 
-export function useLearningRepository(): UseLearningRepository {    
+export function useLearningRepository(): LearningRepositoryApi {    
     const [records, setRecords] =
         useState<Record<string, KifLearningRecord>>({});
     const persistApi = useLearningPersist()
    
-
     useEffect(() => {
         (async () => {
             persistApi.load().then(setRecords).catch((e) =>
@@ -39,8 +42,11 @@ export function useLearningRepository(): UseLearningRepository {
             failedCount: 0,
         }
     }
-    const update = (entryId: string, updater: (r: KifLearningRecord) => KifLearningRecord) => {
-        
+    const findByProblemId = (problemId: string | null): KifLearningRecord | null => {
+        return get(problemId)
+    }
+    const update = (entryId: string, updater: (r: KifLearningRecord) => KifLearningRecord) => {        
+        console.log("update", entryId, updater)
         setRecords(prev => {
             const current = prev[entryId] ?? {
                 entryId,
@@ -55,8 +61,17 @@ export function useLearningRepository(): UseLearningRepository {
         persist()
     };
 
-    function markSolved(entryId: string){
-        console.log("mark solved", entryId)
+    function mark(problemId: string, solution: Solution){
+        const solved = solution === 'solved' ? 1 : 0
+        const failed = solution === 'failed' ? 1 : 0
+        update(problemId, r => ({
+            ...r,
+            solvedCount: r.solvedCount + solved,
+            failedCount: r.failedCount + failed,
+            lastAnsweredAt: Date.now(),
+        }));
+    }
+    function markSolved(entryId: string){        
         update(entryId, r => ({
             ...r,
             solvedCount: r.solvedCount + 1,
@@ -93,5 +108,7 @@ export function useLearningRepository(): UseLearningRepository {
         persist()
     }
 
-    return { records, getLearningRecord: get, markSolved, markFailed, reset, replaceAll };
+    return { records, findByProblemId, 
+        mark, markSolved, markFailed, reset, 
+        replaceAll };
 }
