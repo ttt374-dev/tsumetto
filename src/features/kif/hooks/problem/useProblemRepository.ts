@@ -10,6 +10,7 @@ export interface ProblemRepositoryApi {
   remove: (id: string) => Promise<void>
   removeMany: (ids: string[]) => Promise<void>
   update: (problem: Problem) => Promise<void>
+  replaceAll: (problems: Problem[]) => Promise<void>
 }
 export function useProblemRepository(): ProblemRepositoryApi {
   const [problems, setProblems] = useState<Problem[]>([]);
@@ -54,6 +55,9 @@ export function useProblemRepository(): ProblemRepositoryApi {
     );
     await persist(next);
   };
+  const replaceAll = async (next: Problem[]): Promise<void> => {
+    await persist(next)
+  }
 
-  return { findById, add, addMany, remove, removeMany, update, problems };
+  return { findById, add, addMany, remove, removeMany, update, replaceAll, problems };
 }

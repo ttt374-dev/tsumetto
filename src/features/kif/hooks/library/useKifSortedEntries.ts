@@ -51,5 +51,5 @@ export function useKifSortedEntries(
     //console.log("sorted:", sorted)
 
     return sorted
-  }, [entities, sort])
+  }, [entities, sort, learningRecords])
 }

@@ -53,7 +53,7 @@ export default function LibraryScreen() {
     } = useKifLibraryUI()
     const editDialogApi = useEditDialog(entryIdToEdit, problemRepository)
     const { removeMany, findById, update } = problemRepository
-    const { updateTitle: handleUpdateTitle } = useEditDialog(entryIdToEdit, problemRepository)
+    //const { updateTitle: handleUpdateTitle } = useEditDialog(entryIdToEdit, problemRepository)
     const navigate = useNavigate()
 
     const handleDeleteMany = (problems: Problem[]):  Promise<void> => {

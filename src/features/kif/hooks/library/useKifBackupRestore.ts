@@ -6,13 +6,13 @@ import { useKif } from '../useKif'
 export function useKifBackupRestore() {
   //const kifLibrary = useKifLibrary()
   //const kifLearning = useKifLearning()
-  const { kifEntryController, learningRepository: kifLearning } = useKif()
+  const { entries, problemRepository, learningRepository: kifLearning } = useKif()
 
   const backup = (): KifBackupV1 => {
     return {
       version: 1,
       exportedAt: Date.now(),
-      library: kifEntryController.entries,
+      library: entries,
       learning: kifLearning.records,
     }
   }
@@ -24,19 +24,17 @@ export function useKifBackupRestore() {
     }
 
     // ⚠️ 順序重要
-    kifEntryController.replaceAll(data.library)
+    problemRepository.replaceAll(data.library)
     kifLearning.replaceAll(data.learning)
   }
 
   function isValidBackup(data: any): data is KifBackupV1 {
-  return (
-    data &&
-    data.version === 1 &&
-    Array.isArray(data.library) &&
-    typeof data.learning === "object"
-  )
-}
-
-
-    return { backup, restore }
+    return (
+      data &&
+      data.version === 1 &&
+      Array.isArray(data.library) &&
+      typeof data.learning === "object"
+    )
+  }
+  return { backup, restore }
 }

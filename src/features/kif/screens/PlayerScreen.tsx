@@ -14,6 +14,27 @@ import { BoardPanel } from "../components/player/BoardPanel";
 import type { QueueItem } from "../types";
 import { CollectionsOutlined } from "@mui/icons-material";
 
+export function useTimer(startSeconds: number = 0) {
+  const [seconds, setSeconds] = useState(startSeconds);
+  const [isRunning, setIsRunning] = useState(false);
+
+  useEffect(() => {
+    if (!isRunning) return;
+
+    const id = setInterval(() => {
+      setSeconds(prev => prev + 1);
+    }, 1000);
+
+    return () => clearInterval(id);
+  }, [isRunning]);
+
+  const start = () => setIsRunning(true);
+  const stop = () => setIsRunning(false);
+  const reset = () => setSeconds(0);
+
+  return { seconds, start, stop, reset, isRunning };
+}
+
 ///////////////////////////////////////
 export default function PlayerScreen() {
     //const [result, setResult] = useState<boolean | null>(false)    
@@ -48,12 +69,13 @@ export default function PlayerScreen() {
     } = useKifPlayer(session, problemMap)
     const { title, kifData: { events} } = currentProblem    
     const moves = events.filter(e => e.type === "move")
+    const timer = useTimer()
 
     // currentProblem が空なら deck へ戻る
     if (currentProblem === null){
         navigate("/deck")
     }
-    
+    useEffect(() => { timer.start() }, [])
     ////////////////////
     // フッターのアクションボタン
     const phaseActions: Record<PlayerPhase, JSX.Element> = {
@@ -61,6 +83,7 @@ export default function PlayerScreen() {
             <Button fullWidth variant="contained" color="primary" onClick={() => {
                 advancePhase();
                 advanceMove();
+                timer.stop()
             }}>
                 手筋を表示
             </Button>
@@ -162,6 +185,9 @@ export default function PlayerScreen() {
                             </button>
                         
                         </>}                        
+                        <Box>
+                            Timer: { timer.seconds }
+                        </Box>
                         
                     <button onClick={() =>
                         navigate("/deck")

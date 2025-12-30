@@ -18,6 +18,7 @@ import type { Deck, Problem, QueueItem} from "../types";
 import { useProblemPersist } from "../hooks/problem/useProblemPersist";
 import { useKifFilteredEntries } from "../hooks/deck/useKifFilteredEntries";
 import { RecordVoiceOverSharp } from "@mui/icons-material";
+import { useProblemImporter } from "../hooks/problem/useProblemImporter";
 
 const buildDeck = (): Deck => {
     return {
@@ -36,6 +37,7 @@ const buildDeck = (): Deck => {
 export default function DeckScreen() {
     const { problems, playerSessionApi, learningRepository} = useKif()
     const { records } = learningRepository
+    const { importFiles } = useProblemImporter()
     
     const { filter, setFilter} = useKifDeckFilter()
    
@@ -63,7 +65,7 @@ export default function DeckScreen() {
         <AppLayout
             header={<Box>Deck</Box>}
         >
-            <>
+            <Stack p={2}>
                 <FormControl fullWidth sx={{ mb: 2 }}>
                     <Stack direction="row">
                         <TextField
@@ -112,12 +114,20 @@ export default function DeckScreen() {
                     <button onClick={() => navigate("/library")}>
                         Library
                     </button>
-                    
+                    <MultipleFilesButton
+                        label="登録"
+                        useIconButton={false}
+                        onFileSelected={
+                            async (files: File[]) => {
+                                importFiles(files)
+                            }
+                        }
+                    />
                         
                         
                     
                 </Stack>
-            </>
+            </Stack>
         </AppLayout>
     )
 
