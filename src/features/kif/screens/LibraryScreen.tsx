@@ -11,7 +11,7 @@ import ReplyIcon from "@mui/icons-material/Reply";
 import { AppLayout } from "../../../shared/components/AppLayout/AppLayout";
 import { useKif } from '../hooks/useKif'
 import MultipleFilesButton from '../../../shared/components/MultipleFilesButton';
-import type { KifEntry } from "../types";
+import type { KifEntry, Problem } from "../types";
 import { useKifLibraryList } from '../hooks/library/useLibraryList';
 import LibraryBulkSelectionControl from '../components/library/LibraryBulkSelectionControl';
 import LibrarySortControl from '../components/library/LibrarySortControl';
@@ -53,7 +53,14 @@ export default function LibraryScreen() {
         setBackupOpen,
 
     } = useKifLibraryUI()
-    const { removeMany } = problemRepository
+    const { removeMany, findById, update } = problemRepository
+
+    const handleUpdateTitle = (title: string) => {
+        const targetProblem: Problem | null = entryToEditId !== null ? findById(entryToEditId) : null
+        if (!targetProblem) return 
+        const newProblem: Problem = {...targetProblem, title: title}
+        update(newProblem)
+    }
 
     ////////////////////////////////////////
     const firstSelectedId = checkedIds.values().next().value
@@ -138,7 +145,7 @@ export default function LibraryScreen() {
                     open={openEditDialog}
                     entryId={entryToEditId}
                     //onUpdateTitle={(title: string) => updateTitle(entryToEditId, title)}
-                    onUpdateTitle={(title: string)=> {}}   // TODO
+                    onUpdateTitle={handleUpdateTitle}   // TODO
                     onConfirm={() => { }}
                     onClose={() => setOpenEditDialog(false)}                    
                     //onDelete={() => deleteEntry(entryToEditId)}

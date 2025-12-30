@@ -13,6 +13,9 @@ export function useProblemRepository() {
       .catch(() => setProblems([]));
   }, []);
 
+  const findById = (id: string): Problem | null => {
+    return problems.find(problem => problem.id === id) ?? null
+  }
   const persist = async (next: Problem[]): Promise<void> => {
     await persistApi.save(next);
     setProblems(next);
@@ -39,5 +42,5 @@ export function useProblemRepository() {
     await persist(next);
   };
 
-  return { add, remove, removeMany, update, problems };
+  return { findById, add, remove, removeMany, update, problems };
 }
