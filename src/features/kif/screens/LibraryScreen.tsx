@@ -135,7 +135,7 @@ export default function LibraryScreen() {
                 editMode={editMode}
                 toggleEditMode={toggleEditMode}
                 clearAllCheckbox={clearChecked}
-                getLearningRecord={findByProblemId}
+                
             />
             { /* ダイアログ　*/ }
             

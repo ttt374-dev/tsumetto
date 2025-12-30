@@ -18,6 +18,8 @@ export const KifProvider = ({ children }: { children: ReactNode }) => {
   
   const problems = problemRepository.problems
   const entries = problems
+  const sort = useKifLibrarySort()
+  const filter = useKifDeckFilter()
   const { records } = useLearningRepository()
 
   
@@ -60,6 +62,8 @@ export const KifProvider = ({ children }: { children: ReactNode }) => {
       problems, problemMap,
 
       playerSessionApi,
+
+      sort, filter,
     }}>
       {children}
     </KifContext.Provider>

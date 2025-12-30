@@ -13,6 +13,7 @@ import type { JSX } from "react";
 import { BoardPanel } from "../components/player/BoardPanel";
 import type { QueueItem } from "../types";
 import { CollectionsOutlined } from "@mui/icons-material";
+import { formatDate } from "../../../shared/utils";
 
 export function useTimer(startSeconds: number = 0) {
   const [seconds, setSeconds] = useState(startSeconds);
@@ -40,6 +41,8 @@ export default function PlayerScreen() {
     //const [result, setResult] = useState<boolean | null>(false)    
     const navigate = useNavigate()
 
+    
+
     //const { queue, entryMap, playerSession } = useKif()
     const { problemMap, playerSessionApi, learningRepository } = useKif()
     const { session, isLastIndex,
@@ -47,7 +50,7 @@ export default function PlayerScreen() {
     } = playerSessionApi
     const queue: QueueItem[] = session?.queue ?? []
     const currentPlyIndex = session?.currentPlyIndex ?? 0
-
+    
     //console.log("player session", session)
     //console.log("player session", playerSessionApi) 
     //console.log("sessionId on /player", session?.sessionId)
@@ -64,20 +67,31 @@ export default function PlayerScreen() {
         },
         learnApi: {
             solvedCount, failedCount, accuracy,
-            markSolvedCurrent, markFailedCurrent
+            markSolvedCurrent, markFailedCurrent,
+            nextReviewedAt, easeFactor, learningRecord,
         },
     } = useKifPlayer(session, problemMap, learningRepository)
+    if (currentProblem === null) { navigate("/deck")}
     const { title, kifData: { events} } = currentProblem    
     const moves = events.filter(e => e.type === "move")
     const timer = useTimer()
-
-    // currentProblem が空なら deck へ戻る
-    if (currentProblem === null){
-        navigate("/deck")
-    }
-    useEffect(() => { timer.start() }, [])
+    /*
+    useEffect(() => {
+  if (!session || session.queue.length === 0) {
+    navigate("/deck");
+  }
+}, [session]);
+*/
+    //useEffect(() => { timer.start() }, [])
     ////////////////////
     // フッターのアクションボタン
+
+    function judgeAnswerQuality(answer: "correct" | "wrong", sec: number): number{
+          if (answer === "wrong") return 0
+        if (sec < 10) return 3
+        return 0
+    }
+
     const phaseActions: Record<PlayerPhase, JSX.Element> = {
         problem: (
             <Button fullWidth variant="contained" color="primary" onClick={() => {
@@ -92,10 +106,11 @@ export default function PlayerScreen() {
             <>                
                 <Button fullWidth variant="contained" color="error"
                     onClick={() => {
-                        markFailedCurrent()
-                        //setCurrentAnswer("wrong")
-                        
+                        const answerQulity = judgeAnswerQuality("wrong", timer.seconds)
+                        markFailedCurrent(answerQulity)
+                        //setCurrentAnswer("wrong")                        
                         //setResult(false)
+                        
                         advanceStep()
                     }}
                 >
@@ -103,7 +118,8 @@ export default function PlayerScreen() {
                 </Button>
                 <Button fullWidth variant="contained" color="success"
                     onClick={() => {
-                        markSolvedCurrent()
+                        const answerQulity = judgeAnswerQuality("correct", timer.seconds)
+                        markSolvedCurrent(answerQulity)
                         //setCurrentAnswer("correct")
                         
                         //setResult(true)
@@ -112,15 +128,14 @@ export default function PlayerScreen() {
                             navigate("/summary", { state: { queue} })
                         } else {
                             advanceStep()
-                        }
-                        
+                        }                        
                     }}>
                     正解
                 </Button>
             </>
         ),        
     };
-
+    
     ////
     return (
         <AppLayout
@@ -168,6 +183,9 @@ export default function PlayerScreen() {
                         { /*  {result !== null && (result ? "〇" : "×")} */ } 
                         <Box>
                             Problem: {`${formatAccuracy(accuracy)} [${solvedCount} | ${failedCount}]`}
+                            next review at: { nextReviewedAt && formatDate(nextReviewedAt)}
+                            easy Factor: { easeFactor }
+                            
                         </Box>
                         <Box>
                             { currentPlyIndex }
@@ -186,7 +204,7 @@ export default function PlayerScreen() {
                         
                         </>}                        
                         <Box>
-                            Timer: { timer.seconds }
+                            { /* Timer: { timer.seconds } */ }
                         </Box>
                         
                     <button onClick={() =>

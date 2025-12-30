@@ -17,6 +17,33 @@ export function useKifFilteredEntries(
     filter: DeckFilter
 
 ): KifEntry[] {
+
+    const filteredEntries = useMemo(() => {
+        const now = Date.now();
+
+        return entries.filter(entry => {
+            const record = learningRecords[entry.id];
+
+            // 未回答のみ
+            if (filter.unansweredOnly && !isUnansweredRecord(record)) {
+                return false;
+            }
+
+            // 次回レビュー対象のみ
+            if (
+                filter.dueOnly &&                
+                record?.nextReviewedAt !== undefined &&
+                record.nextReviewedAt > now
+            ) {
+                return false;
+            }
+
+            return true;
+        });
+    }, [entries, learningRecords, filter]);
+
+    return filteredEntries;
+    /*
     const unansweredEntries = useMemo(() => {
         return entries.filter(entry => {
             const record = learningRecords[entry.id]
@@ -26,4 +53,6 @@ export function useKifFilteredEntries(
     console.log("unanswereEntries", unansweredEntries, filter)
     if (filter.unansweredOnly) return unansweredEntries
     else return entries
+    */
+
 }

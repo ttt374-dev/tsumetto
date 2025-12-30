@@ -48,10 +48,12 @@ export function useKifPlayer(
         accuracy: calcAccuracy(learningRecord ?? undefined),
         solvedCount: learningRecord?.solvedCount ?? 0,
         failedCount: learningRecord?.failedCount ?? 0,
-        markSolvedCurrent: () => { 
-            currentEntryId && learningRepository.markSolved(currentEntryId)},
-        markFailedCurrent: () => { 
-            currentEntryId && learningRepository.markFailed(currentEntryId)}
+        nextReviewedAt: learningRecord?.nextReviewedAt,
+        easeFactor: learningRecord?.easeFactor,
+        markSolvedCurrent: (answerQuality: number) => { 
+            currentEntryId && learningRepository.markSolved(currentEntryId, answerQuality)},
+        markFailedCurrent: (answerQuality: number) => { 
+            currentEntryId && learningRepository.markFailed(currentEntryId, answerQuality)}
     }
     /*
     const { resultMap, setAnswer, summary, } = useQueueResult()

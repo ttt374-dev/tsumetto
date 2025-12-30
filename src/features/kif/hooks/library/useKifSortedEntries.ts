@@ -32,15 +32,24 @@ export function useKifSortedEntries(
           break
 
         case "accuracy":
-                const aAcc = calcAccuracy(learningRecords[a.id]) ?? 0
-      const bAcc = calcAccuracy(learningRecords[b.id]) ?? 0
-      return sort.order === "asc" ? aAcc - bAcc : bAcc - aAcc
-
+          const aAcc = calcAccuracy(learningRecords[a.id]) ?? 0
+          const bAcc = calcAccuracy(learningRecords[b.id]) ?? 0
+          return sort.order === "asc" ? aAcc - bAcc : bAcc - aAcc
           break
+        case "easeFactor":
+          vA = learningRecords[a.id].easeFactor
+          vB = learningRecords[b.id].easeFactor
+          break
+
+        case "nextReviewedAt":
+          vA = learningRecords[a.id].nextReviewedAt
+          vB = learningRecords[b.id].nextReviewedAt
+          break;
 
         default:
           return 0
       }
+      //console.log("compare", sort.key, vA, vB)
 
       if (vA < vB) return sort.order === "asc" ? -1 : 1
       if (vA > vB) return sort.order === "asc" ? 1 : -1

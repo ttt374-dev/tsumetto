@@ -14,11 +14,12 @@ import { useKifLibrarySort } from "../hooks/library/useKifLibrarySort";
 import { useKifDeckFilter } from "../hooks/deck/useKifDeckFilter";
 import { createKifData, createKifEntryFromText } from "../domain/factory";
 import MultipleFilesButton from "../../../shared/components/MultipleFilesButton";
-import type { Deck, Problem, QueueItem} from "../types";
+import type { Deck, Problem, QueueItem } from "../types";
 import { useProblemPersist } from "../hooks/problem/useProblemPersist";
 import { useKifFilteredEntries } from "../hooks/deck/useKifFilteredEntries";
 import { RecordVoiceOverSharp } from "@mui/icons-material";
 import { useProblemImporter } from "../hooks/problem/useProblemImporter";
+import LibrarySortControl from "../components/library/LibrarySortControl";
 
 const buildDeck = (): Deck => {
     return {
@@ -32,61 +33,63 @@ const buildDeck = (): Deck => {
     }
 }
 
-
 ///////////////////
 export default function DeckScreen() {
-    const { problems, playerSessionApi, learningRepository} = useKif()
+    const { problems, playerSessionApi, learningRepository, 
+        sort, filter } = useKif()
     const { records } = learningRepository
     const { importFiles } = useProblemImporter()
-    
-    const { filter, setFilter} = useKifDeckFilter()
-   
+
+    //const { filter, setFilter } = useKifDeckFilter()
+
     const navigate = useNavigate()
-    const { sort, setSortKey, setSortOrder } = useKifLibrarySort()
-    const filteredProblems = useKifFilteredEntries(problems, records, filter)
+    //const { sort, setSortKey, setSortOrder } = useKifLibrarySort()
+    const filteredProblems = useKifFilteredEntries(problems, records, filter.filter)
     const deck: Deck = useMemo(() => buildDeck(), [filteredProblems]);
     //const filteredProblems: Problem[] = []
-    
+
     const handleSessionStart = () => {
         const queue = deck.buildQueue(filteredProblems)
         //console.log("built queue" ,queue)
         playerSessionApi.startSession(deck.id, queue)
         navigate("/player")
     }
-    
+
     const handleChangeKey = (e: any) => {
         console.log("set sort key", e.target.value)
-        setSortKey(e.target.value)
+        sort.setSortKey(e.target.value)
     }
     //nst { filter, setFilter } = kifDeckFilter//
-    
+
     /////////////////////////
     return (
         <AppLayout
             header={<Box>Deck</Box>}
         >
             <Stack p={2}>
+
                 <FormControl fullWidth sx={{ mb: 2 }}>
                     <Stack direction="row">
                         <TextField
                             select
                             fullWidth
                             label="Sort by"
-                            value={sort.key}
+                            value={sort.sort.key}
                             onChange={handleChangeKey}
                             sx={{ mt: 2 }}
                         >
                             <MenuItem value="createdAt">登録日</MenuItem>
                             <MenuItem value="title">タイトル</MenuItem>
                             <MenuItem value="accuracy">正答率</MenuItem>
+                            <MenuItem value="easeFactor">習熟度</MenuItem>
                         </TextField>
                         <IconButton onClick={() => {
 
-                            setSortOrder(sort.order == "asc" ? "desc" : "asc")
-                            console.log("toggle sort order", sort.order)
+                            sort.setSortOrder(sort.sort.order == "asc" ? "desc" : "asc")
+                            console.log("toggle sort order", sort.sort.order)
                         }
                         }>
-                            {sort.order === 'asc'
+                            {sort.sort.order === 'asc'
                                 ? <ArrowUpwardIcon />
                                 : <ArrowDownwardIcon />
                             }
@@ -94,25 +97,38 @@ export default function DeckScreen() {
                     </Stack>
 
 
-                                <FormControlLabel control={
-                    <Checkbox
-                        checked={filter.unansweredOnly}
-                        onChange={e =>
-                            setFilter(f => ({
-                                ...f,
-                                unansweredOnly: e.target.checked
-                            }))
-                        }/>}
-                        label="未回答のみ"/>
-                        
+                    <FormControlLabel control={
+                        <Checkbox
+                            checked={filter.filter.unansweredOnly}
+                            onChange={e =>
+                                filter.setFilter(f => ({
+                                    ...f,
+                                    unansweredOnly: e.target.checked
+                                }))
+                            } />}
+                        label="未回答のみ" />
                 </FormControl>
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            checked={filter.filter.dueOnly}
+                            onChange={e =>
+                                filter.setFilter(f => ({
+                                    ...f,
+                                    dueOnly: e.target.checked,
+                                }))
+                            }
+                        />
+                    }
+                    label="習熟度で次回レビュー対象のみ"
+                />
 
                 <Stack direction="row" gap={2} justifyContent="center">
                     <button onClick={handleSessionStart}>
                         セッション開始
                     </button>
                     <button onClick={() => navigate("/library")}>
-                        Library
+                        ライブラリ
                     </button>
                     <MultipleFilesButton
                         label="登録"
@@ -123,9 +139,9 @@ export default function DeckScreen() {
                             }
                         }
                     />
-                        
-                        
-                    
+
+
+
                 </Stack>
             </Stack>
         </AppLayout>

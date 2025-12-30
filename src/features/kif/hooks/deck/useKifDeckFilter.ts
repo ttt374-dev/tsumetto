@@ -3,7 +3,8 @@ import type { DeckFilter } from "../../types";
 
 export function useKifDeckFilter(){
     const [ filter, setFilter ] = useState<DeckFilter>({
-        unansweredOnly: false
+        unansweredOnly: false,
+        dueOnly: false,
     })
 
     

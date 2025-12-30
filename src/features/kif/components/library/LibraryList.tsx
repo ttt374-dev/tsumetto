@@ -7,6 +7,7 @@ import { calcAccuracy, formatAccuracy } from "../../utils";
 import { Check, OndemandVideoTwoTone } from "@mui/icons-material";
 import { useNavigate } from 'react-router-dom'
 import { formatDate } from '../../../../shared/utils';
+import type { KifLearningRecord } from '../../types';
 
 
 function LibraryList({
@@ -18,7 +19,7 @@ function LibraryList({
     editMode,
     toggleEditMode,
     clearAllCheckbox,
-    getLearningRecord
+    
 }: {
     sortedEntries: KifEntry[];
     isChecked: (id: string) => boolean
@@ -26,8 +27,7 @@ function LibraryList({
     onEntryClick: (entryId: string) => void
     editMode: boolean
     toggleEditMode: () => void;
-    clearAllCheckbox: () => void;
-    getLearningRecord: (entryId: string) => void
+    clearAllCheckbox: () => void;    
 }) {
     // 長押しで edit mode / view mode 切り替え
     const LONG_PRESS_MS = 500;
@@ -53,7 +53,16 @@ function LibraryList({
             timerRef.current = null;
         }
     };
-    const navigate = useNavigate()
+    //const navigate = useNavigate()
+
+    function formatItemText(entry: KifEntry): string {      
+        
+        return `${entry.title }        
+    (${ formatDate(entry.createdAt) })
+    
+    `
+    
+    }
     /////////////////////////////////////////////////////
 
     return (
@@ -93,9 +102,7 @@ function LibraryList({
                         </ListItemIcon>
 
                         <ListItemText>
-                            {entry.title} 
-                            [{formatAccuracy(calcAccuracy(getLearningRecord(entry.id) ?? undefined))}]
-                            ({formatDate(entry.createdAt)})
+                            { formatItemText(entry)}
                         </ListItemText>
                     </ListItemButton>
                 </ListItem>
