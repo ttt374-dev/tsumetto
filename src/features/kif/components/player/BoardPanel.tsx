@@ -10,7 +10,7 @@ export function BoardPanel({
     board, hands,
     currentPhase,
     advanceStep, retreatStep,
-    advanceEvent, retreatEvent,
+    advanceMove, retreatMove,
     advancePhase, retreatPhase
 
 }: {
@@ -18,8 +18,8 @@ export function BoardPanel({
     advanceStep: () => void
     retreatStep: () => void
     currentPhase: PlayerPhase
-    advanceEvent: () => void
-    retreatEvent: () => void
+    advanceMove: () => void
+    retreatMove: () => void
     advancePhase: () => void
     retreatPhase: () => void
 }){
@@ -32,11 +32,11 @@ export function BoardPanel({
         },
         onSwipedDown: () => {             
             currentPhase === "problem" && advancePhase()
-            advanceEvent()
+            advanceMove()
         },
         onSwipedUp: () => {
             currentPhase === "solution" && retreatPhase()
-            retreatEvent()
+            retreatMove()
         },
 
         trackMouse: true, // PCでもマウスでスワイプ可能

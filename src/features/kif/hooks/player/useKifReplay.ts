@@ -5,29 +5,30 @@ import { buildBoardUntil } from '../../domain/replay/applyMove'
 export function useKifReplay(
     initialBoard: Board, 
     initialHands: Hands, 
-    events: KifEvent[],
+    //events: KifEvent[],
+    moves: Move[],
 ) {
-    const [currentEventIndex, setCurrentEventIndex] = useState(0)
+    console.log("moves in usekifreplay", moves)
+    const [currentMoveIndex, setCurrentMoveIndex] = useState(0)
     
     const { board, hands } = useMemo(() => 
         {
-            console.log("build board on memo")
-            return buildBoardUntil(initialBoard, initialHands, events, currentEventIndex)
+            return buildBoardUntil(initialBoard, initialHands, moves, currentMoveIndex)
         },
-        [currentEventIndex, initialBoard, initialHands, events]
+        [currentMoveIndex, initialBoard, initialHands, moves]
     );
     
     function reset(){
-        setCurrentEventIndex(0);
+        setCurrentMoveIndex(0);
     }
     return {
         board, hands,
-        currentEventIndex, setCurrentEventIndex,        
-        retreatEvent: () => {
-            currentEventIndex > 0 && setCurrentEventIndex(prev => prev - 1)
+        currentMoveIndex, setCurrentMoveIndex,        
+        retreatMove: () => {
+            currentMoveIndex > 0 && setCurrentMoveIndex(prev => prev - 1)
         },
-        advanceEvent: () => {
-           currentEventIndex < events.length && setCurrentEventIndex(prev => prev + 1)
+        advanceMove: () => {
+           currentMoveIndex < moves.length && setCurrentMoveIndex(prev => prev + 1)
         },
         reset
     }

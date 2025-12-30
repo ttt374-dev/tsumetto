@@ -33,7 +33,6 @@ function BoardView({ board, hands}: Props) {
         { <div>△後手：{formatHand(hands.white)}</div>} 
       </div>
 
-
       {/* 上の筋表示 */}
       <div className={styles.fileLabels}>
 

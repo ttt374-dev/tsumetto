@@ -5,7 +5,7 @@ import { Stack, Divider } from '@mui/material';
 
 import { AppLayout } from '../../../shared/components/AppLayout/AppLayout';
 import { useKif } from '../hooks/useKif'
-import EventsView from '../components/player/EventsView';
+import MovesView from '../components/player/MovesView';
 import { formatAccuracy } from "../utils";
 import { useKifPlayer } from "../hooks/player/useKifPlayer";
 import type { PlayerPhase } from "../hooks/player/useKifPhase";
@@ -31,8 +31,9 @@ export default function PlayerScreen() {
     const {
         currentProblem,
         replayApi: {
-            currentEventIndex, setCurrentEventIndex,
-            retreatEvent, advanceEvent,
+            board, hands,
+            currentMoveIndex, setCurrentMoveIndex,
+            retreatMove, advanceMove,
         },
         phaseApi: {
             currentPhase,
@@ -43,7 +44,8 @@ export default function PlayerScreen() {
             markSolvedCurrent, markFailedCurrent
         },
     } = useKifPlayer(session, problemMap)
-    const { title, kifData: { board, hands, events} } = currentProblem    
+    const { title, kifData: { events} } = currentProblem    
+    const moves = events.filter(e => e.type === "move")
     
     ////////////////////
     // フッターのアクションボタン
@@ -51,7 +53,7 @@ export default function PlayerScreen() {
         problem: (
             <Button fullWidth variant="contained" color="primary" onClick={() => {
                 advancePhase();
-                advanceEvent();
+                advanceMove();
             }}>
                 手筋を表示
             </Button>
@@ -104,8 +106,8 @@ export default function PlayerScreen() {
                     board={board}
                     hands={hands}
                     currentPhase={currentPhase}
-                    advanceEvent={advanceEvent}
-                    retreatEvent={retreatEvent}
+                    advanceMove={advanceMove}
+                    retreatMove={retreatMove}
                     advancePhase={advancePhase}
                     retreatPhase={retreatPhase}
                     advanceStep={advanceStep}
@@ -123,10 +125,10 @@ export default function PlayerScreen() {
                             gap: 2, flex: 7,
                         }}>
                         {currentPhase === "solution" &&
-                            <EventsView
-                                events={events}
-                                currentIndex={currentEventIndex}
-                                onMoveClick={(i) => setCurrentEventIndex(i)} />
+                            <MovesView
+                                moves={moves}
+                                currentIndex={currentMoveIndex}
+                                onMoveClick={(i) => setCurrentMoveIndex(i)} />
                         }
                     </Box>
 
@@ -138,17 +140,17 @@ export default function PlayerScreen() {
                             Problem: {`${formatAccuracy(accuracy)} [${solvedCount} | ${failedCount}]`}
                         </Box>
                         <Box>
-                            
+                            { currentIndex }
                             
                         </Box>
                         <Box>
                             length: { session && `${session.queue.length}`}
                         </Box>
                         {currentPhase === "solution" && <>
-                            <button onClick={retreatEvent}>
+                            <button onClick={retreatMove}>
                                 ↑前の手
                             </button>
-                            <button onClick={advanceEvent}>
+                            <button onClick={advanceMove}>
                                 ↓次の手
                             </button>
                         

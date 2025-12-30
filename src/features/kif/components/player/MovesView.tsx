@@ -1,14 +1,16 @@
-import { useEffect, useRef } from "react";
+import { useMemo, useEffect, useRef } from "react";
 
-import type { Move, Position, PlayerType, KifEvent } from "../../types";
+import type { Move, Position, PlayerType, KifEvent, GameStart } from "../../types";
+import { CalendarTodaySharp } from "@mui/icons-material";
 
 interface Props {
-    events: KifEvent[];
+    moves: Move[];
     currentIndex: number,
     onMoveClick: (index: number) => void;
 }
 
-export default function EventsView({ events, currentIndex, onMoveClick }: Props) {
+    
+export default function MovesView({ moves: moves, currentIndex, onMoveClick }: Props) {
 const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
@@ -36,10 +38,8 @@ const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
         switch (event.type) {
             case "start":
                 return "=== 開始局面 ==="
-                break
             case "move":
                 return formatMove(event, index)
-                break;
             case "end":
                 return `=== 終了 (${event.reason}) ===`
             default:
@@ -48,10 +48,14 @@ const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
 
     }
 
-    return (
+    // 開始局面を表示させるため、先頭に GameStartを挿入
+    const start: GameStart = { type: "start"}
+    const eventRows = [start, ...moves]
+    //const toViewerIndex = (moveIndex: number) => { moveIndex+1 }
+    return (        
         <div>
             {
-                events.map((m, i) => (
+                eventRows.map((m, i) => (
                     <div
                         key={i}
                         ref={(el: HTMLDivElement | null) => {
@@ -64,7 +68,7 @@ const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
                             cursor: "pointer"
 
                         }}>
-                        {formatEvent(m, i)}
+                        { formatEvent(m, i)}
                     </div>
                 ))
             }

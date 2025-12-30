@@ -21,9 +21,9 @@ export function getBasePieceKey(
 export function applyMove(board: Board, hands: Hands, move: Move) {
     const { x, y } = posToIndex(move.position)
     
-    console.log("apply move")
+    //console.log("apply move")
     const cell = board[y][x]
-    console.log("apply move", move, cell)
+    ///console.log("apply move", move, cell)
     // 相手の駒を取る
     if (cell !== null){
         const key = getBasePieceKey(cell.key) as HandPieceKey
@@ -61,21 +61,23 @@ export type ReplayState = {
   hands: Hands;
 };
 export function buildBoardUntil(
-         initialBoard: Board, 
+        initialBoard: Board, 
         initialHands: Hands, 
-        events: KifEvent[],
-        index: number): ReplayState {
+        //events: KifEvent[],
+        moves: Move[],
+        viewerIndex: number): ReplayState {
         const board = cloneBoard(initialBoard);
-        const hands = cloneHands(initialHands)
+        const hands = cloneHands(initialHands)          
         
-        console.log("build board ", index)
-        for (let i = 0; i <= index; i++) {
-            const event = events[i]
-            if (!event) continue   // 防護
-            if (event.type === "move")
-                applyMove(board, hands, event);
+        
+        for (let i = 0; i <= viewerIndex; i++) {
+            const moveIndex = i - 1 // vieweIndex: 0 は初期盤面    
+            const move = moves[moveIndex]
+            if (!move) continue   // 防護
+            if (move.type === "move")
+                applyMove(board, hands, move);
         }
-
+        console.log("built board", board)
         return { board, hands }
     }
     function cloneBoard(board: Board): Board {

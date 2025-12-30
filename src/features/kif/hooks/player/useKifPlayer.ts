@@ -67,8 +67,12 @@ export function useKifPlayer(
     const currentProblem = currentEntry ?? createKifEntry()
     const kifContent = currentProblem.kifData
 
+    const moves = kifContent.events.filter(e => e.type === "move")
+    //console.log("current problem", currentProblem)
+    console.log("events: ", kifContent.events)
+    console.log("moves: ", moves)
     const replayApi = useKifReplay(
-            kifContent.board, kifContent.hands, kifContent.events
+            kifContent.board, kifContent.hands, moves,
             //kifInfo.initialBoard, kifInfo.initialHands, kifInfo.events,
         )
 

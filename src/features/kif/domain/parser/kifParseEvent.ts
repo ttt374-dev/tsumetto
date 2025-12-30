@@ -3,8 +3,8 @@ import type { ParseResult } from "./parseResult";
 import { parsePosition, parseFromToPosition } from './kifParsePosition';
 
 export function parseEvents(lines: string[]): KifEvent[]{ // ParseResult<KifEvent[]>{
-    const gameStart: GameStart = { type: "start"}
-    const events: KifEvent[] = [gameStart];
+    //const gameStart: GameStart = { type: "start"}
+    const events: KifEvent[] = [];
     let inEvents = false
     let prevTo = undefined
 

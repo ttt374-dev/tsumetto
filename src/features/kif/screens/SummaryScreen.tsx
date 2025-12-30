@@ -10,7 +10,7 @@ import { useSwipeable } from "react-swipeable";
 
 import { AppLayout } from '../../../shared/components/AppLayout/AppLayout';
 import { useKif } from '../hooks/useKif'
-import EventsView from '../components/player/EventsView';
+import MovesView from '../components/player/MovesView';
 import MoveControl from '../components/player/MoveControl';
 import SolutionControl from '../components/player/SolutionControl';
 import BoardView from "../components/player/BoardView";
