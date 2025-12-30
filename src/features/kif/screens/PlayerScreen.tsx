@@ -12,6 +12,7 @@ import type { PlayerPhase } from "../hooks/player/useKifPhase";
 import type { JSX } from "react";
 import { BoardPanel } from "../components/player/BoardPanel";
 import type { QueueItem } from "../types";
+import { CollectionsOutlined } from "@mui/icons-material";
 
 ///////////////////////////////////////
 export default function PlayerScreen() {
@@ -26,8 +27,9 @@ export default function PlayerScreen() {
     const queue: QueueItem[] = session?.queue ?? []
     const currentPlyIndex = session?.currentPlyIndex ?? 0
 
+    //console.log("player session", session)
     //console.log("player session", playerSessionApi) 
-   
+    console.log("sessionId on /player", session?.sessionId)
     const {
         currentProblem,
         replayApi: {
@@ -99,7 +101,7 @@ export default function PlayerScreen() {
     ////
     return (
         <AppLayout
-            header={`${currentPlyIndex + 1}: ${title}`}
+            header={`${currentPlyIndex + 1}: ${title} `}
             footer={
                 <Stack direction="row">
                     { phaseActions[currentPhase] }

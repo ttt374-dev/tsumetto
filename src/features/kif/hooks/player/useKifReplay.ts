@@ -8,7 +8,7 @@ export function useKifReplay(
     //events: KifEvent[],
     moves: Move[],
 ) {
-    console.log("moves in usekifreplay", moves)
+    //console.log("moves in usekifreplay", moves)
     const [currentMoveIndex, setCurrentMoveIndex] = useState(0)
     
     const { board, hands } = useMemo(() => 

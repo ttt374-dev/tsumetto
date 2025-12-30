@@ -15,31 +15,40 @@ import { useKifDeckFilter } from "../hooks/deck/useKifDeckFilter";
 import { createKifData, createKifEntryFromText } from "../domain/factory";
 import MultipleFilesButton from "../../../shared/components/MultipleFilesButton";
 import type { Deck, Problem, QueueItem} from "../types";
+import { useProblemPersist } from "../hooks/problem/useProblemPersist";
+import { useKifFilteredEntries } from "../hooks/deck/useKifFilteredEntries";
+import { RecordVoiceOverSharp } from "@mui/icons-material";
 
-export default function DeckScreen() {
-    //const [session, setSession] = useState<PlayerSession>()
-    const { problems, playerSessionApi, } = useKif()
-    
-    const { filter, setFilter
-     } = useKifDeckFilter()
-    const { session, setSession } = playerSessionApi
-    
-    const navigate = useNavigate()
-    const { sort, setSortKey, setSortOrder } = useKifLibrarySort()
-    //const [filter, setFilter] = useState<DeckFilter>({unansweredOnly: false});
-    
-    const deck: Deck = {
+const buildDeck = (): Deck => {
+    return {
         id: v4(),
         name: "default",
-        buildQueue: (problems: Problem[]): QueueItem[] =>{
+        buildQueue: (problems: Problem[]): QueueItem[] => {
             return problems.map(p => ({
-            problemId: p.id,
-        }))}
-          
+                problemId: p.id,
+            }))
+        }
     }
+}
+
+
+///////////////////
+export default function DeckScreen() {
+    const { problems, playerSessionApi, learningRepository} = useKif()
+    const { records } = learningRepository
+    
+    const { filter, setFilter} = useKifDeckFilter()
+   
+    const navigate = useNavigate()
+    const { sort, setSortKey, setSortOrder } = useKifLibrarySort()
+    const filteredProblems = useKifFilteredEntries(problems, records, filter)
+    const deck: Deck = useMemo(() => buildDeck(), [filteredProblems]);
+    //const filteredProblems: Problem[] = []
+    console.log("filter", filter)
+    console.log("filtered problems", filteredProblems)    
     
     const handleSessionStart = () => {
-        const queue = deck.buildQueue(problems)
+        const queue = deck.buildQueue(filteredProblems)
         console.log("built queue" ,queue)
         playerSessionApi.startSession(deck.id, queue)
         navigate("/player")

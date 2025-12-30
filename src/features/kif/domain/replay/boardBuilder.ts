@@ -76,7 +76,7 @@ export function buildBoardUntil(
             if (move.type === "move")
                 applyMove(board, hands, move);
         }
-        console.log("built board", board)
+        //console.log("built board", board)
         return { board, hands }
     }
     function cloneBoard(board: Board): Board {

@@ -12,12 +12,13 @@ import { useQueueResult } from "../session/useQueueResult";
 
 export function useKifPlayer(
     //queue: QueueItem[], 
-    playerSession: PlayerSession | null,
+    session: PlayerSession | null,
     entryMap: Record<string, KifEntry>,
     //onFinish: () => void,
 ){
     //const [currentIndex, setCurrentIndex] = useState(0)
-    const { entryId: entryIdFromRoute } = useParams<{ entryId: string }>();
+    const { entryId: problemIdFromParams } = useParams<{ entryId: string }>();
+    
     
     //const queue: QueueItem[] = playerSession?.queue ?? []
     
@@ -25,7 +26,7 @@ export function useKifPlayer(
     //  インデックスが変われば中身をリセット
     useEffect(()=>{      
         reset()
-    }, [playerSession?.queue, playerSession?.currentPlyIndex, entryMap])
+    }, [session?.queue, session?.currentPlyIndex, entryMap])
 
      
     
@@ -34,12 +35,13 @@ export function useKifPlayer(
        // setCurrentIndex(0)
     }
     
+    const queueItem = session && session.queue[session.currentPlyIndex]
+    const problemIdFromSession = queueItem?.problemId
     //const currentEntryId = playerSession?.queue[playerSession.currentPlyIndex].problemId ?? null;
     // ルートパラメータに entryId があればそれを使用。なければセッションから取り出す
-    const currentEntryId = entryIdFromRoute ? entryIdFromRoute :
-        playerSession?.queue[playerSession.currentPlyIndex].problemId ?? null;
+    const currentEntryId = problemIdFromParams ?? problemIdFromSession ?? null
     const currentEntry = currentEntryId ? entryMap[currentEntryId] ?? null : null;
-    
+    //console.log("current entryid", currentEntryId, problemIdFromParams, problemIdFromSession)
     
     /*
     const kifInfo = {
@@ -62,8 +64,8 @@ export function useKifPlayer(
 
     const moves = kifContent.events.filter(e => e.type === "move")
     //console.log("current problem", currentProblem)
-    console.log("events: ", kifContent.events)
-    console.log("moves: ", moves)
+    //console.log("events: ", kifContent.events)
+    //console.log("moves: ", moves)
     const replayApi = useKifReplay(
             kifContent.board, kifContent.hands, moves,
             //kifInfo.initialBoard, kifInfo.initialHands, kifInfo.events,
@@ -78,7 +80,9 @@ export function useKifPlayer(
         accuracy: calcAccuracy(learningRecord ?? undefined),
         solvedCount: learningRecord?.solvedCount ?? 0,
         failedCount: learningRecord?.failedCount ?? 0,
-        markSolvedCurrent: () => { currentEntryId && learningRepository.markSolved(currentEntryId)},
+        markSolvedCurrent: () => { 
+            console.log("mark sovle current", currentEntryId)
+            currentEntryId && learningRepository.markSolved(currentEntryId)},
         markFailedCurrent: () => { currentEntryId && learningRepository.markFailed(currentEntryId)}
     }
     /*

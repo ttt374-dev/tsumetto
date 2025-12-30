@@ -23,7 +23,7 @@ export function useKifFilteredEntries(
             return isUnansweredRecord(record);
         });
     }, [entries, learningRecords, filter]);
-
+    console.log("unanswereEntries", unansweredEntries, filter)
     if (filter.unansweredOnly) return unansweredEntries
     else return entries
 }

@@ -56,7 +56,7 @@ export function useLearningRepository(): UseLearningRepository {
     };
 
     function markSolved(entryId: string){
-        
+        console.log("mark solved", entryId)
         update(entryId, r => ({
             ...r,
             solvedCount: r.solvedCount + 1,

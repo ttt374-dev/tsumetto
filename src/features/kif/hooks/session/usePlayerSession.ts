@@ -9,8 +9,10 @@ export function usePlayerSession() {
 
 
     const startSession = (deckId: string, queue: QueueItem[]) => {
-        if (queue.length === 0) return
+        //console.log("start session", queue)
 
+        //if (queue.length === 0) return
+        
         setSession({
             deckId: deckId,
             sessionId: v4(),
