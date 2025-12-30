@@ -21,22 +21,23 @@ export function useKifPlayer(
     //  インデックスが変われば中身をリセット
     useEffect(()=>{      
         reset()
-    }, [session?.queue, session?.currentPlyIndex, entryMap])
+    }, [session?.queue, session?.currentIndex, entryMap])
 
-    const queueItem = session && session.queue[session.currentPlyIndex]
-    const problemIdFromSession = queueItem?.problemId
-    //const currentEntryId = playerSession?.queue[playerSession.currentPlyIndex].problemId ?? null;
+    
+
+    const queueItem = session && session.queue[session.currentIndex]
+    const problemIdFromSession = queueItem?.problemId    
     // ルートパラメータに entryId があればそれを使用。なければセッションから取り出す
     const currentEntryId = problemIdFromParams ?? problemIdFromSession ?? null
     const currentEntry = currentEntryId ? entryMap[currentEntryId] ?? null : null;
     //console.log("current entryid", currentEntryId, problemIdFromParams, problemIdFromSession)
     
-    const currentProblem = currentEntry ?? createKifEntry()
-    const kifContent = currentProblem.kifData
+    const currentProblem = currentEntry // ?? createKifEntry()
+    const kifContent = currentProblem?.kifData ?? createKifData()
 
-    const moves = kifContent.events.filter(e => e.type === "move")
+    const moves = kifContent.events.filter(e => e.type === "move") 
     const replayApi = useKifReplay(
-            kifContent.board, kifContent.hands, moves,
+            kifContent?.board, kifContent?.hands, moves,
     
         )
     
@@ -73,6 +74,7 @@ export function useKifPlayer(
     ////////////////////
     return {
         currentProblem: currentProblem,
+        currentEntryId,
         replayApi: replayApi,               
         phaseApi: phaseInfo,
         learnApi: learningApi,

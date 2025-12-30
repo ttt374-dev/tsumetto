@@ -27,11 +27,11 @@ export default function LibraryScreen() {
     const { 
         learningRepository, problems, problemRepository,
     } = useKif()
-    const { sort, setSortKey, setSortOrder }= useKifLibrarySort()    
+    const { sortState, setSortKey, setSortOrder }= useKifLibrarySort()    
     
     const { records, findByProblemId } = learningRepository
     const { importFiles } = useProblemImporter()
-    const sortedEntries = useKifSortedEntries(problems, records, sort)
+    const sortedEntries = useKifSortedEntries(problems, records, sortState)
 
     const {
         checkedIds, isChecked, toggleChecked, 
@@ -114,7 +114,7 @@ export default function LibraryScreen() {
                 </IconButton>
                 
                 <Box sx={{ flexGrow: 1 }} />
-                <LibrarySortControl sort={sort} setSortKey={setSortKey} setSortOrder={setSortOrder} />
+                <LibrarySortControl sort={sortState} setSortKey={setSortKey} setSortOrder={setSortOrder} />
             </Stack>
             
             { /*  エントリーリスト */}

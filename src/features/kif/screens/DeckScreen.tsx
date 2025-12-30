@@ -36,7 +36,9 @@ const buildDeck = (): Deck => {
 ///////////////////
 export default function DeckScreen() {
     const { problems, playerSessionApi, learningRepository, 
-        sort, filter } = useKif()
+        sort: { sortState, setSortKey, setSortOrder}, 
+        filter: { filter, setFilter } } = useKif()
+    
     const { records } = learningRepository
     const { importFiles } = useProblemImporter()
 
@@ -44,7 +46,7 @@ export default function DeckScreen() {
 
     const navigate = useNavigate()
     //const { sort, setSortKey, setSortOrder } = useKifLibrarySort()
-    const filteredProblems = useKifFilteredEntries(problems, records, filter.filter)
+    const filteredProblems = useKifFilteredEntries(problems, records, filter)
     const deck: Deck = useMemo(() => buildDeck(), [filteredProblems]);
     //const filteredProblems: Problem[] = []
 
@@ -57,7 +59,7 @@ export default function DeckScreen() {
 
     const handleChangeKey = (e: any) => {
         console.log("set sort key", e.target.value)
-        sort.setSortKey(e.target.value)
+        setSortKey(e.target.value)
     }
     //nst { filter, setFilter } = kifDeckFilter//
 
@@ -74,7 +76,7 @@ export default function DeckScreen() {
                             select
                             fullWidth
                             label="Sort by"
-                            value={sort.sort.key}
+                            value={sortState.key}
                             onChange={handleChangeKey}
                             sx={{ mt: 2 }}
                         >
@@ -85,11 +87,11 @@ export default function DeckScreen() {
                         </TextField>
                         <IconButton onClick={() => {
 
-                            sort.setSortOrder(sort.sort.order == "asc" ? "desc" : "asc")
-                            console.log("toggle sort order", sort.sort.order)
+                            setSortOrder(sortState.order == "asc" ? "desc" : "asc")
+                            console.log("toggle sort order", sortState.order)
                         }
                         }>
-                            {sort.sort.order === 'asc'
+                            {sortState.order === 'asc'
                                 ? <ArrowUpwardIcon />
                                 : <ArrowDownwardIcon />
                             }
@@ -99,9 +101,9 @@ export default function DeckScreen() {
 
                     <FormControlLabel control={
                         <Checkbox
-                            checked={filter.filter.unansweredOnly}
+                            checked={filter.unansweredOnly}
                             onChange={e =>
-                                filter.setFilter(f => ({
+                                setFilter(f => ({
                                     ...f,
                                     unansweredOnly: e.target.checked
                                 }))
@@ -111,34 +113,27 @@ export default function DeckScreen() {
                 <FormControlLabel
                     control={
                         <Checkbox
-                            checked={filter.filter.dueOnly}
+                            checked={filter.dueOnly}
                             onChange={e =>
-                                filter.setFilter(f => ({
+                                setFilter(f => ({
                                     ...f,
                                     dueOnly: e.target.checked,
                                 }))
                             }
                         />
                     }
-                    label="習熟度で次回レビュー対象のみ"
+                    label="習熟度でレビュー対象のみ"
                 />
-
+                <Box>
+                    { filteredProblems.length } 件
+                </Box>
                 <Stack direction="row" gap={2} justifyContent="center">
                     <button onClick={handleSessionStart}>
                         セッション開始
                     </button>
                     <button onClick={() => navigate("/library")}>
                         ライブラリ
-                    </button>
-                    <MultipleFilesButton
-                        label="登録"
-                        useIconButton={false}
-                        onFileSelected={
-                            async (files: File[]) => {
-                                importFiles(files)
-                            }
-                        }
-                    />
+                    </button>                   
 
 
 

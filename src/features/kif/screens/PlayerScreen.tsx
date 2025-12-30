@@ -14,6 +14,7 @@ import { BoardPanel } from "../components/player/BoardPanel";
 import type { QueueItem } from "../types";
 import { CollectionsOutlined } from "@mui/icons-material";
 import { formatDate } from "../../../shared/utils";
+import { createKifEntry } from "../domain/factory";
 
 export function useTimer(startSeconds: number = 0) {
   const [seconds, setSeconds] = useState(startSeconds);
@@ -41,21 +42,19 @@ export default function PlayerScreen() {
     //const [result, setResult] = useState<boolean | null>(false)    
     const navigate = useNavigate()
 
-    
-
     //const { queue, entryMap, playerSession } = useKif()
     const { problemMap, playerSessionApi, learningRepository } = useKif()
     const { session, isLastIndex,
         advance: advanceStep, retreat: retreatStep, 
     } = playerSessionApi
     const queue: QueueItem[] = session?.queue ?? []
-    const currentPlyIndex = session?.currentPlyIndex ?? 0
-    
+    const currentIndex = session?.currentIndex ?? 0
+
     //console.log("player session", session)
     //console.log("player session", playerSessionApi) 
     //console.log("sessionId on /player", session?.sessionId)
     const {
-        currentProblem,
+        currentProblem, currentEntryId,
         replayApi: {
             board, hands,
             currentMoveIndex, setCurrentMoveIndex,
@@ -71,10 +70,21 @@ export default function PlayerScreen() {
             nextReviewedAt, easeFactor, learningRecord,
         },
     } = useKifPlayer(session, problemMap, learningRepository)
-    if (currentProblem === null) { navigate("/deck")}
-    const { title, kifData: { events} } = currentProblem    
+    if (currentProblem === null) { navigate("/summary")}
+    const { title, kifData: { events } } = currentProblem ?? createKifEntry()
     const moves = events.filter(e => e.type === "move")
     const timer = useTimer()
+
+        useEffect(() => {
+        if (!session || session.queue.length === 0) {
+            //alert("no session / no such problem id")
+            navigate("/summary", { state: { queue: []}});
+        }
+    }, [session, navigate]);
+      if (!session) {
+          return null; // or loading
+      }
+
     /*
     useEffect(() => {
   if (!session || session.queue.length === 0) {
@@ -82,7 +92,7 @@ export default function PlayerScreen() {
   }
 }, [session]);
 */
-    //useEffect(() => { timer.start() }, [])
+    useEffect(() => { timer.start() }, [])
     ////////////////////
     // フッターのアクションボタン
 
@@ -139,7 +149,7 @@ export default function PlayerScreen() {
     ////
     return (
         <AppLayout
-            header={`${currentPlyIndex + 1}: ${title} `}
+            header={`${currentIndex + 1}: ${title} `}
             footer={
                 <Stack direction="row">
                     { phaseActions[currentPhase] }
@@ -182,17 +192,22 @@ export default function PlayerScreen() {
                         
                         { /*  {result !== null && (result ? "〇" : "×")} */ } 
                         <Box>
-                            Problem: {`${formatAccuracy(accuracy)} [${solvedCount} | ${failedCount}]`}
+                            {`${formatAccuracy(accuracy)} [${solvedCount} | ${failedCount}]`}
+                        </Box>
+                        <Box>
                             next review at: { nextReviewedAt && formatDate(nextReviewedAt)}
-                            easy Factor: { easeFactor }
-                            
                         </Box>
                         <Box>
-                            { currentPlyIndex }
-                            
+                            easy Factor: { easeFactor?.toFixed(2) }
+                        </Box>    
+                        
+                        <Box onClick={() => {                             
+                            timer.isRunning ? timer.stop() : timer.start()
+                        }}>
+                            timer: { timer.seconds } sec
                         </Box>
                         <Box>
-                            length: { session && `${session.queue.length}`}
+                            session: { session && `${currentIndex+1} / ${session.queue.length}`}
                         </Box>
                         {currentPhase === "solution" && <>
                             <button onClick={retreatMove}>
@@ -203,9 +218,7 @@ export default function PlayerScreen() {
                             </button>
                         
                         </>}                        
-                        <Box>
-                            { /* Timer: { timer.seconds } */ }
-                        </Box>
+                        
                         
                     <button onClick={() =>
                         navigate("/deck")

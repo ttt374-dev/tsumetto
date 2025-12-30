@@ -8,12 +8,12 @@ const DEFAULT_SORT: SortState = {
 }
 
 export function useKifLibrarySort() {
-  const [sort, setSort] = useState<SortState>(DEFAULT_SORT)
+  const [sortState, setSortState] = useState<SortState>(DEFAULT_SORT)
 
   const setSortKey = useCallback((key: SortKey) => {
     //alert("setsortkey")
     console.log("sort key", key)
-    setSort(prev => {
+    setSortState(prev => {
       // 同じキーを押したら order を反転
       if (prev.key === key) {
         return {
@@ -31,11 +31,11 @@ export function useKifLibrarySort() {
 
   const setSortOrder = useCallback((order: SortOrder) => {
     console.log("sort order", order)
-    setSort(prev => ({ ...prev, order }))
+    setSortState(prev => ({ ...prev, order }))
   }, [])
 
   return {
-    sort,          // { key, order }
+    sortState,          // { key, order }
     setSortKey,    // UI用
     setSortOrder,  // UI用（必要なら）
   }

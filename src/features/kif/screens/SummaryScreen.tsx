@@ -22,10 +22,10 @@ import { Apple } from "@mui/icons-material";
 
 export default function SummaryScreen(){
     const location = useLocation();
-    const { queue } = location.state as {
-        queue: string[];
+    //const { queue } = location.state as {
+    //    queue: string[];
         //queueResultMap: Record<string, AnswerResult>
-    };
+    //};
     /*
     const stats = useMemo(() => {
         return queue.reduce(
