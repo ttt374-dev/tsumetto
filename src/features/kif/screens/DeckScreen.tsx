@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { Stack, Box, InputLabel, FormControlLabel, FormGroup, FormLabel ,
+import { Stack, Box, Button, FormControlLabel, FormGroup, FormLabel ,
     InputAdornment
 } from "@mui/material";
 import ClearIcon from '@mui/icons-material/Clear';
@@ -21,9 +21,10 @@ import MultipleFilesButton from "../../../shared/components/MultipleFilesButton"
 import type { Deck, Problem, QueueItem } from "../types";
 import { useProblemPersist } from "../hooks/problem/useProblemPersist";
 import { useKifFilteredEntries } from "../hooks/deck/useKifFilteredEntries";
-import { RecordVoiceOverSharp } from "@mui/icons-material";
+import { EngineeringTwoTone, RecordVoiceOverSharp } from "@mui/icons-material";
 import { useProblemImporter } from "../hooks/problem/useProblemImporter";
 import LibrarySortControl from "../components/library/LibrarySortControl";
+import { useKifSortedEntries } from "../hooks/library/useKifSortedEntries";
 
 const buildDeck = (): Deck => {
     return {
@@ -50,7 +51,8 @@ export default function DeckScreen() {
 
     const navigate = useNavigate()
     //const { sort, setSortKey, setSortOrder } = useKifLibrarySort()
-    const filteredProblems = useKifFilteredEntries(problems, records, filter)
+    const sortedProblems = useKifSortedEntries(problems, records, sortState)
+    const filteredProblems = useKifFilteredEntries(sortedProblems, records, filter)
     const deck: Deck = useMemo(() => buildDeck(), [filteredProblems]);
     //const filteredProblems: Problem[] = []
 
@@ -73,12 +75,12 @@ export default function DeckScreen() {
             header={<Box>Deck</Box>}
             footer={
                 <Stack direction="row" gap={2} justifyContent="center">
-                    <button onClick={handleSessionStart}>
+                    <Button variant="contained" color="primary" onClick={handleSessionStart}>
                         セッション開始
-                    </button>
-                    <button onClick={() => navigate("/library")}>
+                    </Button>
+                    <Button variant="outlined" color="info" onClick={() => navigate("/library")}>
                         ライブラリ
-                    </button>
+                    </Button>
 
                 </Stack>
             }

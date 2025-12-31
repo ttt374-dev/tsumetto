@@ -15,7 +15,7 @@ export function useKifSortedEntries(
     if (!entities || entities.length === 0) return []
 
     const sorted = [...entities]
-
+    //console.log("sorted entries", sort)
     sorted.sort((a, b) => {
       let vA: any
       let vB: any
@@ -49,6 +49,7 @@ export function useKifSortedEntries(
         case "random":
           vA = Math.random();
           vB = Math.random();
+          //console.log("random", vA, vB)
           break;
 
         default:

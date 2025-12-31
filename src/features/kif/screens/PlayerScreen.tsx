@@ -37,6 +37,14 @@ export function useTimer(startSeconds: number = 0) {
   return { seconds, start, stop, reset, isRunning };
 }
 
+// utils
+export function formatMMSS(sec: number): string {
+  const m = Math.floor(sec / 60);
+  const s = sec % 60;
+  return `${m}:${s.toString().padStart(2, "0")}`;
+}
+
+
 ///////////////////////////////////////
 export default function PlayerScreen() {
     //const [result, setResult] = useState<boolean | null>(false)    
@@ -75,11 +83,13 @@ export default function PlayerScreen() {
     const moves = events.filter(e => e.type === "move")
     const timer = useTimer()
 
-        useEffect(() => {
+    useEffect(() => {
         if (!session || session.queue.length === 0) {
             //alert("no session / no such problem id")
             navigate("/summary", { state: { queue: []}});
         }
+        timer.reset()
+        timer.start()
     }, [session, navigate]);
       if (!session) {
           return null; // or loading
@@ -194,20 +204,16 @@ export default function PlayerScreen() {
                         <Box>
                             {`${formatAccuracy(accuracy)} [${solvedCount} | ${failedCount}]`}
                         </Box>
+                        { /* 
                         <Box>
-                            next review at: { nextReviewedAt && formatDate(nextReviewedAt)}
-                        </Box>
-                        <Box>
-                            easy Factor: { easeFactor?.toFixed(2) }
+                            { nextReviewedAt && formatDate(nextReviewedAt)}
+                            / { easeFactor?.toFixed(2) }
                         </Box>    
-                        
+                        */}
                         <Box onClick={() => {                             
                             timer.isRunning ? timer.stop() : timer.start()
                         }}>
-                            timer: { timer.seconds } sec
-                        </Box>
-                        <Box>
-                            session: { session && `${currentIndex+1} / ${session.queue.length}`}
+                            timer: { formatMMSS(timer.seconds) }
                         </Box>
                         {currentPhase === "solution" && <>
                             <button onClick={retreatMove}>
@@ -216,15 +222,18 @@ export default function PlayerScreen() {
                             <button onClick={advanceMove}>
                                 ↓次の手
                             </button>
-                        
-                        </>}                        
-                        
-                        
-                    <button onClick={() =>
-                        navigate("/deck")
-                    }>
-                        デッキに戻る
-                    </button>
+
+                        </>}
+
+
+                        <button onClick={() =>
+                            navigate("/deck")
+                        }>
+                            デッキに戻る
+                        </button>
+                        <Box>
+                            session: {session && `${currentIndex + 1} / ${session.queue.length}`}
+                        </Box>
 
                     </Stack>
                 </Box>
