@@ -17,6 +17,16 @@ export function useKifFilteredEntries(
 
 ): KifEntry[] {
 
+    function matchesText(entry: KifEntry, text?: string): boolean {
+        if (!text) return true;
+        const t = text.toLowerCase();
+        return (
+            entry.title?.toLowerCase().includes(t) 
+//            entry.description?.toLowerCase().includes(t)
+        );
+    }
+
+
     const filteredEntries = useMemo(() => {
         const now = Date.now();
 
@@ -36,7 +46,10 @@ export function useKifFilteredEntries(
             ) {
                 return false;
             }
-
+            // text
+            if (!matchesText(entry, filter.text)) {
+                return false;
+            }
             return true;
         });
     }, [entries, learningRecords, filter]);

@@ -1,5 +1,9 @@
 import { useState, useMemo } from "react";
-import { Stack, Box, InputLabel, FormControlLabel } from "@mui/material";
+import { Stack, Box, InputLabel, FormControlLabel, FormGroup, FormLabel ,
+    InputAdornment
+} from "@mui/material";
+import ClearIcon from '@mui/icons-material/Clear';
+
 import { createSession, Navigate, useNavigate } from 'react-router-dom';
 import { IconButton } from "@mui/material";
 import { v4 } from 'uuid'
@@ -35,10 +39,10 @@ const buildDeck = (): Deck => {
 
 ///////////////////
 export default function DeckScreen() {
-    const { problems, playerSessionApi, learningRepository, 
-        sort: { sortState, setSortKey, setSortOrder}, 
+    const { problems, playerSessionApi, learningRepository,
+        sort: { sortState, setSortKey, setSortOrder },
         filter: { filter, setFilter } } = useKif()
-    
+
     const { records } = learningRepository
     const { importFiles } = useProblemImporter()
 
@@ -67,6 +71,17 @@ export default function DeckScreen() {
     return (
         <AppLayout
             header={<Box>Deck</Box>}
+            footer={
+                <Stack direction="row" gap={2} justifyContent="center">
+                    <button onClick={handleSessionStart}>
+                        セッション開始
+                    </button>
+                    <button onClick={() => navigate("/library")}>
+                        ライブラリ
+                    </button>
+
+                </Stack>
+            }
         >
             <Stack p={2}>
 
@@ -84,9 +99,9 @@ export default function DeckScreen() {
                             <MenuItem value="title">タイトル</MenuItem>
                             <MenuItem value="accuracy">正答率</MenuItem>
                             <MenuItem value="easeFactor">習熟度</MenuItem>
+                            <MenuItem value="random">ランダム</MenuItem>
                         </TextField>
                         <IconButton onClick={() => {
-
                             setSortOrder(sortState.order == "asc" ? "desc" : "asc")
                             console.log("toggle sort order", sortState.order)
                         }
@@ -97,47 +112,61 @@ export default function DeckScreen() {
                             }
                         </IconButton>
                     </Stack>
-
-
-                    <FormControlLabel control={
-                        <Checkbox
-                            checked={filter.unansweredOnly}
-                            onChange={e =>
-                                setFilter(f => ({
-                                    ...f,
-                                    unansweredOnly: e.target.checked
-                                }))
-                            } />}
-                        label="未回答のみ" />
                 </FormControl>
-                <FormControlLabel
-                    control={
-                        <Checkbox
-                            checked={filter.dueOnly}
-                            onChange={e =>
+
+                <FormControl>
+                    <FormLabel>
+                        抽出条件
+                    </FormLabel>
+                    <FormGroup>
+                        <TextField size="small" fullWidth placeholder="タイトル"
+                            onChange={ e=>
                                 setFilter(f => ({
                                     ...f,
-                                    dueOnly: e.target.checked,
+                                    text: e.target.value
                                 }))
+
                             }
+                            
+                        >
+                            
+
+                        </TextField>
+                        
+                        <FormControlLabel control={
+                            <Checkbox
+                                checked={filter.unansweredOnly}
+                                onChange={e =>
+                                    setFilter(f => ({
+                                        ...f,
+                                        unansweredOnly: e.target.checked
+                                    }))
+                                } />}
+                            label="未回答のみ" />
+                        
+
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={filter.dueOnly}
+                                    onChange={e =>
+                                        setFilter(f => ({
+                                            ...f,
+                                            dueOnly: e.target.checked,
+                                        }))
+                                    }
+                                />
+                            }
+                            label="習熟度でレビュー対象のみ"
                         />
-                    }
-                    label="習熟度でレビュー対象のみ"
-                />
+                    </FormGroup>
+                </FormControl>
+
+
                 <Box>
-                    { filteredProblems.length } 件
+                    セッション問題数：{filteredProblems.length} 件
                 </Box>
-                <Stack direction="row" gap={2} justifyContent="center">
-                    <button onClick={handleSessionStart}>
-                        セッション開始
-                    </button>
-                    <button onClick={() => navigate("/library")}>
-                        ライブラリ
-                    </button>                   
-
-
-
-                </Stack>
+                
             </Stack>
         </AppLayout>
     )

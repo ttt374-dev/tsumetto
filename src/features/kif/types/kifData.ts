@@ -8,6 +8,10 @@ export type Piece = {
 };
 
 export type HandPieceKey = "飛" | "角" | "金" | "銀" | "桂" | "香" | "歩";
+export const HandPieceKeyOrder: HandPieceKey[] = [
+  "飛", "角", "金", "銀", "桂", "香", "歩",
+];
+
 
 export type Position = {
   file: number;

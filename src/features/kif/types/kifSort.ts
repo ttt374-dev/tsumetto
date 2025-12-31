@@ -4,6 +4,9 @@ export type SortState = {
   order: SortOrder
 }
 
-export type SortKey = 'createdAt' | 'title' | 'moveCount' | 'accuracy' | 'easeFactor' | 'nextReviewedAt';
+export type SortKey =
+  'createdAt' | 'title' | 'moveCount' |
+  'accuracy' | 'easeFactor' | 'nextReviewedAt' |
+  'random'
 export type SortOrder = 'asc' | 'desc';
 

@@ -46,6 +46,11 @@ export function useKifSortedEntries(
           vB = learningRecords[b.id].nextReviewedAt
           break;
 
+        case "random":
+          vA = Math.random();
+          vB = Math.random();
+          break;
+
         default:
           return 0
       }
